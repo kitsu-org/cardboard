@@ -5,7 +5,7 @@ No dependencies, strictly typed, and looking quite stylish!
 
 ## Example
 ```js
-import { Cardboard } from 'cardboard';
+import { Cardboard } from '@kitsu-org/cardboard';
 const cardboard = new CardboardClient("kitsunes.club", "yourkeyhere");
 
 cardboard.on("ready", async () => {
