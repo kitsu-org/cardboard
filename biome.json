@@ -1,0 +1,100 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "all": true,
+            "correctness": {
+                "noNodejsModules": "off"
+            },
+            "style": {
+                "noDefaultExport": "off",
+                "noParameterProperties": "off",
+                "noNamespaceImport": "off",
+                "useFilenamingConvention": "off",
+                "useNamingConvention": {
+                    "level": "warn",
+                    "options": {
+                        "requireAscii": false,
+                        "strictCase": false,
+                        "conventions": [
+                            {
+                                "selector": {
+                                    "kind": "typeProperty"
+                                },
+                                "formats": [
+                                    "camelCase",
+                                    "CONSTANT_CASE",
+                                    "PascalCase",
+                                    "snake_case"
+                                ]
+                            },
+                            {
+                                "selector": {
+                                    "kind": "objectLiteralProperty",
+                                    "scope": "any"
+                                },
+                                "formats": [
+                                    "camelCase",
+                                    "CONSTANT_CASE",
+                                    "PascalCase",
+                                    "snake_case"
+                                ]
+                            },
+                            {
+                                "selector": {
+                                    "kind": "classMethod",
+                                    "scope": "any"
+                                },
+                                "formats": ["camelCase", "PascalCase"]
+                            },
+                            {
+                                "selector": {
+                                    "kind": "functionParameter",
+                                    "scope": "any"
+                                },
+                                "formats": ["snake_case", "camelCase"]
+                            }
+                        ]
+                    }
+                }
+            },
+            "nursery": {
+                "noDuplicateElseIf": "warn",
+                "noDuplicateJsonKeys": "warn",
+                "noEvolvingTypes": "warn",
+                "noYodaExpression": "warn",
+                "useConsistentBuiltinInstantiation": "warn",
+                "useErrorMessage": "warn",
+                "useImportExtensions": "off",
+                "useThrowNewError": "warn"
+            }
+        }
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "javascript": {
+        "globals": ["Bun", "Timer"]
+    },
+    "overrides": [
+        {
+            "include": ["./**/*.svelte"],
+            "linter": {
+                "rules": {
+                    "correctness": {
+                        "noUnusedVariables": "off"
+                    }
+                }
+            }
+        }
+    ],
+    "files": {
+        "ignore": ["node_modules", "dist", ".svelte-kit"]
+    }
+}

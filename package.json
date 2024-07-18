@@ -1,11 +1,30 @@
 {
-  "name": "cardboard",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+    "name": "cardboard",
+    "description": "a wrapper for Misskey! 📦",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kitsu-org/cardboard.git"
+    },
+    "author": "Kio (https://kitsu.life)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/kitsu-org/cardboard/issues"
+    },
+    "homepage": "https://github.com/kitsu-org/cardboard",
+    "module": "src/index.ts",
+    "type": "module",
+    "keywords": ["misskey","wrapper","typescript"],
+    "version": "1.0.0",
+    "scripts": {
+        "lint": "bunx @biomejs/biome check ."
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.8.3",
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "trustedDependencies": ["@biomejs/biome"]
+
 }

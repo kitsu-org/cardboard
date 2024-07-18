@@ -1,17 +1,26 @@
 # Cardboard 📦
-Cardboard is a module that allows you to easily work with misskey, with a focus on Sharkey.
+Cardboard is a module that allows you to easily work with misskey, with a focus on Sharkey. 
 
+No dependencies, strictly typed, and looking quite stylish!
 
-To install dependencies:
+## Example
+```js
+import { Cardboard } from 'cardboard';
+const cardboard = new CardboardClient();
 
-```bash
-bun install
+cardboard.on("ready", async () => {
+    console.info(`ready!`);
+});
+
+cardboard.on("mention", async (msg) => {
+    if (
+        msg.note.text
+            ?.replaceAll(`@${(await cardboard.getSelf()).username} `, "")
+            .startsWith("hello")
+    ) {
+        await msg.reply("Cardboard! 📦");
+    }
+});
+
+cardboard.connect("kitsunes.club", "yourkeyhere");
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.17.
