@@ -13,7 +13,7 @@
     "homepage": "https://github.com/kitsu-org/cardboard",
     "module": "src/index.ts",
     "type": "module",
-    "keywords": ["misskey","wrapper","typescript"],
+    "keywords": ["misskey", "wrapper", "typescript"],
     "version": "1.0.0",
     "scripts": {
         "lint": "bunx @biomejs/biome check ."
@@ -26,5 +26,4 @@
         "typescript": "^5.0.0"
     },
     "trustedDependencies": ["@biomejs/biome"]
-
 }

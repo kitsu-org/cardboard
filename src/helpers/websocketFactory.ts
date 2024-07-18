@@ -1,5 +1,5 @@
-import type { CardboardClient } from "..";
 import pkg from "~/package.json" assert { type: "json" };
+import type { CardboardClient } from "..";
 import { Note } from "./noteFactory";
 
 export enum TimelineType {

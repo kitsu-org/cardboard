@@ -1,5 +1,5 @@
-import type { NoteVisibility, MisskeyNote, NoteOptions } from "@/types/note";
 import type { CardboardClient } from "@/index";
+import type { MisskeyNote, NoteOptions, NoteVisibility } from "@/types/note";
 import { misskeyRequest } from "./requestFactory";
 
 export class Note {
