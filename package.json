@@ -1,5 +1,5 @@
 {
-    "name": "cardboard",
+    "name": "@kitsu-org/cardboard",
     "description": "a wrapper for Misskey! 📦",
     "repository": {
         "type": "git",
