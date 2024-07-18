@@ -5,12 +5,31 @@
         "type": "git",
         "url": "https://github.com/kitsu-org/cardboard.git"
     },
+    "exports": {
+        ".": {
+            "import": "./src/index.ts",
+            "default": "./src/index.ts"
+        },
+        "./types/error": {
+            "import": "./src/types/error.ts",
+            "default": "./src/types/error.ts"
+        },
+        "./types/user": {
+            "import": "./src/types/user.ts",
+            "default": "./src/types/user.ts"
+        },
+        "./types/note": {
+            "import": "./src/types/note.ts",
+            "default": "./src/types/note.ts"
+        }
+    },
     "author": "Kio (https://kitsu.life)",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/kitsu-org/cardboard/issues"
     },
     "homepage": "https://github.com/kitsu-org/cardboard",
+    "main": "src/index.ts",
     "module": "src/index.ts",
     "type": "module",
     "keywords": ["misskey", "wrapper", "typescript"],
