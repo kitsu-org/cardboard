@@ -6,15 +6,46 @@ export enum Visibility {
     Private = "private",
 }
 
-// ---  Tip: ---
-// Syntax:
-// const a = Visibility.Public;
-// a === "public" === Visibility.Public
-//
-// You can also cast (aka convert) string values to Visibility
-// const a = "public" as Visibility;
+export type LiteUser = {
+    id: string;
+    name: string | null;
+    username: string;
+    host: string | null;
+    avatarUrl: string | null;
+    avatarBlurhash: string | null;
+    avatarDecorations: {
+        id: string;
+        angle: number;
+        flipH: boolean;
+        url: string;
+        offsetX: number;
+        offsetY: number;
+    }[];
+    isAdmin?: boolean;
+    isModerator?: boolean;
+    isSilenced: boolean;
+    noindex: boolean;
+    isBot?: boolean;
+    isCat?: boolean;
+    speakAsCat?: boolean;
+    instance?: {
+        name: string | null;
+        softwareName: string | null;
+        softwareVersion: string | null;
+        iconUrl: string | null;
+        faviconUrl: string | null;
+        themeColor: string | null;
+    };
+    emojis: unknown[];
+    onlineStatus: "unknown" | "online" | "active" | "offline";
+    badgeRoles: {
+        name: string;
+        iconUrl: string | null;
+        displayOrder: number;
+    }[];
+};
 
-export type SelfUser = User & {
+export type SelfUser = MisskeyUser & {
     twoFactorEnabled: boolean;
     usePasswordLessLogin: boolean;
     securityKeys: boolean;
@@ -60,7 +91,7 @@ export type SelfUser = User & {
     }[];
 };
 
-export type User = {
+export type MisskeyUser = {
     id: string;
     name: string;
     username: string;

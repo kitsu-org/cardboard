@@ -6,14 +6,7 @@ import {
     type WebsocketOptions,
 } from "./helpers/websocketFactory";
 import type { NoteOptions } from "./types/note";
-import type { User } from "./types/user";
-
-// TODO:
-// Look at me - Done!
-// Send a message - Done!
-// Handle new notes - Done!
-// Reply to an event - Done!
-// Get a user - Must we? :thinking:
+import type { MisskeyUser } from "./types/user";
 
 interface Events {
     ready: () => void;
@@ -22,33 +15,44 @@ interface Events {
 }
 
 export class CardboardClient {
-    public instance!: string;
-    public accessToken!: string;
+    constructor(
+        public readonly instance: string,
+        public readonly accessToken: string,
+    ) {}
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
 
+    //TODO: I wish to change this to a sort of PrivilegedUser
+    // or SelfUser that allows greater control over the profile.
     /**
-     * Queries /i and formats it into a FullUser.
-     *
-     * @returns {Promise<any>} The user that is currently logged in.
+     * Queries /i and formats it into a Note.
+     * @returns {Promise<MisskeyUser>} The user that is currently logged in.
      */
-    async getSelf(): Promise<User> {
+    public async getSelf(): Promise<MisskeyUser> {
         return await misskeyRequest(this.instance, this.accessToken, "i", {});
     }
 
-    connect(
-        instance: string,
-        token: string,
+    /**
+     * connect the websocket to the backend.
+     * @param websocketOptions Optional parameters that allow you to scale your userbase at the cost of performance.
+     */
+    public connect(
         websocketOptions: WebsocketOptions = {
             TimelineType: TimelineType.Local,
         },
-    ) {
-        this.instance = instance;
-        this.accessToken = token;
+    ): void {
         new CardboardWebsocket(this, websocketOptions);
     }
 
-    async createNote(content: string, options: NoteOptions): Promise<Note> {
+    /**
+     * @param content The message you wish to send
+     * @param {NoteOptions} options optional bits to fine-tune where and how your message is sent.
+     * @returns {Promise<Note>}
+     */
+    public async createNote(
+        content: string,
+        options: NoteOptions,
+    ): Promise<Note> {
         return new Note(
             this,
             await misskeyRequest(

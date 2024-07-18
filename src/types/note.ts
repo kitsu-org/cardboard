@@ -1,4 +1,4 @@
-import type { User } from "./user";
+import type { LiteUser, MisskeyUser } from "./user";
 
 export enum ReactionAcceptance {
     LikeOnly = "likeOnly",
@@ -9,7 +9,7 @@ export enum ReactionAcceptance {
 
 export type NoteOptions = {
     visibility?: NoteVisibility;
-    visibileUserIds?: string[];
+    visibleUserIds?: string[];
     cw?: string;
     localOnly?: boolean;
     reactionAcceptance?: ReactionAcceptance | null;
@@ -46,44 +46,7 @@ export type MisskeyNote = {
     text: string | null;
     cw?: string | null;
     userId: string;
-    user: {
-        id: string;
-        name: string | null;
-        username: string;
-        host: string | null;
-        avatarUrl: string | null;
-        avatarBlurhash: string | null;
-        avatarDecorations: {
-            id: string;
-            angle: number;
-            flipH: boolean;
-            url: string;
-            offsetX: number;
-            offsetY: number;
-        }[];
-        isAdmin?: boolean;
-        isModerator?: boolean;
-        isSilenced: boolean;
-        noindex: boolean;
-        isBot?: boolean;
-        isCat?: boolean;
-        speakAsCat?: boolean;
-        instance?: {
-            name: string | null;
-            softwareName: string | null;
-            softwareVersion: string | null;
-            iconUrl: string | null;
-            faviconUrl: string | null;
-            themeColor: string | null;
-        };
-        emojis: unknown[];
-        onlineStatus: OnlineStatus;
-        badgeRoles: {
-            name: string;
-            iconUrl: string | null;
-            displayOrder: number;
-        }[];
-    };
+    user: LiteUser;
     replyId?: string | null;
     renoteId?: string | null;
     reply?: MisskeyNote;
@@ -149,5 +112,5 @@ type File = {
     folderId: string | null;
     folder: string | null;
     userId: string;
-    user: User | null;
+    user: MisskeyUser | null;
 };

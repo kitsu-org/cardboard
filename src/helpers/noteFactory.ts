@@ -1,17 +1,24 @@
 import type { CardboardClient } from "@/index";
 import type { MisskeyNote, NoteOptions, NoteVisibility } from "@/types/note";
 import { misskeyRequest } from "./requestFactory";
+import type { LiteUser } from "@/types/user";
 
 export class Note {
     constructor(
         private readonly cardboard: CardboardClient,
-        public readonly note: MisskeyNote,
-    ) {}
+        private readonly note: MisskeyNote,
+    ) {
+        this.content = note.text;
+        this.user = note.user;
+    }
+
+    public content: string | null;
+    public user: LiteUser;
 
     /**
      * Reply to this post.
      * @param {string} content - The message you would like to send.
-     * @param {NoteOptions} options - Any additional options to add to the note.
+     * @param {NoteOptions} options - optional settings to modify to whom and how your message is sent.
      * @returns {Promise<Note>}
      */
     async reply(
@@ -61,8 +68,11 @@ export class Note {
             ...options,
         });
     }
-
-    async delete() {
+    /**
+     * Delete the note, if you have permission.
+     * @returns {Promise<void>}
+     */
+    async delete(): Promise<void> {
         return await misskeyRequest(
             this.cardboard.instance,
             this.cardboard.accessToken,
