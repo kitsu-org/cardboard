@@ -91,12 +91,12 @@ export type MisskeyNote = {
     myReaction?: string | null;
 };
 
-type FileProperties = {
+export type FileProperties = {
     width: number;
     height: number;
 };
 
-type File = {
+export type File = {
     id: string;
     createdAt: string;
     name: string;
