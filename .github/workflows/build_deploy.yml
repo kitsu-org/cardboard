@@ -3,6 +3,18 @@ name: Build & Publish NPM Package
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish"
+        required: true
+        type: string
+        # Default to truncated commit hash
+        default: "0.0.0"
+      tag:
+        description: "Tag to publish"
+        required: true
+        type: string
+        default: "latest"
 
 permissions:
   contents: read
@@ -24,6 +36,13 @@ jobs:
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
+
+      # Code is not minified and bundled anymore
+      #- name: Build
+      #  run: bun run build
+
+      - name: Change version in package.json to ${{ github.event.inputs.version }}, defaulting to the truncated commit hash
+        run: 'sed -i ''s/"version": ".*"/"version": "${{ github.event.inputs.version }}"/'' package.json'
 
       - name: Publish to NPM
         run: npm publish --provenance --tag ${{ github.event.inputs.tag }} --access public
