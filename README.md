@@ -6,7 +6,7 @@ No dependencies, strictly typed, and looking quite stylish!
 ## Example
 ```js
 import { Cardboard } from 'cardboard';
-const cardboard = new CardboardClient();
+const cardboard = new CardboardClient("kitsunes.club", "yourkeyhere");
 
 cardboard.on("ready", async () => {
     console.info(`ready!`);
@@ -22,5 +22,5 @@ cardboard.on("mention", async (msg) => {
     }
 });
 
-cardboard.connect("kitsunes.club", "yourkeyhere");
+cardboard.connect();
 ```
