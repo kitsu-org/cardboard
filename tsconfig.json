@@ -24,8 +24,8 @@
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false,
         "paths": {
-            "@/*": ["./src/*"],
-            "~/*": ["./*"]
+            // "@/*": ["./src/*"],
+            // "~/*": ["./*"]
         }
     }
 }

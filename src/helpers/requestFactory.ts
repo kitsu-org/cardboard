@@ -1,5 +1,5 @@
-import { AuthenticationError, PermissionDeniedError } from "@/types/errors";
-import pkg from "~/package.json" assert { type: "json" };
+import { AuthenticationError, PermissionDeniedError } from "../types/error";
+import pkg from "../../package.json" assert { type: "json" };
 
 export const misskeyRequest = async (
     instance: string,
