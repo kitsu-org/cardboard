@@ -5,19 +5,19 @@ import {
     PermissionDeniedError,
 } from "./error";
 import {
-    ReactionAcceptance,
+    type File,
+    type FileProperties,
+    type MisskeyNote,
+    type NoteOptions,
     NoteVisibility,
     OnlineStatus,
-    type MisskeyNote,
-    type FileProperties,
-    type File,
-    type NoteOptions,
+    ReactionAcceptance,
 } from "./note";
 import {
-    Visibility,
     type LiteUser,
-    type SelfMisskeyUser,
     type MisskeyUser,
+    type SelfMisskeyUser,
+    Visibility,
 } from "./user";
 
 //error

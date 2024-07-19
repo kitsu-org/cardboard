@@ -1,8 +1,8 @@
-import type { MisskeyUser } from "../types/user";
 import type { CardboardClient } from "..";
-import { NoteVisibility, type NoteOptions } from "../types/note";
-import type { Note } from "./noteFactory";
 import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
+import { type NoteOptions, NoteVisibility } from "../types/note";
+import type { MisskeyUser } from "../types/user";
+import type { Note } from "./noteFactory";
 import { misskeyRequest } from "./requestFactory";
 
 const checkForHarmAndThrowIfTrue = async (
@@ -15,30 +15,27 @@ const checkForHarmAndThrowIfTrue = async (
         "i",
     );
     if (checkforSelf.id === userId) {
-        throw CannotHurtSelfError;
+        throw new CannotHurtSelfError();
     }
 };
 
-const checkForNoBotandThrowIfExists = async (
+const checkForNoBotandThrowIfExists = (
     cardboard: CardboardClient,
     user: MisskeyUser,
 ) => {
-    return new Promise((resolve) => {
-        if (cardboard.options?.bypassNoBot) {
-            console.warn(`
+    if (cardboard.options?.bypassNoBot) {
+        console.warn(`
             ====\n
             user @${user.username}${user.instance ? `@${user.instance}` : ""} does NOT want to be interacted with.\n
             However, #NoBot Interaction Errors are being bypassed.\n
             To disable this warning, please disable bypassNoBot.\n
             ====
             `);
-            return resolve;
-        }
-        if (user.description.toLocaleLowerCase().includes("#nobot")) {
-            throw NoBotInteractionError;
-        }
-        return resolve;
-    });
+    }
+    if (user.description.toLocaleLowerCase().includes("#nobot")) {
+        throw new NoBotInteractionError();
+    }
+    return Promise.resolve(true);
 };
 
 export class User {

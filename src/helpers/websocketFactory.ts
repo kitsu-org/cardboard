@@ -1,5 +1,5 @@
-import pkg from "../../package.json" assert { type: "json" };
 import type { CardboardClient } from "..";
+import pkg from "../../package.json" assert { type: "json" };
 import { Note } from "./noteFactory";
 import { misskeyRequest } from "./requestFactory";
 

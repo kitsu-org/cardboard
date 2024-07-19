@@ -1,5 +1,5 @@
-import { AuthenticationError, PermissionDeniedError } from "../types/error";
 import pkg from "../../package.json" assert { type: "json" };
+import { AuthenticationError, PermissionDeniedError } from "../types/error";
 
 export const misskeyRequest = async (
     instance: string,
@@ -36,6 +36,13 @@ export const misskeyRequest = async (
             case 403:
                 throw new PermissionDeniedError();
             default: {
+                if (
+                    !response.headers
+                        .get("content-type")
+                        ?.includes("application/json")
+                ) {
+                    throw new Error(`Request Error: ${response.status}`);
+                }
                 const errorInfo = (await response.json()) as {
                     error: {
                         code: string;
