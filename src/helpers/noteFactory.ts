@@ -6,7 +6,7 @@ import type { LiteUser } from "../types/user";
 export class Note {
     constructor(
         private readonly cardboard: CardboardClient,
-        private readonly note: MisskeyNote,
+        public readonly note: MisskeyNote,
     ) {
         this.content = note.text;
         this.user = note.user;
