@@ -1,5 +1,6 @@
 import { Note } from "./helpers/noteFactory";
 import { misskeyRequest } from "./helpers/requestFactory";
+import { User } from "./helpers/userFactory";
 import {
     CardboardWebsocket,
     TimelineType,
@@ -18,16 +19,23 @@ export class CardboardClient {
     constructor(
         public readonly instance: string,
         public readonly accessToken: string,
-    ) {}
+        public readonly options?: {
+            bypassNoBot?: boolean;
+        },
+    ) {
+        if (options?.bypassNoBot === true) {
+            console.warn(`
+                ==========\n
+                You've enabled bypassNoBot. I understand that this can be a bit of a nuisance, but some users would rather not be interacted with.\n
+                This error is to ensure that your bot is respectful of people's wishes.\n
+                To stop this warning, please disable bypassNoBot.\n
+                ==========
+                `);
+        }
+    }
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
 
-    //TODO: I wish to change this to a sort of PrivilegedUser
-    // or SelfUser that allows greater control over the profile.
-    /**
-     * Queries /i and formats it into a Note.
-     * @returns {Promise<MisskeyUser>} The user that is currently logged in.
-     */
     public async getSelf(): Promise<MisskeyUser> {
         return await misskeyRequest(this.instance, this.accessToken, "i", {});
     }
@@ -42,6 +50,47 @@ export class CardboardClient {
         },
     ): void {
         new CardboardWebsocket(this, websocketOptions);
+    }
+
+    public async findUser(
+        username: string,
+        host?: string | null,
+        options?: {
+            limit?: number;
+        },
+    ) {
+        const users = await misskeyRequest(
+            this.instance,
+            this.accessToken,
+            "users/search-by-username-and-host",
+            {
+                username,
+                host,
+                limit: options?.limit,
+            },
+        );
+        if (users.length === 0) {
+            return [];
+        }
+        const createdUsers: User[] = [];
+        for (const user of users) {
+            createdUsers.push(new User(this, user));
+        }
+        return createdUsers;
+    }
+
+    public async showUser(userId: string) {
+        return new User(
+            this,
+            await misskeyRequest(
+                this.instance,
+                this.accessToken,
+                "users/show",
+                {
+                    userId,
+                },
+            ),
+        );
     }
 
     /**

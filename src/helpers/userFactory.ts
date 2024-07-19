@@ -2,12 +2,276 @@ import type { MisskeyUser } from "../types/user";
 import type { CardboardClient } from "..";
 import { NoteVisibility, type NoteOptions } from "../types/note";
 import type { Note } from "./noteFactory";
+import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
+import { misskeyRequest } from "./requestFactory";
+
+const checkForHarmAndThrowIfTrue = async (
+    cardboard: CardboardClient,
+    userId: string,
+) => {
+    const checkforSelf = await misskeyRequest(
+        cardboard.instance,
+        cardboard.accessToken,
+        "i",
+    );
+    if (checkforSelf.id === userId) {
+        throw CannotHurtSelfError;
+    }
+};
+
+const checkForNoBotandThrowIfExists = async (
+    cardboard: CardboardClient,
+    user: MisskeyUser,
+) => {
+    return new Promise((resolve) => {
+        if (cardboard.options?.bypassNoBot) {
+            console.warn(`
+            ====\n
+            user @${user.username}${user.instance ? `@${user.instance}` : ""} does NOT want to be interacted with.\n
+            However, #NoBot Interaction Errors are being bypassed.\n
+            To disable this warning, please disable bypassNoBot.\n
+            ====
+            `);
+            return resolve;
+        }
+        if (user.description.toLocaleLowerCase().includes("#nobot")) {
+            throw NoBotInteractionError;
+        }
+        return resolve;
+    });
+};
 
 export class User {
     constructor(
-        private readonly cardboard: CardboardClient,
-        public readonly user: MisskeyUser,
+        protected readonly cardboard: CardboardClient,
+        protected misskeyUser: MisskeyUser,
     ) {}
+
+    get user() {
+        return this.misskeyUser;
+    }
+
+    /**
+     * Suspends the user from using the isntance.
+     * @param modNote an optional string to automatically inform admins what's going on.
+     */
+    async suspend(modNote?: string): Promise<void> {
+        await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "admin/suspend-user",
+            { userId: this.user.id },
+        );
+        if (modNote) {
+            await misskeyRequest(
+                this.cardboard.instance,
+                this.cardboard.accessToken,
+                "admin/update-user-note",
+                {
+                    userId: this.user.id,
+                    text: `${this.user.moderationNote}\n${modNote}`,
+                },
+            );
+        }
+    }
+
+    /**
+     * Unsuspend the user from the instance, allowing them to access it again.
+     * @param modNote an optional string to automatically inform admins what's going on.
+     */
+    async unsuspend(modNote?: string): Promise<void> {
+        await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "admin/unsuspend-user",
+            { userId: this.user.id },
+        );
+        if (modNote) {
+            await misskeyRequest(
+                this.cardboard.instance,
+                this.cardboard.accessToken,
+                "admin/update-user-note",
+                {
+                    userId: this.user.id,
+                    text: `${this.user.moderationNote}\n${modNote}`,
+                },
+            );
+        }
+    }
+
+    /**
+     * silence the user, preventing their notes from appearing on feeds unless they're followed.
+     * @param modNote an optional string to automatically inform admins what's going on.
+     */
+    async silence(modNote?: string): Promise<void> {
+        await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "admin/silence-user",
+            { userId: this.user.id },
+        );
+        if (modNote) {
+            await misskeyRequest(
+                this.cardboard.instance,
+                this.cardboard.accessToken,
+                "admin/update-user-note",
+                {
+                    userId: this.user.id,
+                    text: `${this.user.moderationNote}\n${modNote}`,
+                },
+            );
+        }
+    }
+
+    /**
+     * unsilence their user, bringing their post visibility back to normal.
+     * @param modNote an optional string to automatically inform admins what's going on.
+     */
+    async unsilence(modNote?: string): Promise<void> {
+        await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "admin/unsilence-user",
+            { userId: this.user.id },
+        );
+        if (modNote) {
+            await misskeyRequest(
+                this.cardboard.instance,
+                this.cardboard.accessToken,
+                "admin/update-user-note",
+                {
+                    userId: this.user.id,
+                    text: `${this.user.moderationNote}\n${modNote}`,
+                },
+            );
+        }
+    }
+
+    /**
+     * follow the user.
+     */
+    async follow(): Promise<void> {
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForNoBotandThrowIfExists(this.cardboard, this.user);
+        const request = await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "following/create",
+            { userId: this.user.id },
+        );
+        this.misskeyUser = request;
+    }
+
+    /**
+     * unfollow the user.
+     */
+    async unfollow(): Promise<void> {
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        const request = await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "following/delete",
+            { userId: this.user.id },
+        );
+        this.misskeyUser = request;
+    }
+
+    /**
+     * mute the user, preventing it from being seen by the bot.
+     * @param renotes prevent notes from this user, renoted by others, from appearing on the feed.
+     */
+    async mute(renotes = false): Promise<void> {
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        const request = await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "mute/create",
+            { userId: this.user.id },
+        );
+        this.misskeyUser = request;
+        if (renotes) {
+            await misskeyRequest(
+                this.cardboard.instance,
+                this.cardboard.accessToken,
+                "renote-mute/create",
+                { userId: this.user.id },
+            );
+        }
+    }
+
+    /**
+     * unmute the user, restoring vision of this user's notes to the bot.
+     * @param renotes also return notes from this user, renoted by others.
+     */
+    async unmute(renotes = false): Promise<void> {
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        const request = await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "mute/delete",
+            { userId: this.user.id },
+        );
+        this.misskeyUser = request;
+        if (renotes) {
+            await misskeyRequest(
+                this.cardboard.instance,
+                this.cardboard.accessToken,
+                "renote-mute/delete",
+                { userId: this.user.id },
+            );
+        }
+    }
+
+    /**
+     * Block the user, preventing the user from seeing the bot, & vice versa.
+     * On specific/legacy instances, you should keep in mind that some users may be able to bypass this,
+     * and that the bot is easily accessible by viewing it from a seperate account, or by logging out.
+     */
+    async block(): Promise<void> {
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+
+        const request = await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "blocking/create",
+            {
+                userId: this.user.id,
+            },
+        );
+        this.misskeyUser = request;
+    }
+
+    /**
+     * Block the user, preventing the user from seeing the bot, & vice versa.
+     * On specific/legacy instances, you should keep in mind that some users may be able to bypass this,
+     * and that the bot is easily accessible by viewing it from a seperate account, or by logging out.
+     */
+    async unblock(): Promise<void> {
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        const request = await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "blocking/delete",
+            { userId: this.user.id },
+        );
+        this.misskeyUser = request;
+    }
+
+    /**
+     * Set a memo on the profile.
+     * @param memo a text string. Newlines can use `\n`.
+     */
+    async setMemo(memo: string): Promise<void> {
+        await misskeyRequest(
+            this.cardboard.instance,
+            this.cardboard.accessToken,
+            "users/update-memo",
+            {
+                userId: this.user.id,
+                memo: memo,
+            },
+        );
+    }
 
     /**
      * Alias for creating a specified note for a user.
@@ -15,12 +279,12 @@ export class User {
      * @param options The message options. Some are disabled.
      * @returns {Promise<Note>}
      */
-
     // biome-ignore lint/style/useNamingConvention: DM is an abbreviation for direct message.
     async DM(
         content: string,
         options?: Omit<NoteOptions, "text" | "visibility" | "visibleUserIds">,
     ): Promise<Note> {
+        await checkForNoBotandThrowIfExists(this.cardboard, this.user);
         return await this.cardboard.createNote(content, {
             visibility: NoteVisibility.Specified,
             text: content,

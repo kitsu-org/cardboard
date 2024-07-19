@@ -25,7 +25,6 @@ export class CardboardWebsocket {
             this.cardboard.instance,
             this.cardboard.accessToken,
             "i",
-            {},
         ).then(() => {
             const websocketBuilder = new URL(
                 `/streaming?i=${this.cardboard.accessToken}`,

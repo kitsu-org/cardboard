@@ -45,7 +45,7 @@ export type LiteUser = {
     }[];
 };
 
-export type SelfUser = MisskeyUser & {
+export type SelfMisskeyUser = MisskeyUser & {
     twoFactorEnabled: boolean;
     usePasswordLessLogin: boolean;
     securityKeys: boolean;

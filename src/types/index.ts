@@ -1,4 +1,9 @@
-import { AuthenticationError, PermissionDeniedError } from "./error";
+import {
+    AuthenticationError,
+    CannotHurtSelfError,
+    NoBotInteractionError,
+    PermissionDeniedError,
+} from "./error";
 import {
     ReactionAcceptance,
     NoteVisibility,
@@ -11,12 +16,17 @@ import {
 import {
     Visibility,
     type LiteUser,
-    type SelfUser,
+    type SelfMisskeyUser,
     type MisskeyUser,
 } from "./user";
 
 //error
-export { AuthenticationError, PermissionDeniedError };
+export {
+    AuthenticationError,
+    PermissionDeniedError,
+    NoBotInteractionError,
+    CannotHurtSelfError,
+};
 //note
 export {
     ReactionAcceptance,
@@ -28,4 +38,9 @@ export {
     type NoteOptions,
 };
 //user
-export { Visibility, type LiteUser, type SelfUser, type MisskeyUser };
+export {
+    Visibility,
+    type LiteUser,
+    type SelfMisskeyUser as SelfUser,
+    type MisskeyUser,
+};

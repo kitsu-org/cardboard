@@ -5,7 +5,7 @@ export const misskeyRequest = async (
     instance: string,
     token: string,
     path: string,
-    options: Record<string, unknown>,
+    options?: Record<string, unknown>,
 ) => {
     const url = new URL(`/api/${path}`, `https://${instance}`);
     const response = await fetch(url, {
