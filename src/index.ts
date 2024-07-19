@@ -1,11 +1,11 @@
-import { Note } from "./helpers/noteFactory";
-import { misskeyRequest } from "./helpers/requestFactory";
-import { User } from "./helpers/userFactory";
+import { Note } from "./helpers/noteHelper";
+import { misskeyRequest } from "./helpers/requestHelper";
+import { User } from "./helpers/userHelper";
 import {
     CardboardWebsocket,
     TimelineType,
     type WebsocketOptions,
-} from "./helpers/websocketFactory";
+} from "./helpers/websocketHelper";
 import type { NoteOptions } from "./types/note";
 import type { MisskeyUser } from "./types/user";
 

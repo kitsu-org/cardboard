@@ -1,7 +1,7 @@
 import type { CardboardClient } from "../index";
 import type { MisskeyNote, NoteOptions, NoteVisibility } from "../types/note";
 import type { LiteUser } from "../types/user";
-import { misskeyRequest } from "./requestFactory";
+import { misskeyRequest } from "./requestHelper";
 
 export class Note {
     constructor(

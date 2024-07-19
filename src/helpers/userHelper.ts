@@ -2,8 +2,8 @@ import type { CardboardClient } from "..";
 import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
 import { type NoteOptions, NoteVisibility } from "../types/note";
 import type { MisskeyUser } from "../types/user";
-import type { Note } from "./noteFactory";
-import { misskeyRequest } from "./requestFactory";
+import type { Note } from "./noteHelper";
+import { misskeyRequest } from "./requestHelper";
 
 const checkForHarmAndThrowIfTrue = async (
     cardboard: CardboardClient,

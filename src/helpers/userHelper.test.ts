@@ -2,8 +2,8 @@ import { type Mock, beforeEach, describe, expect, mock, test } from "bun:test";
 import type { CardboardClient } from "../index";
 import type { MisskeyUser } from "../types";
 import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
-import { misskeyRequest } from "./requestFactory";
-import { User } from "./userFactory";
+import { misskeyRequest } from "./requestHelper";
+import { User } from "./userHelper";
 
 // Mock the dependencies
 mock.module("./requestFactory", () => ({
@@ -66,7 +66,7 @@ describe("User", () => {
     });
 
     test("DM calls createNote with correct parameters", async () => {
-        await user.DM("Test message");
+        await user.dm("Test message");
         expect(mockClient.createNote).toHaveBeenCalledWith("Test message", {
             visibility: "specified",
             text: "Test message",

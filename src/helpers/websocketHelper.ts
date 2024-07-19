@@ -1,7 +1,7 @@
 import type { CardboardClient } from "..";
 import pkg from "../../package.json" assert { type: "json" };
-import { Note } from "./noteFactory";
-import { misskeyRequest } from "./requestFactory";
+import { Note } from "./noteHelper";
+import { misskeyRequest } from "./requestHelper";
 
 export enum TimelineType {
     Local = "localTimeline",

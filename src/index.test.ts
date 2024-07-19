@@ -7,8 +7,8 @@ import {
     mock,
     test,
 } from "bun:test";
-import { misskeyRequest } from "./helpers/requestFactory";
-import { CardboardWebsocket, TimelineType } from "./helpers/websocketFactory";
+import { misskeyRequest } from "./helpers/requestHelper";
+import { CardboardWebsocket, TimelineType } from "./helpers/websocketHelper";
 import { CardboardClient } from "./index";
 import { NoteVisibility } from "./types";
 
