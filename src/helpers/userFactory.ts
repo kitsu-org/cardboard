@@ -276,8 +276,7 @@ export class User {
      * @param options The message options. Some are disabled.
      * @returns {Promise<Note>}
      */
-    // biome-ignore lint/style/useNamingConvention: DM is an abbreviation for direct message.
-    async DM(
+    async dm(
         content: string,
         options?: Omit<NoteOptions, "text" | "visibility" | "visibleUserIds">,
     ): Promise<Note> {
