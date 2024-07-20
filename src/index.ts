@@ -1,5 +1,6 @@
 import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
+import { SelfUser } from "./helpers/selfUserHelper";
 import { User } from "./helpers/userHelper";
 import {
     CardboardWebsocket,
@@ -7,7 +8,6 @@ import {
     type WebsocketOptions,
 } from "./helpers/websocketHelper";
 import type { NoteOptions } from "./types/note";
-import type { MisskeyUser } from "./types/user";
 
 interface Events {
     ready: () => void;
@@ -36,8 +36,11 @@ export class CardboardClient {
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
 
-    public async getSelf(): Promise<MisskeyUser> {
-        return await misskeyRequest(this.instance, this.accessToken, "i", {});
+    public async getSelf(): Promise<SelfUser> {
+        return new SelfUser(
+            this,
+            await misskeyRequest(this.instance, this.accessToken, "i", {}),
+        );
     }
 
     /**
