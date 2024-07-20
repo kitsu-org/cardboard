@@ -23,7 +23,10 @@ const checkForNoBotandThrowIfExists = (
     cardboard: CardboardClient,
     user: MisskeyUser,
 ) => {
-    if (cardboard.options?.bypassNoBot) {
+    if (
+        cardboard.options?.bypassNoBot &&
+        user.description.toLocaleLowerCase().includes("#nobot")
+    ) {
         console.warn(`
             ====\n
             user @${user.username}${user.instance ? `@${user.instance}` : ""} does NOT want to be interacted with.\n
