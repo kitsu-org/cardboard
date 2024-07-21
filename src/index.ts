@@ -1,4 +1,5 @@
 import { Drive } from "./helpers/driveHelper";
+import { Logger } from "./helpers/logHelper";
 import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
 import { SelfUser } from "./helpers/selfUserHelper";
@@ -22,6 +23,8 @@ export class CardboardClient {
         public readonly accessToken: string,
         public readonly options?: {
             bypassNoBot?: boolean;
+            output?: "verbose" | "debug" | "log" | "warn" | "error" | "crit";
+            logFile?: string;
         },
     ) {
         if (options?.bypassNoBot === true) {
@@ -34,18 +37,17 @@ export class CardboardClient {
                 `);
         }
         this.drive = new Drive(this);
+        this.logger = new Logger(this);
     }
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
 
     public async getSelf(): Promise<SelfUser> {
-        return new SelfUser(
-            this,
-            await misskeyRequest(this.instance, this.accessToken, "i", {}),
-        );
+        return new SelfUser(this, await misskeyRequest(this, "i"));
     }
 
     public drive: Drive;
+    public logger: Logger;
 
     /**
      * connect the websocket to the backend.
@@ -67,8 +69,7 @@ export class CardboardClient {
         },
     ) {
         const users = await misskeyRequest(
-            this.instance,
-            this.accessToken,
+            this,
             "users/search-by-username-and-host",
             {
                 username,
@@ -89,14 +90,9 @@ export class CardboardClient {
     public async showUser(userId: string) {
         return new User(
             this,
-            await misskeyRequest(
-                this.instance,
-                this.accessToken,
-                "users/show",
-                {
-                    userId,
-                },
-            ),
+            await misskeyRequest(this, "users/show", {
+                userId,
+            }),
         );
     }
 
@@ -111,12 +107,10 @@ export class CardboardClient {
     ): Promise<Note> {
         return new Note(
             this,
-            await misskeyRequest(
-                this.instance,
-                this.accessToken,
-                "notes/create",
-                { text: content, ...options },
-            ),
+            await misskeyRequest(this, "notes/create", {
+                text: content,
+                ...options,
+            }),
         );
     }
 

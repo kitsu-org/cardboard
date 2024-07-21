@@ -15,7 +15,7 @@ cardboard.on("ready", async () => {
 cardboard.on("mention", async (msg) => {
     if (
         msg.note.text
-            ?.replaceAll(`@${(await cardboard.getSelf()).username} `, "")
+            ?.replaceAll(`@${(await cardboard.getSelf()).user.username} `, "")
             .startsWith("hello")
     ) {
         await msg.reply("Cardboard! 📦");

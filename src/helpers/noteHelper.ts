@@ -16,6 +16,52 @@ export class Note {
     public user: LiteUser;
 
     /**
+     * get the Parent note, if there is any.
+     * @returns {Promise<Note|null>}
+     */
+    async getParent(): Promise<Note | null> {
+        if (this.note.reply) {
+            return new Note(this.cardboard, this.note.reply);
+        }
+        if (this.note.replyId) {
+            return new Note(
+                this.cardboard,
+                await misskeyRequest(this.cardboard, "notes/show", {
+                    noteId: this.note.replyId,
+                }),
+            );
+        }
+        return null;
+    }
+
+    /**
+     * Get Replies (Children) of the note you have.
+     * @param options options to get more children, or change which children are seen.
+     * @returns {Promise<Note[] | null>}
+     * @todo add proper and easy pagination.
+     */
+    async getReplies(options: {
+        limit: number;
+        sinceId: string;
+        untilId: string;
+        showQuotes: boolean;
+    }): Promise<Note[] | null> {
+        if (this.note.repliesCount !== 0) {
+            const notes = await misskeyRequest(
+                this.cardboard,
+                "notes/children",
+                { noteId: this.note.id, ...options },
+            );
+            const preppedNotes: Note[] = [];
+            for await (const reply of notes) {
+                preppedNotes.push(new Note(this.cardboard, reply));
+            }
+            return preppedNotes;
+        }
+        return null;
+    }
+
+    /**
      * Reply to this post.
      * @param {string} content - The message you would like to send.
      * @param {NoteOptions} options - optional settings to modify to whom and how your message is sent.
@@ -44,12 +90,11 @@ export class Note {
         local = true,
         visibility?: Omit<NoteVisibility, NoteVisibility.Specified>,
     ): Promise<void> {
-        return await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "notes/create",
-            { renoteId: this.note.id, localOnly: local, visibility },
-        );
+        return await misskeyRequest(this.cardboard, "notes/create", {
+            renoteId: this.note.id,
+            localOnly: local,
+            visibility,
+        });
     }
 
     /**
@@ -73,11 +118,8 @@ export class Note {
      * @returns {Promise<void>}
      */
     async delete(): Promise<void> {
-        return await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "notes/delete",
-            { noteId: this.note.id },
-        );
+        return await misskeyRequest(this.cardboard, "notes/delete", {
+            noteId: this.note.id,
+        });
     }
 }

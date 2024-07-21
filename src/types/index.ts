@@ -5,6 +5,7 @@ import {
     PermissionDeniedError,
     PopulatedFolderError,
 } from "./error";
+import type { MisskeyFile } from "./file";
 import {
     type File,
     type FileProperties,
@@ -21,6 +22,8 @@ import {
     Visibility,
 } from "./user";
 
+//file
+export type { MisskeyFile };
 //error
 export {
     AuthenticationError,

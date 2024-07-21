@@ -105,12 +105,7 @@ export class Drive {
      * @param {ShowOptions} options - options to make sorting a bit quicker.
      */
     async dir(options: Omit<ShowOptions, "type" | "sort">) {
-        return await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "drive/folders",
-            options,
-        );
+        return await misskeyRequest(this.cardboard, "drive/folders", options);
     }
     /**
      * show files inside your misskey drive.
@@ -118,8 +113,7 @@ export class Drive {
      */
     async ls(options: ShowOptions) {
         const files = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "drive/files",
             options,
         );
@@ -138,8 +132,7 @@ export class Drive {
      */
     async deleteFolder(folderId: string, recursive = false): Promise<void> {
         const checkForFolder = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "drive/folders/show",
             { folderId },
         );
@@ -149,12 +142,9 @@ export class Drive {
         ) {
             throw PopulatedFolderError;
         }
-        return await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "drive/folders/delete",
-            { folderId },
-        );
+        return await misskeyRequest(this.cardboard, "drive/folders/delete", {
+            folderId,
+        });
     }
 
     /**
@@ -165,17 +155,7 @@ export class Drive {
     async deleteFile(fileId: string): Promise<void> {
         // We'll specifically call drive/files/show to ensure that the file is present.
         // If it's not, it'll throw an error that prevents us from doing anything _too_ dangerous.
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "drive/files/show",
-            { fileId },
-        );
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "drive/files/delete",
-            { fileId },
-        );
+        await misskeyRequest(this.cardboard, "drive/files/show", { fileId });
+        await misskeyRequest(this.cardboard, "drive/files/delete", { fileId });
     }
 }

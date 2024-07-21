@@ -1,17 +1,17 @@
+import type { CardboardClient } from "..";
 import pkg from "../../package.json" assert { type: "json" };
 import { AuthenticationError, PermissionDeniedError } from "../types/error";
 
 export const misskeyRequest = async (
-    instance: string,
-    token: string,
+    cardboard: CardboardClient,
     path: string,
     options?: Record<string, unknown>,
 ) => {
-    const url = new URL(`/api/${path}`, `https://${instance}`);
+    const url = new URL(`/api/${path}`, `https://${cardboard.instance}`);
     const response = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
-            i: token,
+            i: cardboard.accessToken,
             ...options,
         }),
         headers: {
@@ -21,7 +21,8 @@ export const misskeyRequest = async (
             "accept-encoding": "gzip, deflate, br",
         },
     });
-
+    cardboard.logger.debug(`-> ${path} -- returned ${response.status}`);
+    cardboard.logger.verbose(JSON.stringify(response));
     if (response.ok) {
         // Check if response is JSON
         if (

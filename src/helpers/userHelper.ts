@@ -9,17 +9,13 @@ const checkForHarmAndThrowIfTrue = async (
     cardboard: CardboardClient,
     userId: string,
 ) => {
-    const checkforSelf = await misskeyRequest(
-        cardboard.instance,
-        cardboard.accessToken,
-        "i",
-    );
+    const checkforSelf = await misskeyRequest(cardboard, "i");
     if (checkforSelf.id === userId) {
         throw new CannotHurtSelfError();
     }
 };
 
-const checkForNoBotandThrowIfExists = (
+const checkForNoBotAndThrowIfExists = (
     cardboard: CardboardClient,
     user: MisskeyUser,
 ) => {
@@ -56,22 +52,14 @@ export class User {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async suspend(modNote?: string): Promise<void> {
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "admin/suspend-user",
-            { userId: this.user.id },
-        );
+        await misskeyRequest(this.cardboard, "admin/suspend-user", {
+            userId: this.user.id,
+        });
         if (modNote) {
-            await misskeyRequest(
-                this.cardboard.instance,
-                this.cardboard.accessToken,
-                "admin/update-user-note",
-                {
-                    userId: this.user.id,
-                    text: `${this.user.moderationNote}\n${modNote}`,
-                },
-            );
+            await misskeyRequest(this.cardboard, "admin/update-user-note", {
+                userId: this.user.id,
+                text: `${this.user.moderationNote}\n${modNote}`,
+            });
         }
     }
 
@@ -80,22 +68,14 @@ export class User {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async unsuspend(modNote?: string): Promise<void> {
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "admin/unsuspend-user",
-            { userId: this.user.id },
-        );
+        await misskeyRequest(this.cardboard, "admin/unsuspend-user", {
+            userId: this.user.id,
+        });
         if (modNote) {
-            await misskeyRequest(
-                this.cardboard.instance,
-                this.cardboard.accessToken,
-                "admin/update-user-note",
-                {
-                    userId: this.user.id,
-                    text: `${this.user.moderationNote}\n${modNote}`,
-                },
-            );
+            await misskeyRequest(this.cardboard, "admin/update-user-note", {
+                userId: this.user.id,
+                text: `${this.user.moderationNote}\n${modNote}`,
+            });
         }
     }
 
@@ -104,22 +84,14 @@ export class User {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async silence(modNote?: string): Promise<void> {
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "admin/silence-user",
-            { userId: this.user.id },
-        );
+        await misskeyRequest(this.cardboard, "admin/silence-user", {
+            userId: this.user.id,
+        });
         if (modNote) {
-            await misskeyRequest(
-                this.cardboard.instance,
-                this.cardboard.accessToken,
-                "admin/update-user-note",
-                {
-                    userId: this.user.id,
-                    text: `${this.user.moderationNote}\n${modNote}`,
-                },
-            );
+            await misskeyRequest(this.cardboard, "admin/update-user-note", {
+                userId: this.user.id,
+                text: `${this.user.moderationNote}\n${modNote}`,
+            });
         }
     }
 
@@ -128,22 +100,14 @@ export class User {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async unsilence(modNote?: string): Promise<void> {
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "admin/unsilence-user",
-            { userId: this.user.id },
-        );
+        await misskeyRequest(this.cardboard, "admin/unsilence-user", {
+            userId: this.user.id,
+        });
         if (modNote) {
-            await misskeyRequest(
-                this.cardboard.instance,
-                this.cardboard.accessToken,
-                "admin/update-user-note",
-                {
-                    userId: this.user.id,
-                    text: `${this.user.moderationNote}\n${modNote}`,
-                },
-            );
+            await misskeyRequest(this.cardboard, "admin/update-user-note", {
+                userId: this.user.id,
+                text: `${this.user.moderationNote}\n${modNote}`,
+            });
         }
     }
 
@@ -152,10 +116,9 @@ export class User {
      */
     async follow(): Promise<void> {
         await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
-        await checkForNoBotandThrowIfExists(this.cardboard, this.user);
+        await checkForNoBotAndThrowIfExists(this.cardboard, this.user);
         const request = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "following/create",
             { userId: this.user.id },
         );
@@ -168,8 +131,7 @@ export class User {
     async unfollow(): Promise<void> {
         await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
         const request = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "following/delete",
             { userId: this.user.id },
         );
@@ -182,20 +144,14 @@ export class User {
      */
     async mute(renotes = false): Promise<void> {
         await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
-        const request = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "mute/create",
-            { userId: this.user.id },
-        );
+        const request = await misskeyRequest(this.cardboard, "mute/create", {
+            userId: this.user.id,
+        });
         this.misskeyUser = request;
         if (renotes) {
-            await misskeyRequest(
-                this.cardboard.instance,
-                this.cardboard.accessToken,
-                "renote-mute/create",
-                { userId: this.user.id },
-            );
+            await misskeyRequest(this.cardboard, "renote-mute/create", {
+                userId: this.user.id,
+            });
         }
     }
 
@@ -205,20 +161,14 @@ export class User {
      */
     async unmute(renotes = false): Promise<void> {
         await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
-        const request = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "mute/delete",
-            { userId: this.user.id },
-        );
+        const request = await misskeyRequest(this.cardboard, "mute/delete", {
+            userId: this.user.id,
+        });
         this.misskeyUser = request;
         if (renotes) {
-            await misskeyRequest(
-                this.cardboard.instance,
-                this.cardboard.accessToken,
-                "renote-mute/delete",
-                { userId: this.user.id },
-            );
+            await misskeyRequest(this.cardboard, "renote-mute/delete", {
+                userId: this.user.id,
+            });
         }
     }
 
@@ -231,8 +181,7 @@ export class User {
         await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
 
         const request = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "blocking/create",
             {
                 userId: this.user.id,
@@ -249,8 +198,7 @@ export class User {
     async unblock(): Promise<void> {
         await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
         const request = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "blocking/delete",
             { userId: this.user.id },
         );
@@ -262,15 +210,10 @@ export class User {
      * @param memo a text string. Newlines can use `\n`.
      */
     async setMemo(memo: string): Promise<void> {
-        await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
-            "users/update-memo",
-            {
-                userId: this.user.id,
-                memo: memo,
-            },
-        );
+        await misskeyRequest(this.cardboard, "users/update-memo", {
+            userId: this.user.id,
+            memo: memo,
+        });
     }
 
     /**
@@ -283,7 +226,7 @@ export class User {
         content: string,
         options?: Omit<NoteOptions, "text" | "visibility" | "visibleUserIds">,
     ): Promise<Note> {
-        await checkForNoBotandThrowIfExists(this.cardboard, this.user);
+        await checkForNoBotAndThrowIfExists(this.cardboard, this.user);
         return await this.cardboard.createNote(content, {
             visibility: NoteVisibility.Specified,
             text: content,

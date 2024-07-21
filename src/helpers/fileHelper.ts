@@ -1,5 +1,5 @@
 import type { CardboardClient } from "..";
-import type { MisskeyFile } from "../types";
+import type { MisskeyFile } from "../types/file";
 import { misskeyRequest } from "./requestHelper";
 
 export class FileItem {
@@ -21,8 +21,7 @@ export class FileItem {
 
     async addCaption(caption: string) {
         const newFile = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "drive/files/update",
             { fileId: this.file.id, comment: caption },
         );
@@ -31,8 +30,7 @@ export class FileItem {
 
     async setSensitivity(sensitive: boolean) {
         const newFile = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "drive/files/update",
             { fileId: this.file.id, isSensitive: sensitive },
         );
@@ -41,8 +39,7 @@ export class FileItem {
 
     async rename(filename: string) {
         const newFile = await misskeyRequest(
-            this.cardboard.instance,
-            this.cardboard.accessToken,
+            this.cardboard,
             "drive/files/update",
             {
                 fileId: this.file.id,
