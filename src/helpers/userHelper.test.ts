@@ -6,7 +6,7 @@ import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
 // Mock the dependencies
-mock.module("./requestFactory", () => ({
+mock.module("./requestHelper", () => ({
     misskeyRequest: mock(() => Promise.resolve({})),
 }));
 

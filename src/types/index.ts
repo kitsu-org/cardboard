@@ -3,6 +3,7 @@ import {
     CannotHurtSelfError,
     NoBotInteractionError,
     PermissionDeniedError,
+    PopulatedFolderError,
 } from "./error";
 import {
     type File,
@@ -26,6 +27,7 @@ export {
     PermissionDeniedError,
     NoBotInteractionError,
     CannotHurtSelfError,
+    PopulatedFolderError,
 };
 //note
 export {

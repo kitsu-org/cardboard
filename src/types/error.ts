@@ -6,6 +6,15 @@ export class AuthenticationError extends Error {
     }
 }
 
+export class PopulatedFolderError extends Error {
+    constructor() {
+        super();
+        this.name = "PopulatedFolderError";
+        this.message =
+            "There are files a/o folders in the folder you'd like to delete, and recursive is not truthy; so this action is disallowed.";
+    }
+}
+
 export class PermissionDeniedError extends Error {
     constructor() {
         super();

@@ -1,3 +1,4 @@
+import { Drive } from "./helpers/driveHelper";
 import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
 import { SelfUser } from "./helpers/selfUserHelper";
@@ -32,6 +33,7 @@ export class CardboardClient {
                 ==========
                 `);
         }
+        this.drive = new Drive(this);
     }
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
@@ -42,6 +44,8 @@ export class CardboardClient {
             await misskeyRequest(this.instance, this.accessToken, "i", {}),
         );
     }
+
+    public drive: Drive;
 
     /**
      * connect the websocket to the backend.
