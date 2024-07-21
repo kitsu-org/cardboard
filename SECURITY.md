@@ -13,7 +13,7 @@ Vulnerabilities that will be immediately rejected:
 - Modules that are developed by a 3rd party
 - Frameworks or modules that are not explicitly made by cardboard or for cardboard
 - Code that violates misskey's ratelimits (as misskey does not report its own ratelimits.)
-- Odd happenings using misskeyRequest
+- Odd happenings using misskeyRequest directly
 
 Remember that you should analyze each line of a bot (whether running cardboard directly, or running inside a box) someone made for you, that you are going to run.
 I will not take responsibility for someone else's module getting you silenced or suspended, putting forks in your toaster, sending messages that you did not authorize, eating your snacks, etc...
