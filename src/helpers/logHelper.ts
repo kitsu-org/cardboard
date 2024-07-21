@@ -1,5 +1,5 @@
-import type { CardboardClient } from "..";
 import { createWriteStream } from "node:fs";
+import type { CardboardClient } from "..";
 
 export class Logger {
     constructor(protected readonly cardboard: CardboardClient) {

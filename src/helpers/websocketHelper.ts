@@ -1,6 +1,5 @@
 import type { CardboardClient } from "..";
 import pkg from "../../package.json" assert { type: "json" };
-import { Logger } from "./logHelper";
 import { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
 
