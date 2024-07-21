@@ -50,7 +50,10 @@ export const misskeyRequest = async (
                         uuid: string;
                     };
                 };
-                throw new Error(errorInfo.error.message);
+                throw {
+                    name: errorInfo.error.code,
+                    message: errorInfo.error.message,
+                };
             }
         }
     }
