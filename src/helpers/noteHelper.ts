@@ -79,6 +79,29 @@ export class Note {
         });
     }
 
+    //TODO: Get unicode emojis. Right now, I'm just not that good... =~=
+    /**
+     * Get all *custom* emojis within a post.
+     * This function does not get unicode emojis yet.
+     */
+    getEmojis() {
+        if (this.content === null) {
+            return null;
+        }
+        const count: Record<string, number> = {};
+        const match = this.content
+            .toString()
+            .matchAll(/:([a-zA-Z0-9_-]+(@\w+\.\w+)*):/g);
+        for (const element of match) {
+            if (count[element[0]]) {
+                count[element[0]]++;
+            } else {
+                count[element[0]] = 1;
+            }
+        }
+        return count;
+    }
+
     /**
      * Boost the note without adding additional content.
      * @param {boolean} local Federate the note.
