@@ -9,7 +9,7 @@ export class AuthenticationError extends Error {
 export class PermissionDeniedError extends Error {
     constructor() {
         super();
-        this.name = "PermissionDenied";
+        this.name = "PermissionDeniedError";
         this.message =
             "You are not able to use this command with the permissions this token has been granted.";
     }
