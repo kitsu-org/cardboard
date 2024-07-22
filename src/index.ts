@@ -1,3 +1,4 @@
+import { readdir } from "node:fs/promises";
 import { Drive } from "./helpers/driveHelper";
 import { Logger } from "./helpers/logHelper";
 import { Note } from "./helpers/noteHelper";
@@ -15,6 +16,15 @@ interface Events {
     ready: () => void;
     mention: (msg: Note) => void;
     note: (note: Note) => void;
+    delete: (deletedNote: { id: string; deletedAt: string }) => void;
+    follow: (user: User) => void;
+    unfollow: (user: User) => void;
+    followRequest: (user: User) => void;
+    reaction: (react: {
+        noteId: string;
+        reaction: string;
+        userId: string;
+    }) => void;
 }
 
 export class CardboardClient {
@@ -49,13 +59,32 @@ export class CardboardClient {
     public drive: Drive;
     public logger: Logger;
 
+    public async addFolder(boxFolder: string) {
+        const folder = await readdir(boxFolder);
+        for await (const file of folder) {
+            this.addBox(`${boxFolder}/${file}`);
+        }
+    }
+
+    /**
+     * Add a box for Cardboard to work with.
+     * @param command the file leading to the box in question.
+     */
+    public addBox(boxFile: string) {
+        if (typeof boxFile === "string") {
+            import(boxFile).then((found) => {
+                new found.default(this);
+            });
+        }
+    }
+
     /**
      * connect the websocket to the backend.
      * @param websocketOptions Optional parameters that allow you to scale your userbase at the cost of performance.
      */
     public connect(
         websocketOptions: WebsocketOptions = {
-            TimelineType: TimelineType.Local,
+            TimelineType: TimelineType.Global || TimelineType.Local,
         },
     ): void {
         new CardboardWebsocket(this, websocketOptions);

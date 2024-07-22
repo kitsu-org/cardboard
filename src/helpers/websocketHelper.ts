@@ -2,6 +2,7 @@ import type { CardboardClient } from "..";
 import pkg from "../../package.json" assert { type: "json" };
 import { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
+import { User } from "./userHelper";
 
 export enum TimelineType {
     Local = "localTimeline",
@@ -20,7 +21,7 @@ export class CardboardWebsocket {
         private readonly cardboard: CardboardClient,
         public readonly websocketOptions: WebsocketOptions,
     ) {
-        const _connect = () => {
+        const connect = () => {
             // Verify Validity of Token before trying to jam it into the websocket builder.
             this.cardboard.logger.debug("[WS] authenticating...");
             misskeyRequest(this.cardboard, "i").then(() => {
@@ -39,9 +40,8 @@ export class CardboardWebsocket {
                         "accept-encoding": "gzip, deflate, br",
                     },
                 });
-
                 // TODO: This should be a proper handler.
-                // this.websocket.addEventListener("error", this.cardboard.logger.error);
+                this.websocket.addEventListener("error", console.error);
 
                 this.websocket.addEventListener("message", (rawData) => {
                     const data = JSON.parse(rawData.data);
@@ -51,6 +51,64 @@ export class CardboardWebsocket {
                     // Default catchall will service the rest in the meantime.
                     if (data.type === "channel") {
                         switch (data.body.type) {
+                            case "receiveFollowRequest": {
+                                this.cardboard.logger.debug(
+                                    `[WS] user ${data.body.id} followed.`,
+                                );
+                                this.cardboard.emit(
+                                    "followRequest",
+                                    new User(this.cardboard, data.body.body),
+                                );
+                                break;
+                            }
+                            case "reacted": {
+                                this.cardboard.emit("reaction", {
+                                    noteId: data.body.id,
+                                    reaction: data.body.body.reaction,
+                                    userId: data.body.body.userId,
+                                });
+                                break;
+                            }
+                            case "follow": {
+                                this.cardboard.logger.debug(
+                                    `[WS] user ${data.body.id} followed.`,
+                                );
+                                this.cardboard.emit(
+                                    "follow",
+                                    new User(this.cardboard, data.body.body),
+                                );
+                                break;
+                            }
+                            case "unfollow": {
+                                this.cardboard.logger.debug(
+                                    `[WS] user ${data.body.id} unfollowed.`,
+                                );
+                                this.cardboard.emit(
+                                    "unfollow",
+                                    new User(this.cardboard, data.body.body),
+                                );
+                                break;
+                            }
+                            case "updated": {
+                                this.cardboard.logger.debug(
+                                    `[WS] note ${data.body.id} updated.`,
+                                );
+                                this.cardboard.emit("delete", {
+                                    id: data.body.id,
+                                    deletedAt: data.body.body.deletedAt,
+                                });
+                                break;
+                            }
+                            case "deleted": {
+                                this.cardboard.logger.debug(
+                                    `[WS] note ${data.body.id} deleted.`,
+                                );
+                                this.cardboard.emit("delete", {
+                                    id: data.body.id,
+                                    deletedAt: data.body.body.deletedAt,
+                                });
+                                break;
+                            }
                             case "note": {
                                 this.cardboard.logger.debug(
                                     `[WS] note ${data.body.body.id} received.`,
@@ -85,11 +143,11 @@ export class CardboardWebsocket {
                         }
                     }
                 });
-
                 this.websocket.addEventListener("close", () => {
                     //TODO: Reconnect to the websocket.
                     this.cardboard.logger.warn("[WS] Websocket closed.");
-                    _connect();
+                    connect();
+                    return;
                 });
 
                 this.websocket.addEventListener("open", () => {
@@ -108,7 +166,7 @@ export class CardboardWebsocket {
                             type: "connect",
                             body: {
                                 channel: "main",
-                                id: this.id++,
+                                id: this.id.toString(),
                             },
                         }),
                     );
@@ -117,7 +175,7 @@ export class CardboardWebsocket {
                             type: "connect",
                             body: {
                                 channel: this.websocketOptions.TimelineType,
-                                id: this.id++,
+                                id: (this.id++).toString(),
                                 params: {
                                     withRenotes:
                                         !!this.websocketOptions.withRenotes,
@@ -130,11 +188,11 @@ export class CardboardWebsocket {
                     );
                     this.cardboard.logger.debug("[WS] channel opened: main");
                     this.websocket.send(
-                        `[WS] -> -- ${JSON.stringify({
+                        JSON.stringify({
                             type: "connect",
                             body: {
                                 channel: this.websocketOptions.TimelineType,
-                                id: this.id++,
+                                id: this.id.toString(),
                                 params: {
                                     withRenotes:
                                         !!this.websocketOptions.withRenotes,
@@ -143,7 +201,7 @@ export class CardboardWebsocket {
                                     withBots: !!this.websocketOptions.withBots,
                                 },
                             },
-                        })}`,
+                        }),
                     );
                     this.cardboard.logger.debug(
                         `[WS] channel opened: ${this.websocketOptions.TimelineType}`,
@@ -152,6 +210,7 @@ export class CardboardWebsocket {
                 });
             });
         };
+        connect();
     }
 
     private id = 0;

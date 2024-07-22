@@ -64,6 +64,23 @@ export class User {
     }
 
     /**
+     * Accept a pending follow request.
+     */
+    async approveFollowRequest(): Promise<void> {
+        await misskeyRequest(this.cardboard, "following/requests/accept", {
+            userId: this.user.id,
+        });
+    }
+    /**
+     * Reject a follow request that is pending for the user.
+     */
+    async rejectFollowRequest(): Promise<void> {
+        await misskeyRequest(this.cardboard, "following/requests/reject", {
+            userId: this.user.id,
+        });
+    }
+
+    /**
      * Unsuspend the user from the instance, allowing them to access it again.
      * @param modNote an optional string to automatically inform admins what's going on.
      */
