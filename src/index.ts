@@ -102,11 +102,9 @@ export class CardboardClient {
      * @param command the file leading to the box in question.
      */
     public addBox(boxFile: string) {
-        if (typeof boxFile === "string") {
-            import(boxFile).then((found) => {
-                new found.default(this);
-            });
-        }
+        import(boxFile).then((found) => {
+            new found.default(this);
+        });
     }
 
     /**
