@@ -2,11 +2,11 @@ import { type Mock, beforeEach, describe, expect, mock, test } from "bun:test";
 import type { CardboardClient } from "../index";
 import type { MisskeyUser } from "../types";
 import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
-import { misskeyRequest } from "./requestHelper";
-import { User } from "./userHelper";
+import { misskeyRequest } from "../helpers/requestHelper";
+import { User } from "../helpers/userHelper";
 
 // Mock the dependencies
-mock.module("./requestHelper", () => ({
+mock.module("../helpers/requestHelper", () => ({
     misskeyRequest: mock(() => Promise.resolve({})),
 }));
 
@@ -34,14 +34,18 @@ describe("User", () => {
     test("suspend calls misskeyRequest correctly", async () => {
         await user.suspend("test note");
         expect(misskeyRequest).toHaveBeenCalledWith(
-            "example.com",
-            "test-token",
+            {
+                instance: "example.com",
+                accessToken: "test-token",
+            } as CardboardClient,
             "admin/suspend-user",
             { userId: "test-user-id" },
         );
         expect(misskeyRequest).toHaveBeenCalledWith(
-            "example.com",
-            "test-token",
+            {
+                instance: "example.com",
+                accessToken: "test-token",
+            } as CardboardClient,
             "admin/update-user-note",
             { userId: "test-user-id", text: "undefined\ntest note" },
         );

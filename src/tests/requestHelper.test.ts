@@ -1,6 +1,7 @@
 import { type Mock, beforeEach, describe, expect, mock, test } from "bun:test";
 import { AuthenticationError, PermissionDeniedError } from "../types/error";
-import { misskeyRequest } from "./requestHelper";
+import { misskeyRequest } from "../helpers/requestHelper";
+import type { CardboardClient } from "..";
 
 describe("misskeyRequest", () => {
     let mockFetch: Mock<
@@ -24,9 +25,16 @@ describe("misskeyRequest", () => {
     });
 
     test("sends correct request", async () => {
-        await misskeyRequest("example.com", "test-token", "test/path", {
-            option: "value",
-        });
+        await misskeyRequest(
+            {
+                instance: "example.com",
+                accessToken: "test-token",
+            } as CardboardClient,
+            "test/path",
+            {
+                option: "value",
+            },
+        );
 
         expect(mockFetch).toHaveBeenCalledWith(
             new URL("https://example.com/api/test/path"),
@@ -43,8 +51,10 @@ describe("misskeyRequest", () => {
 
     test("returns JSON response when successful", async () => {
         const result = await misskeyRequest(
-            "example.com",
-            "test-token",
+            {
+                instance: "example.com",
+                accessToken: "test-token",
+            } as CardboardClient,
             "test/path",
         );
         expect(result).toEqual({ data: "test" });
@@ -58,7 +68,13 @@ describe("misskeyRequest", () => {
         });
 
         await expect(
-            misskeyRequest("example.com", "test-token", "test/path"),
+            misskeyRequest(
+                {
+                    instance: "example.com",
+                    accessToken: "test-token",
+                } as CardboardClient,
+                "test/path",
+            ),
         ).rejects.toThrow(AuthenticationError);
     });
 
@@ -70,7 +86,13 @@ describe("misskeyRequest", () => {
         });
 
         await expect(
-            misskeyRequest("example.com", "test-token", "test/path"),
+            misskeyRequest(
+                {
+                    instance: "example.com",
+                    accessToken: "test-token",
+                } as CardboardClient,
+                "test/path",
+            ),
         ).rejects.toThrow(PermissionDeniedError);
     });
 
@@ -85,7 +107,13 @@ describe("misskeyRequest", () => {
         });
 
         await expect(
-            misskeyRequest("example.com", "test-token", "test/path"),
+            misskeyRequest(
+                {
+                    instance: "example.com",
+                    accessToken: "test-token",
+                } as CardboardClient,
+                "test/path",
+            ),
         ).rejects.toThrow("Test error");
     });
 });
