@@ -6,6 +6,14 @@ export class AuthenticationError extends Error {
     }
 }
 
+export class BadOffsetError extends Error {
+    constructor() {
+        super();
+        this.name = "BadOffsetError";
+        this.message = "You are trying to offset below 0. This is not allowed.";
+    }
+}
+
 export class PopulatedFolderError extends Error {
     constructor() {
         super();

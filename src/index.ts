@@ -11,6 +11,9 @@ import {
     type WebsocketOptions,
 } from "./helpers/websocketHelper";
 import type { NoteOptions } from "./types/note";
+import { Admin } from "./helpers/adminHelper";
+import type { ServerSortOptions } from "./types/sorting";
+import { IterableArray } from "./helpers/iterableArrayHelper";
 
 interface Events {
     ready: () => void;
@@ -48,6 +51,7 @@ export class CardboardClient {
         }
         this.drive = new Drive(this);
         this.logger = new Logger(this);
+        this.admin = new Admin(this);
     }
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
@@ -58,12 +62,50 @@ export class CardboardClient {
 
     public drive: Drive;
     public logger: Logger;
+    public admin: Admin;
 
     public async addFolder(boxFolder: string) {
         const folder = await readdir(boxFolder);
         for await (const file of folder) {
             this.addBox(`${boxFolder}/${file}`);
         }
+    }
+
+    /**
+     * Get the emoji list.
+     * Note: This can be a very extensive list. Filter at your own risk.
+     */
+    public async getEmojis(): Promise<{
+        emojis: {
+            aliases: string[];
+            name: string;
+            category: string | null;
+            url: string;
+            localOnly?: boolean;
+            isSensitive?: boolean;
+            roleIdsThatCanBeUsedThisEmojiAsReaction?: string[];
+        }[];
+    }> {
+        return await misskeyRequest(this, "emojis");
+    }
+
+    /**
+     * Get the list of servers that your instance knows ab out, and the status they are at present.
+     *
+     */
+    public async getFederatedServers(options: ServerSortOptions) {
+        const request = await misskeyRequest(
+            this,
+            "federation/instances",
+            options,
+        );
+        return new IterableArray(
+            this,
+            "federation/instances",
+            options,
+            request,
+            true,
+        );
     }
 
     /**

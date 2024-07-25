@@ -1,44 +1,40 @@
+import type { MetaOptions, PermissionsOptions } from "../types/user";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
-export type MetaOptions = {
-    location?: string;
-    birthday?: string;
-    followers?: {
-        visibility?: "visible" | "friendsOnly" | "private";
-        requireApproval?: boolean;
-    };
-    following?: {
-        visibility?: "visible" | "friendsOnly" | "private";
-    };
-    visibility?: {
-        online?: boolean;
-        crawlers?: boolean;
-        crawle: boolean;
-        explore?: boolean;
-        ai?: boolean;
-        reactions?: boolean;
-    };
-    listenBrainz?: string;
-    language?: string;
-    fields?: { name: string; value: string }[];
-    isBot?: boolean;
-    catMode?: {
-        earsVisible?: boolean;
-        speech?: boolean;
-    };
-};
-
 export class SelfUser extends User {
+    /**
+     * A way to change what people may see when they look at your post. This is not your username.
+     * @param name A human-readable string that you wish to set your display name to.
+     */
     async setDisplayName(name: string): Promise<void> {
         await misskeyRequest(this.cardboard, "i/update", {
             name,
         });
     }
+    /**
+     * Change the description, aka the bio.
+     * @param description A human-readable string delimited by \n for newlines.
+     */
     async setDescription(description: string): Promise<void> {
         await misskeyRequest(this.cardboard, "i/update", {
             description,
         });
+    }
+
+    /**
+     * Create a restricted API key. By default, all parameters are disabled.
+     * NOTE: This is labelled as an internal endpoint. *Key devs may ask for it to be removed at any time,
+     * and I will comply.
+     */
+    async createApiKey(
+        options: PermissionsOptions,
+    ): Promise<{ token: string }> {
+        return await misskeyRequest(
+            this.cardboard,
+            "miauth/gen-token",
+            options,
+        );
     }
 
     //WONTFIX: Account deletion should not be programmatic.
@@ -46,6 +42,10 @@ export class SelfUser extends User {
     //WONTFIX: I will never make a method for importing notes.
     //         That's a quick way to make a server _very_ unhappy.
 
+    /**
+     * Set any optional, "filler" portions of your profile.
+     * @param meta the options that you would like to set for the profile.
+     */
     async setMeta(meta: MetaOptions): Promise<void> {
         await misskeyRequest(this.cardboard, "i/update", {
             birthday: meta.birthday,

@@ -64,6 +64,22 @@ export class User {
     }
 
     /**
+     * Set all content from a user as NSFW, instance wide.
+     * @param nsfw whether or not you wish for the user to be nsfw'd.
+     */
+    async setNsfw(nsfw: boolean): Promise<void> {
+        if (nsfw) {
+            await misskeyRequest(this.cardboard, "admin/nsfw-user", {
+                userId: this.user.id,
+            });
+        } else {
+            await misskeyRequest(this.cardboard, "admin/unnsfw-user", {
+                userId: this.user.id,
+            });
+        }
+    }
+
+    /**
      * Accept a pending follow request.
      */
     async approveFollowRequest(): Promise<void> {
