@@ -7,10 +7,10 @@ export type ServerStatusOptions = {
 };
 
 export type InviteListOptions = {
-    limit: number;
-    offset: number;
-    type: "unused" | "used" | "expired" | "all";
-    sort: "+createdAt" | "-createdAt" | "+usedAt" | "-usedAt";
+    limit?: number;
+    offset?: number;
+    type?: "unused" | "used" | "expired" | "all";
+    sort?: "+createdAt" | "-createdAt" | "+usedAt" | "-usedAt";
 };
 
 export type Invite = {
