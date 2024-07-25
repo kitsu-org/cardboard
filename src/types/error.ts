@@ -6,6 +6,15 @@ export class AuthenticationError extends Error {
     }
 }
 
+export class NotValidJsonError extends Error {
+    constructor() {
+        super();
+        this.name = "NotValidJsonError";
+        this.message =
+            "I accessed a file & it's not JSON, like *key reports as. This is not allowed.";
+    }
+}
+
 export class BadOffsetError extends Error {
     constructor() {
         super();
