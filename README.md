@@ -24,3 +24,17 @@ cardboard.on("mention", async (msg) => {
 
 cardboard.connect();
 ```
+
+## installation
+Installing cardboard is easy! You can install cardboard by including it into your project, like so!
+```bash
+# Install the stable version of cardboard
+bun add @kitsu-org/cardboard
+```
+
+If you want to use the cutting edge version, you can install it through git.
+> ⚠️ You should keep in mind that reliability will not be _great_ if you use this method, but you'll get more features.
+```bash
+# Install the development edition
+bun add github:kitsu-org/cardboard
+```
