@@ -44,6 +44,9 @@ jobs:
       - name: Change version in package.json to ${{ github.event.inputs.version }}, defaulting to the truncated commit hash
         run: 'sed -i ''s/"version": ".*"/"version": "${{ github.event.inputs.version }}"/'' package.json'
 
+      - name: Remove development systems
+        run: 'rm -rf .github biome.json'
+
       - name: Publish to NPM
         run: npm publish --provenance --tag ${{ github.event.inputs.tag }} --access public
         env:
