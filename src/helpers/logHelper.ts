@@ -7,7 +7,7 @@ const logger = (
     writeLog: WriteStream | { write: () => null },
 ): void => {
     let prefixConsoleMessage = "";
-    const time = new Date(Date.now()).toLocaleString();
+    const time = new Date().toLocaleString();
 
     switch (type) {
         case "verbose":
