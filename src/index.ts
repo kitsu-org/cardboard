@@ -12,9 +12,9 @@ import {
     TimelineType,
     type WebsocketOptions,
 } from "./helpers/websocketHelper";
+import type { Emoji } from "./types/emoji";
 import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
-import type { Emoji } from "./types/emoji";
 
 interface Events {
     ready: () => void;

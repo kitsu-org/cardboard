@@ -1,7 +1,7 @@
 import { type Mock, beforeEach, describe, expect, mock, test } from "bun:test";
-import { AuthenticationError, PermissionDeniedError } from "../types/error";
-import { misskeyRequest } from "../helpers/requestHelper";
 import type { CardboardClient } from "..";
+import { misskeyRequest } from "../helpers/requestHelper";
+import { AuthenticationError, PermissionDeniedError } from "../types/error";
 
 describe("misskeyRequest", () => {
     let mockFetch: Mock<
