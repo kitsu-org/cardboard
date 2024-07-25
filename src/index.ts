@@ -63,7 +63,7 @@ export class CardboardClient {
 
     public async addFolder(boxFolder: string) {
         const folder = await readdir(boxFolder);
-        for await (const file of folder) {
+        for (const file of folder) {
             this.addBox(`${boxFolder}/${file}`);
         }
     }
