@@ -1,9 +1,11 @@
 import type { CardboardClient } from "..";
 import type {
+    AdvertisementOptions,
     AnnouncementOptions,
     AnnouncementResponse,
     Invite,
     InviteListOptions,
+    ReportSortingOptions,
     ServerStatusOptions,
 } from "../types/admin";
 import type { Emoji } from "../types/emoji";
@@ -404,15 +406,7 @@ export class Admin {
     public async createAdvertisement(
         url: string,
         imageUrl: string,
-        options: {
-            memo?: string | null;
-            place?: "square" | "horizontal" | "horizontal-big";
-            dayOfWeek?: number; // I don't understand the numbers here...
-            ratio?: number;
-            startsAt: number;
-            expiresAt: number;
-            priority: "middle";
-        },
+        options: AdvertisementOptions,
     ): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/ad/create ", {
             url,
@@ -438,15 +432,7 @@ export class Admin {
         adId: string,
         url: string,
         imageUrl: string,
-        options: {
-            memo?: string | null;
-            place?: "square" | "horizontal" | "horizontal-big";
-            dayOfWeek?: number; // I don't understand the numbers here...
-            ratio?: number;
-            startsAt: number;
-            expiresAt: number;
-            priority: "middle";
-        },
+        options: AdvertisementOptions,
     ): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/ad/update ", {
             id: adId,
@@ -476,15 +462,9 @@ export class Admin {
      * List reports.
      * @param sortingOptions A list of options you can utilize to sort.
      */
-    public async getReports(sortingOptions?: {
-        limit?: number;
-        sinceId?: string;
-        untilId?: string;
-        state?: string | null;
-        reporterOrigin?: "combined" | "local" | "remote";
-        targetUserOrigin?: "combined" | "local" | "remote";
-        forwarded?: boolean;
-    }): Promise<IterableArray> {
+    public async getReports(
+        sortingOptions?: ReportSortingOptions,
+    ): Promise<IterableArray> {
         const report = await misskeyRequest(
             this.cardboard,
             "admin/abuse-user-reports",

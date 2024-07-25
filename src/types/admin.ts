@@ -41,3 +41,21 @@ export type AnnouncementResponse = {
     text: string;
     imageUrl: string;
 };
+export type AdvertisementOptions = {
+    memo?: string | null;
+    place?: "square" | "horizontal" | "horizontal-big";
+    dayOfWeek?: number; // I don't understand the numbers here...
+    ratio?: number;
+    startsAt: number;
+    expiresAt: number;
+    priority: "middle";
+};
+export type ReportSortingOptions = {
+    limit?: number;
+    sinceId?: string;
+    untilId?: string;
+    state?: string | null;
+    reporterOrigin?: "combined" | "local" | "remote";
+    targetUserOrigin?: "combined" | "local" | "remote";
+    forwarded?: boolean;
+};

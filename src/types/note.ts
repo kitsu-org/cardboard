@@ -39,6 +39,17 @@ export enum OnlineStatus {
     Offline = "offline",
 }
 
+export type DeletedNote = {
+    id: string;
+    deletedAt: string;
+};
+
+export type Reaction = {
+    noteId: string;
+    reaction: string;
+    userId: string;
+};
+
 export type MisskeyNote = {
     id: string;
     createdAt: string;

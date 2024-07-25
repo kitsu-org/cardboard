@@ -12,22 +12,19 @@ import {
     TimelineType,
     type WebsocketOptions,
 } from "./helpers/websocketHelper";
-import type { NoteOptions } from "./types/note";
+import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
+import type { Emoji } from "./types/emoji";
 
 interface Events {
     ready: () => void;
     mention: (msg: Note) => void;
     note: (note: Note) => void;
-    delete: (deletedNote: { id: string; deletedAt: string }) => void;
+    delete: (deletedNote: DeletedNote) => void;
     follow: (user: User) => void;
     unfollow: (user: User) => void;
     followRequest: (user: User) => void;
-    reaction: (react: {
-        noteId: string;
-        reaction: string;
-        userId: string;
-    }) => void;
+    reaction: (react: Reaction) => void;
 }
 
 export class CardboardClient {
@@ -76,15 +73,7 @@ export class CardboardClient {
      * Note: This can be a very extensive list. Filter at your own risk.
      */
     public async getEmojis(): Promise<{
-        emojis: {
-            aliases: string[];
-            name: string;
-            category: string | null;
-            url: string;
-            localOnly?: boolean;
-            isSensitive?: boolean;
-            roleIdsThatCanBeUsedThisEmojiAsReaction?: string[];
-        }[];
+        emojis: Omit<Emoji, "id" | "host" | "license" | "localOnly">[];
     }> {
         return await misskeyRequest(this, "emojis");
     }
