@@ -1,7 +1,36 @@
-import { createWriteStream } from "node:fs";
+import { createWriteStream, type WriteStream } from "node:fs"; // How do I turn this dynamic?
 import type { CardboardClient } from "..";
 
-//TODO: Loghelper needs a refactor.
+const logger = (
+    message: string,
+    type: string,
+    writeLog: WriteStream | { write: () => null },
+): void => {
+    let prefixConsoleMessage = "";
+    const time = new Date(Date.now()).toLocaleString();
+
+    switch (type) {
+        case "verbose":
+            prefixConsoleMessage = "\x1b[90m";
+            break;
+        case "debug":
+            prefixConsoleMessage = "\x1b[90m";
+            break;
+        case "warn":
+            prefixConsoleMessage = "\x1b[33m";
+            break;
+        case "error":
+            prefixConsoleMessage = "\x1b[31m";
+            break;
+        case "critical":
+            prefixConsoleMessage = "\x1b[1m\x1b[30m\x1b[41m";
+            break;
+    }
+    process.stdout.write(
+        `${prefixConsoleMessage}[${type.toUpperCase()}] [${time}] ${message}\x1b[0m\r\n`,
+    );
+    writeLog.write(`[${type.toUpperCase()}] [${time}] ${message}\r\n`);
+};
 
 export class Logger {
     constructor(protected readonly cardboard: CardboardClient) {
@@ -26,12 +55,8 @@ export class Logger {
      * @param message the string you'd like to display to the log.
      */
     verbose(message: string): void {
-        const time = new Date(Date.now()).toLocaleString();
         if (this.loggingType === "verbose") {
-            process.stdout.write(
-                `\x1b[90m[VER] [${time}] ${message}\x1b[0m\r\n`,
-            );
-            this.writeStream.write(`[VER] [${time}] ${message}\r\n`);
+            logger(message, "verbose", this.writeStream);
         }
     }
 
@@ -40,12 +65,8 @@ export class Logger {
      * @param message the string you'd like to display to the log.
      */
     debug(message: string): void {
-        const time = new Date(Date.now()).toLocaleString();
         if (["verbose", "debug"].includes(this.loggingType)) {
-            process.stdout.write(
-                `\x1b[90m[DBG] [${time}] ${message}\x1b[0m\r\n`,
-            );
-            this.writeStream.write(`[DBG] [${time}] ${message}\r\n`);
+            logger(message, "debug", this.writeStream);
         }
     }
 
@@ -54,11 +75,9 @@ export class Logger {
      * @param message the string you'd like to display to the log.
      */
     log(message: string): void {
-        const time = new Date(Date.now()).toLocaleString();
         if (["log", "verbose", "debug"].includes(this.loggingType)) {
-            process.stdout.write(`[log] [${time}] ${message}\r\n`);
+            logger(message, "log", this.writeStream);
         }
-        this.writeStream.write(`[log] [${time}] ${message}\r\n`);
     }
 
     /**
@@ -66,12 +85,8 @@ export class Logger {
      * @param message
      */
     warn(message: string): void {
-        const time = new Date(Date.now()).toLocaleString();
         if (["warn", "log", "verbose", "debug"].includes(this.loggingType)) {
-            process.stdout.write(
-                `\x1b[33m[wrn] [${time}] ${message}\x1b[0m\r\n`,
-            );
-            this.writeStream.write(`[wrn] [${time}] ${message}\r\n`);
+            logger(message, "warn", this.writeStream);
         }
     }
     /**
@@ -79,32 +94,20 @@ export class Logger {
      * @param message the string you'd like to display.
      */
     error(message: string): void {
-        const time = new Date(Date.now()).toLocaleString();
         if (
-            ["warn", "error", "log", "verbose", "debug"].includes(
+            ["error", "warn", "log", "verbose", "debug"].includes(
                 this.loggingType,
             )
         ) {
-            process.stdout.write(
-                `\x1b[31m[err] [${time}] ${message}\x1b[0m\r\n`,
-            );
-            this.writeStream.write(`[err] [${time}] ${message}\r\n`);
+            logger(message, "error", this.writeStream);
         }
     }
     /**
      * Send a critical message. In terms of importance, these are "the patient is currently dying".
-     * Will always appear print to stdout. will be highlighted in the logfile. Use this command sparingly.
+     * Will always appear print to stdout. will be highlighted in the log file. Use this command sparingly.
      * @param message the string you'd like to display.
      */
     crit(message: string): void {
-        const time = new Date(Date.now()).toLocaleString();
-        process.stdout.write(
-            `\x1b[1m\x1b[30m\x1b[41m[CRT] [${time}] ${message}\x1b[0m\r\n`,
-        );
-        this.writeStream.write(
-            `${"=".repeat(`[CRT] [${time}] ${message}`.length)}
-[CRT] [${time}] ${message}
-${"=".repeat(`[CRT] [${time}] ${message}`.length)}\r\n`,
-        );
+        logger(message, "crit", this.writeStream);
     }
 }
