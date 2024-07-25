@@ -1,6 +1,8 @@
 import { createWriteStream } from "node:fs";
 import type { CardboardClient } from "..";
 
+//TODO: Loghelper needs a refactor.
+
 export class Logger {
     constructor(protected readonly cardboard: CardboardClient) {
         this.loggingType = cardboard.options?.output || "error";

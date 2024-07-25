@@ -4,29 +4,40 @@ import {
     AuthenticationError,
     NotValidJsonError,
     PermissionDeniedError,
-} from "../types/error";
+} from "./error";
 
 export const misskeyRequest = async (
     cardboard: CardboardClient,
     path: string,
-    options?: Record<string, unknown>,
+    options?: Record<string, unknown> | FormData,
 ) => {
     const url = new URL(`/api/${path}`, `https://${cardboard.instance}`);
+    const headers: {
+        "user-agent": string;
+        accept: string;
+        "accept-encoding": string;
+        "content-type"?: string;
+    } = {
+        "user-agent": `Cardboard/${pkg.version} (Misskey Bot; https://cardboard.kitsu.life/)`,
+        accept: "application/json",
+        "accept-encoding": "gzip, deflate, br",
+    };
+    if (!(options instanceof FormData)) {
+        headers["content-type"] = "application/json; charset=utf8";
+    }
     const response = await fetch(url, {
         method: "POST",
-        body: JSON.stringify({
-            i: cardboard.accessToken,
-            ...options,
-        }),
-        headers: {
-            "user-agent": `Cardboard/${pkg.version} (Misskey Bot; https://cardboard.kitsu.life/)`,
-            "content-type": "application/json; charset=utf8",
-            accept: "application/json",
-            "accept-encoding": "gzip, deflate, br",
-        },
+        body:
+            options instanceof FormData
+                ? options
+                : JSON.stringify({
+                      i: cardboard.accessToken,
+                      ...options,
+                  }),
+        headers: headers,
     });
     cardboard.logger.debug(`-> ${path} -- returned ${response.status}`);
-    cardboard.logger.verbose(JSON.stringify(response));
+    cardboard.logger.verbose(JSON.stringify(options));
     if (response.ok) {
         // Check if response is JSON
         if (

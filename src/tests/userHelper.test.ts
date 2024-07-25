@@ -1,9 +1,9 @@
 import { type Mock, beforeEach, describe, expect, mock, test } from "bun:test";
+import { CannotHurtSelfError, NoBotInteractionError } from "../helpers/error";
 import { misskeyRequest } from "../helpers/requestHelper";
 import { User } from "../helpers/userHelper";
 import type { CardboardClient } from "../index";
 import type { MisskeyUser } from "../types";
-import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
 
 // Mock the dependencies
 mock.module("../helpers/requestHelper", () => ({

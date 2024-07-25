@@ -1,12 +1,7 @@
 import { openAsBlob } from "node:fs";
 import type { CardboardClient } from "..";
-import pkg from "../../package.json" assert { type: "json" };
-import {
-    AuthenticationError,
-    PermissionDeniedError,
-    PopulatedFolderError,
-} from "../types/error";
-import type { MisskeyFile, MisskeyFolder } from "../types/file";
+import type { MisskeyFolder } from "../types/file";
+import { PopulatedFolderError } from "./error";
 import { FileItem } from "./fileHelper";
 import { misskeyRequest } from "./requestHelper";
 
@@ -45,7 +40,7 @@ export class Drive {
     async upload(
         file: Buffer | string,
         options: FileOptions,
-    ): Promise<MisskeyFile> {
+    ): Promise<FileItem> {
         let upload: Blob;
         if (typeof file === "string") {
             upload = await openAsBlob(file);
@@ -61,50 +56,20 @@ export class Drive {
                 formData.set(option, options[option]);
             }
         }
-        const response = await fetch(
-            `https://${this.cardboard.instance}/api/drive/files/create`,
-            {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "user-agent": `Cardboard/${pkg.version} (Misskey Bot; https://cardboard.kitsu.life/)`,
-                    "accept-encoding": "gzip, deflate, br",
-                },
-            },
+        return new FileItem(
+            this.cardboard,
+            await misskeyRequest(
+                this.cardboard,
+                "drive/files/create",
+                formData,
+            ),
         );
-        if (response.ok) {
-            //@ts-expect-error This should always return with the values.
-            return new FileItem(this.cardboard, await response.json());
-        }
-        switch (response.status) {
-            case 401:
-                throw new AuthenticationError();
-            case 403:
-                throw new PermissionDeniedError();
-            default: {
-                if (
-                    !response.headers
-                        .get("content-type")
-                        ?.includes("application/json")
-                ) {
-                    throw new Error(`Request Error: ${response.status}`);
-                }
-                const errorInfo = (await response.json()) as {
-                    error: {
-                        code: string;
-                        message: string;
-                        uuid: string;
-                    };
-                };
-                throw new Error(errorInfo.error.message);
-            }
-        }
     }
     /**
      * show folders inside your misskey drive.
      * @param {ShowOptions} options - options to make sorting a bit quicker.
      */
-    async dir(
+    async getDirectories(
         options: Omit<ShowOptions, "type" | "sort">,
     ): Promise<MisskeyFolder[]> {
         return await misskeyRequest(this.cardboard, "drive/folders", options);
@@ -113,14 +78,14 @@ export class Drive {
      * show files inside your misskey drive.
      * @param {ShowOptions} options - options to make sorting a bit quicker.
      */
-    async ls(options: ShowOptions): Promise<FileItem[]> {
+    async getFiles(options: ShowOptions): Promise<FileItem[]> {
         const files = await misskeyRequest(
             this.cardboard,
             "drive/files",
             options,
         );
         const preppedFiles: FileItem[] = [];
-        for await (const file of files) {
+        for (const file of files) {
             preppedFiles.push(new FileItem(this.cardboard, file));
         }
         return preppedFiles;

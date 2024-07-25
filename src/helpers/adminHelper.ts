@@ -10,9 +10,9 @@ import type {
     ServerStatusOptions,
 } from "../types/admin";
 import type { Emoji } from "../types/emoji";
-import { NotImplementedError } from "../types/error";
 import type { ModerationLogSorting } from "../types/sorting";
 import type { MisskeyUser, Role } from "../types/user";
+import { NotImplementedError } from "./error";
 import { FileItem } from "./fileHelper";
 import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
@@ -281,6 +281,36 @@ export class Admin {
             this.cardboard,
             "admin/delete-all-files-of-a-user",
             { userId },
+        );
+    }
+
+    /**
+     *
+     * @param options Options to help you filter what users you'd like to retrieve.
+     * @returns
+     */
+    public async getUsers(options?: {
+        username?: string;
+        host?: string | null;
+        limit?: number;
+        origin?: "local" | "remote" | "combined";
+        state: string;
+    }): Promise<IterableArray<User>> {
+        const response = await misskeyRequest(
+            this.cardboard,
+            "admin/show-users",
+            options,
+        );
+        const users: User[] = [];
+        for (const user of response) {
+            users.push(new User(this.cardboard, user));
+        }
+        return new IterableArray(
+            this.cardboard,
+            "admin/show-users",
+            options,
+            users,
+            true,
         );
     }
 

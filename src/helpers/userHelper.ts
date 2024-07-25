@@ -1,7 +1,7 @@
 import type { CardboardClient } from "..";
-import { CannotHurtSelfError, NoBotInteractionError } from "../types/error";
 import { type NoteOptions, NoteVisibility } from "../types/note";
 import type { MisskeyUser } from "../types/user";
+import { CannotHurtSelfError, NoBotInteractionError } from "./error";
 import type { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
 
@@ -24,12 +24,11 @@ const checkForNoBotAndThrowIfExists = (
         user.description.toLocaleLowerCase().includes("#nobot")
     ) {
         console.warn(`
-            ====\n
-            user @${user.username}${user.instance ? `@${user.instance}` : ""} does NOT want to be interacted with.\n
-            However, #NoBot Interaction Errors are being bypassed.\n
-            To disable this warning, please disable bypassNoBot.\n
-            ====
-            `);
+====
+user @${user.username}${user.instance ? `@${user.instance}` : ""} does NOT want to be interacted with.
+However, #NoBot Interaction Errors are being bypassed.
+To disable this warning, please disable bypassNoBot.
+====`);
     }
     if (user.description.toLocaleLowerCase().includes("#nobot")) {
         throw new NoBotInteractionError();
@@ -68,15 +67,13 @@ export class User {
      * @param nsfw whether or not you wish for the user to be nsfw'd.
      */
     async setNsfw(nsfw: boolean): Promise<void> {
-        if (nsfw) {
-            await misskeyRequest(this.cardboard, "admin/nsfw-user", {
+        await misskeyRequest(
+            this.cardboard,
+            nsfw ? "admin/nsfw-user" : "admin/unnsfw-user",
+            {
                 userId: this.user.id,
-            });
-        } else {
-            await misskeyRequest(this.cardboard, "admin/unnsfw-user", {
-                userId: this.user.id,
-            });
-        }
+            },
+        );
     }
 
     /**

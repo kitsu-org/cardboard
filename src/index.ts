@@ -39,11 +39,11 @@ export class CardboardClient {
     ) {
         if (options?.bypassNoBot === true) {
             console.warn(`
-                ==========\n
-                You've enabled bypassNoBot. I understand that this can be a bit of a nuisance, but some users would rather not be interacted with.\n
-                This error is to ensure that your bot is respectful of people's wishes.\n
-                To stop this warning, please disable bypassNoBot.\n
-                ==========
+==========
+You've enabled bypassNoBot. I understand that this can be a bit of a nuisance, but some users would rather not be interacted with.
+This error is to ensure that your bot is respectful of people's wishes.
+To stop this warning, please disable bypassNoBot.
+==========
                 `);
         }
         this.drive = new Drive(this);
@@ -66,6 +66,28 @@ export class CardboardClient {
         for (const file of folder) {
             this.addBox(`${boxFolder}/${file}`);
         }
+    }
+
+    public async getPostsByTag(
+        tag: string,
+        limit = 10,
+        allowPartial = true,
+    ): Promise<Note[]> {
+        const response = await misskeyRequest(this, "notes/search-by-tag", {
+            tag,
+            limit,
+            allowPartial,
+        });
+        const posts: Note[] = new IterableArray(
+            this,
+            "notes/search-by-tag",
+            { tag, limit, allowPartial },
+            [],
+        );
+        for (const post of response) {
+            posts.push(new Note(this, post));
+        }
+        return posts;
     }
 
     /**

@@ -4,7 +4,7 @@ import {
     NoBotInteractionError,
     PermissionDeniedError,
     PopulatedFolderError,
-} from "./error";
+} from "../helpers/error";
 import type { MisskeyFile } from "./file";
 import {
     type File,

@@ -35,6 +35,10 @@ export class Note {
         return null;
     }
 
+    get id() {
+        return this.note.id;
+    }
+
     /**
      * Get Replies (Children) of the note you have.
      * @param options options to get more children, or change which children are seen.
@@ -61,7 +65,6 @@ export class Note {
                 this.cardboard,
                 "notes/children",
                 options,
-                //@ts-expect-error SHHHHH ts, note[] is valid...
                 preppedNotes,
             );
         }
