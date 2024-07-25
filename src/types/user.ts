@@ -303,3 +303,23 @@ export type MetaOptions = {
         speech?: boolean;
     };
 };
+export type Role = {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    name: string;
+    description: string;
+    color: string | null;
+    iconUrl: string | null;
+    target: "manual" | "conditional";
+    condFormula: Record<string, unknown>;
+    isPublic: boolean;
+    isModerator: boolean;
+    isAdministrator: boolean;
+    isExplorable?: boolean;
+    asBadge: boolean;
+    canEditMembersByModerator: boolean;
+    displayOrder: boolean;
+    policies: Record<string, unknown>;
+    usersCount: number;
+};

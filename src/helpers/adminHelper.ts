@@ -11,31 +11,11 @@ import type {
 import type { Emoji } from "../types/emoji";
 import { NotImplementedError } from "../types/error";
 import type { ModerationLogSorting } from "../types/sorting";
+import type { Role } from "../types/user";
 import { FileItem } from "./fileHelper";
 import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
-
-type Role = {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    name: string;
-    description: string;
-    color: string | null;
-    iconUrl: string | null;
-    target: "manual" | "conditional";
-    condFormula: Record<string, unknown>;
-    isPublic: boolean;
-    isModerator: boolean;
-    isAdministrator: boolean;
-    isExplorable?: boolean;
-    asBadge: boolean;
-    canEditMembersByModerator: boolean;
-    displayOrder: boolean;
-    policies: Record<string, unknown>;
-    usersCount: number;
-};
 
 export class Admin {
     constructor(protected readonly cardboard: CardboardClient) {}
@@ -46,7 +26,7 @@ export class Admin {
      * @param {InviteListOptions} options any optional settings you would like to define.
      * @returns {Promise<Invite>}
      */
-    public async getInvites(options: InviteListOptions): Promise<Invite> {
+    public async getInvites(options?: InviteListOptions): Promise<Invite> {
         const response = await misskeyRequest(
             this.cardboard,
             "admin/invite/list",
@@ -502,7 +482,7 @@ export class Admin {
      * @param options Optional methods of sorting the logs.
      * @returns {Promise<{id: string; createdAt: string; type: string; info: Record<string, unknown>; userId: string; user: MisskeyUser;}[]>}
      */
-    public async getModerationLogs(options: ModerationLogSorting): Promise<
+    public async getModerationLogs(options?: ModerationLogSorting): Promise<
         {
             id: string;
             createdAt: string;
