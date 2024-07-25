@@ -34,6 +34,10 @@ export const misskeyRequest = async (
         ) {
             return await response.json();
         }
+        if (response.status === 204) {
+            return;
+        }
+
         throw NotValidJsonError;
     }
     switch (response.status) {
