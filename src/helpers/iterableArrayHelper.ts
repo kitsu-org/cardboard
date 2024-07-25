@@ -2,7 +2,7 @@ import type { CardboardClient } from "..";
 import { BadOffsetError } from "../types/error";
 import { misskeyRequest } from "./requestHelper";
 
-export class IterableArray extends Array {
+export class IterableArray<Type> extends Array {
     constructor(
         private readonly cardboard: CardboardClient,
         private readonly callNeeded: string,
@@ -14,7 +14,7 @@ export class IterableArray extends Array {
         super(...array);
     }
 
-    public async next(limit = 100) {
+    public async next(limit = 100): Promise<IterableArray<Type>> {
         let response: Record<string, unknown>[];
         if (this.iterateByOffsetAndLimit) {
             response = await misskeyRequest(this.cardboard, this.callNeeded, {
@@ -38,7 +38,7 @@ export class IterableArray extends Array {
             response,
         );
     }
-    public async previous(limit = 100) {
+    public async previous(limit = 100): Promise<IterableArray<Type>> {
         let response: Record<string, unknown>[];
         if (this.iterateByOffsetAndLimit) {
             //@ts-expect-error just shh.

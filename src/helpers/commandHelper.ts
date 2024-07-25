@@ -13,37 +13,41 @@ export default class Command {
         this.onStartup();
     }
 
-    onStartup() {
+    onStartup(): void {
         return;
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
-    onNote(message: Note) {
+    onNote(message: Note): void {
         return;
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
-    onFollow(user: User) {
+    onFollow(user: User): void {
         return;
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
-    onUnfollow(user: User) {
+    onUnfollow(user: User): void {
         return;
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
-    onMsgDelete(deletedMessage: { id: string; deletedAt: string }) {
+    onMsgDelete(deletedMessage: { id: string; deletedAt: string }): void {
         return;
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
-    onMention(message: Note) {
+    onMention(message: Note): void {
         return;
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
-    onReact(reaction: { noteId: string; reaction: string; userId: string }) {
+    onReact(reaction: {
+        noteId: string;
+        reaction: string;
+        userId: string;
+    }): void {
         return;
     }
 }

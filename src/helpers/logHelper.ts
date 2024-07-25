@@ -23,7 +23,7 @@ export class Logger {
      * Send a verbosity-level message to the log. In terms of importance, this is just Cardboard rambling, at this point.
      * @param message the string you'd like to display to the log.
      */
-    verbose(message: string) {
+    verbose(message: string): void {
         const time = new Date(Date.now()).toLocaleString();
         if (this.loggingType === "verbose") {
             process.stdout.write(
@@ -37,7 +37,7 @@ export class Logger {
      * Send a debug message to the log. In terms of importance, these are "the patient is explaining its job."
      * @param message the string you'd like to display to the log.
      */
-    debug(message: string) {
+    debug(message: string): void {
         const time = new Date(Date.now()).toLocaleString();
         if (["verbose", "debug"].includes(this.loggingType)) {
             process.stdout.write(
@@ -51,7 +51,7 @@ export class Logger {
      * Send a regular log. In terms of importance, these are "the patient is having a conversation."
      * @param message the string you'd like to display to the log.
      */
-    log(message: string) {
+    log(message: string): void {
         const time = new Date(Date.now()).toLocaleString();
         if (["log", "verbose", "debug"].includes(this.loggingType)) {
             process.stdout.write(`[log] [${time}] ${message}\r\n`);
@@ -63,7 +63,7 @@ export class Logger {
      * Send a warning to the log. In terms of importance, these are "the patient is uncomfortable."
      * @param message
      */
-    warn(message: string) {
+    warn(message: string): void {
         const time = new Date(Date.now()).toLocaleString();
         if (["warn", "log", "verbose", "debug"].includes(this.loggingType)) {
             process.stdout.write(
@@ -76,7 +76,7 @@ export class Logger {
      * Sends an error to the log. In terms of importance, these are "the patient is in a lot of pain."
      * @param message the string you'd like to display.
      */
-    error(message: string) {
+    error(message: string): void {
         const time = new Date(Date.now()).toLocaleString();
         if (
             ["warn", "error", "log", "verbose", "debug"].includes(
@@ -94,7 +94,7 @@ export class Logger {
      * Will always appear print to stdout. will be highlighted in the logfile. Use this command sparingly.
      * @param message the string you'd like to display.
      */
-    crit(message: string) {
+    crit(message: string): void {
         const time = new Date(Date.now()).toLocaleString();
         process.stdout.write(
             `\x1b[1m\x1b[30m\x1b[41m[CRT] [${time}] ${message}\x1b[0m\r\n`,

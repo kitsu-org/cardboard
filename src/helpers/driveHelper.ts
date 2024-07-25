@@ -6,7 +6,7 @@ import {
     PermissionDeniedError,
     PopulatedFolderError,
 } from "../types/error";
-import type { MisskeyFile } from "../types/file";
+import type { MisskeyFile, MisskeyFolder } from "../types/file";
 import { FileItem } from "./fileHelper";
 import { misskeyRequest } from "./requestHelper";
 
@@ -104,14 +104,16 @@ export class Drive {
      * show folders inside your misskey drive.
      * @param {ShowOptions} options - options to make sorting a bit quicker.
      */
-    async dir(options: Omit<ShowOptions, "type" | "sort">) {
+    async dir(
+        options: Omit<ShowOptions, "type" | "sort">,
+    ): Promise<MisskeyFolder[]> {
         return await misskeyRequest(this.cardboard, "drive/folders", options);
     }
     /**
      * show files inside your misskey drive.
      * @param {ShowOptions} options - options to make sorting a bit quicker.
      */
-    async ls(options: ShowOptions) {
+    async ls(options: ShowOptions): Promise<FileItem[]> {
         const files = await misskeyRequest(
             this.cardboard,
             "drive/files",

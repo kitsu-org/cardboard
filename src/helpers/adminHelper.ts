@@ -5,13 +5,14 @@ import type {
     AnnouncementResponse,
     Invite,
     InviteListOptions,
+    Report,
     ReportSortingOptions,
     ServerStatusOptions,
 } from "../types/admin";
 import type { Emoji } from "../types/emoji";
 import { NotImplementedError } from "../types/error";
 import type { ModerationLogSorting } from "../types/sorting";
-import type { Role } from "../types/user";
+import type { MisskeyUser, Role } from "../types/user";
 import { FileItem } from "./fileHelper";
 import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
@@ -72,7 +73,7 @@ export class Admin {
      * Alias to get the approval list required. getApprovalsList makes assumptions, that you have a low user registration influx.
      * Not recommended for massive servers.
      */
-    public async getApprovalsList() {
+    public async getApprovalsList(): Promise<IterableArray<MisskeyUser>> {
         const options = {
             limit: 100,
             allowPartial: true,
@@ -266,7 +267,7 @@ export class Admin {
      * NOTE: Users will consider this invasive if you are regularly accessing their drive without permission!
      * @see https://github.com/kitsu-org/cardboard/issues/4
      */
-    public getFullDrive() {
+    public getFullDrive(): NotImplementedError {
         throw NotImplementedError;
     }
 
@@ -287,7 +288,7 @@ export class Admin {
      * Delete a file from the drive.
      * @param fileId the ID of the file that you'd like to delete.
      */
-    public async deleteDriveFile(fileId: string) {
+    public async deleteDriveFile(fileId: string): Promise<void> {
         await misskeyRequest(this.cardboard, "drive/files/delete", {
             fileId,
         });
@@ -444,7 +445,7 @@ export class Admin {
      */
     public async getReports(
         sortingOptions?: ReportSortingOptions,
-    ): Promise<IterableArray> {
+    ): Promise<IterableArray<Report>> {
         const report = await misskeyRequest(
             this.cardboard,
             "admin/abuse-user-reports",

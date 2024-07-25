@@ -43,7 +43,7 @@ export class User {
         protected misskeyUser: MisskeyUser,
     ) {}
 
-    get user() {
+    get user(): MisskeyUser {
         return this.misskeyUser;
     }
 

@@ -91,7 +91,7 @@ export class Note {
      * Get all *custom* emojis within a post.
      * This function does not get unicode emojis yet.
      */
-    getEmojis() {
+    getEmojis(): Record<string, number> | null {
         if (this.content === null) {
             return null;
         }

@@ -1,4 +1,4 @@
-import type { LiteUser } from "./user";
+import type { LiteUser, MisskeyUser } from "./user";
 
 export type ServerStatusOptions = {
     defederate: boolean;
@@ -41,6 +41,20 @@ export type AnnouncementResponse = {
     text: string;
     imageUrl: string;
 };
+
+export type Report = {
+    id: string;
+    createdAt: string;
+    comment: string;
+    resolved: boolean;
+    reporterId: string;
+    targetUserId: string;
+    assigneeId: string;
+    reporter: MisskeyUser | null;
+    targetUser: MisskeyUser | null;
+    assignee: MisskeyUser;
+};
+
 export type AdvertisementOptions = {
     memo?: string | null;
     place?: "square" | "horizontal" | "horizontal-big";

@@ -61,7 +61,7 @@ export class CardboardClient {
     public logger: Logger;
     public admin: Admin;
 
-    public async addFolder(boxFolder: string) {
+    public async addFolder(boxFolder: string): Promise<void> {
         const folder = await readdir(boxFolder);
         for (const file of folder) {
             this.addBox(`${boxFolder}/${file}`);
@@ -101,7 +101,7 @@ export class CardboardClient {
      * Add a box for Cardboard to work with.
      * @param command the file leading to the box in question.
      */
-    public addBox(boxFile: string) {
+    public addBox(boxFile: string): void {
         import(boxFile).then((found) => {
             new found.default(this);
         });
@@ -125,7 +125,7 @@ export class CardboardClient {
         options?: {
             limit?: number;
         },
-    ) {
+    ): Promise<User[]> {
         const users = await misskeyRequest(
             this,
             "users/search-by-username-and-host",
@@ -135,9 +135,6 @@ export class CardboardClient {
                 limit: options?.limit,
             },
         );
-        if (users.length === 0) {
-            return [];
-        }
         const createdUsers: User[] = [];
         for (const user of users) {
             createdUsers.push(new User(this, user));
@@ -145,7 +142,7 @@ export class CardboardClient {
         return createdUsers;
     }
 
-    public async showUser(userId: string) {
+    public async showUser(userId: string): Promise<User> {
         return new User(
             this,
             await misskeyRequest(this, "users/show", {
@@ -204,7 +201,7 @@ export class CardboardClient {
     emit<Event extends keyof Events>(
         event: Event,
         ...args: Parameters<Events[Event]>
-    ) {
+    ): void {
         const listeners = this.eventListeners.get(event);
         if (listeners) {
             for (const listener of listeners) {

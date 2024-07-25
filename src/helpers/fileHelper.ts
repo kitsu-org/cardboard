@@ -8,7 +8,7 @@ export class FileItem {
         protected file: MisskeyFile,
     ) {}
 
-    get info() {
+    get info(): MisskeyFile {
         return this.file;
     }
 
@@ -19,7 +19,7 @@ export class FileItem {
         await this.cardboard.drive.deleteFile(this.file.id);
     }
 
-    async addCaption(caption: string) {
+    async addCaption(caption: string): Promise<void> {
         const newFile = await misskeyRequest(
             this.cardboard,
             "drive/files/update",
@@ -28,7 +28,7 @@ export class FileItem {
         this.file = newFile;
     }
 
-    async setSensitivity(sensitive: boolean) {
+    async setSensitivity(sensitive: boolean): Promise<void> {
         const newFile = await misskeyRequest(
             this.cardboard,
             "drive/files/update",
@@ -37,7 +37,7 @@ export class FileItem {
         this.file = newFile;
     }
 
-    async rename(filename: string) {
+    async rename(filename: string): Promise<void> {
         const newFile = await misskeyRequest(
             this.cardboard,
             "drive/files/update",

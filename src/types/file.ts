@@ -1,5 +1,15 @@
 import type { LiteUser } from "./user";
 
+export type MisskeyFolder = {
+    id: string;
+    createdAt: string;
+    name: string;
+    parentId: string;
+    foldersCount?: number;
+    filesCount?: number;
+    parent?: MisskeyFolder;
+};
+
 export type MisskeyFile = {
     id: string;
     createdAt: string;
