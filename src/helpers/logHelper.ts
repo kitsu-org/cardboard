@@ -1,4 +1,4 @@
-import { createWriteStream, type WriteStream } from "node:fs"; // How do I turn this dynamic?
+import { type WriteStream, createWriteStream } from "node:fs"; // How do I turn this dynamic?
 import type { CardboardClient } from "..";
 
 const logger = (

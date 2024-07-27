@@ -14,7 +14,7 @@ import type { ModerationLogSorting } from "../types/sorting";
 import type { MisskeyUser, Role } from "../types/user";
 import { NotImplementedError } from "./error";
 import { FileItem } from "./fileHelper";
-import { IterableArray } from "./iterableArrayHelper";
+// import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
@@ -33,13 +33,14 @@ export class Admin {
             "admin/invite/list",
             options,
         );
-        return new IterableArray(
-            this.cardboard,
-            "admin/invite/list",
-            options,
-            response,
-            true,
-        );
+        return response;
+        // return new IterableArray(
+        //     this.cardboard,
+        //     "admin/invite/list",
+        //     options,
+        //     response,
+        //     true,
+        // );
     }
 
     /**
@@ -73,7 +74,7 @@ export class Admin {
      * Alias to get the approval list required. getApprovalsList makes assumptions, that you have a low user registration influx.
      * Not recommended for massive servers.
      */
-    public async getApprovalsList(): Promise<IterableArray<MisskeyUser>> {
+    public async getApprovalsList(): Promise<MisskeyUser[]> {
         const options = {
             limit: 100,
             allowPartial: true,
@@ -86,13 +87,14 @@ export class Admin {
             "admin/show-users",
             options,
         );
-        return new IterableArray(
-            this.cardboard,
-            "admin/show-users",
-            options,
-            response,
-            true,
-        );
+        return response;
+        // return new IterableArray(
+        //     this.cardboard,
+        //     "admin/show-users",
+        //     options,
+        //     response,
+        //     true,
+        // );
     }
 
     /**
@@ -295,7 +297,7 @@ export class Admin {
         limit?: number;
         origin?: "local" | "remote" | "combined";
         state: string;
-    }): Promise<IterableArray<User>> {
+    }): Promise<User[]> {
         const response = await misskeyRequest(
             this.cardboard,
             "admin/show-users",
@@ -305,13 +307,13 @@ export class Admin {
         for (const user of response) {
             users.push(new User(this.cardboard, user));
         }
-        return new IterableArray(
-            this.cardboard,
-            "admin/show-users",
-            options,
-            users,
-            true,
-        );
+        // return new IterableArray(
+        // this.cardboard,
+        // "admin/show-users",
+        // options,
+        return users;
+        // true,
+        // );
     }
 
     /**
@@ -475,18 +477,19 @@ export class Admin {
      */
     public async getReports(
         sortingOptions?: ReportSortingOptions,
-    ): Promise<IterableArray<Report>> {
+    ): Promise<Report[]> {
         const report = await misskeyRequest(
             this.cardboard,
             "admin/abuse-user-reports",
             sortingOptions,
         );
-        return new IterableArray(
-            this.cardboard,
-            "admin/abuse-user-reports",
-            sortingOptions,
-            report,
-        );
+        return report;
+        // return new IterableArray(
+        //     this.cardboard,
+        //     "admin/abuse-user-reports",
+        //     sortingOptions,
+        //     report,
+        // );
     }
 
     /**
@@ -529,11 +532,12 @@ export class Admin {
             options,
         );
         returned.user = new User(this.cardboard, returned.user);
-        return new IterableArray(
-            this.cardboard,
-            "admin/show-moderation-logs",
-            options,
-            returned,
-        );
+        return returned;
+        // return new IterableArray(
+        //     this.cardboard,
+        //     "admin/show-moderation-logs",
+        //     options,
+        //     returned,
+        // );
     }
 }

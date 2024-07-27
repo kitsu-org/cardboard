@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { Admin } from "./helpers/adminHelper";
 import { Drive } from "./helpers/driveHelper";
-import { IterableArray } from "./helpers/iterableArrayHelper";
+// import { IterableArray } from "./helpers/iterableArrayHelper";
 import { Logger } from "./helpers/logHelper";
 import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
@@ -26,7 +26,10 @@ interface Events {
     followRequest: (user: User) => void;
     reaction: (react: Reaction) => void;
 }
-
+/**
+ *
+ * {@link Drive}
+ */
 export class CardboardClient {
     constructor(
         public readonly instance: string,
@@ -78,12 +81,13 @@ To stop this warning, please disable bypassNoBot.
             limit,
             allowPartial,
         });
-        const posts: Note[] = new IterableArray(
-            this,
-            "notes/search-by-tag",
-            { tag, limit, allowPartial },
-            [],
-        );
+        const posts: Note[] = [];
+        // const posts: Note[] = new IterableArray(
+        //     this,
+        //     "notes/search-by-tag",
+        //     { tag, limit, allowPartial },
+        //     [],
+        // );
         for (const post of response) {
             posts.push(new Note(this, post));
         }
@@ -110,13 +114,14 @@ To stop this warning, please disable bypassNoBot.
             "federation/instances",
             options,
         );
-        return new IterableArray(
-            this,
-            "federation/instances",
-            options,
-            request,
-            true,
-        );
+        return request;
+        // return new IterableArray(
+        //     this,
+        //     "federation/instances",
+        //     options,
+        //     request,
+        //     true,
+        // );
     }
 
     /**

@@ -1,7 +1,7 @@
 import type { CardboardClient } from "../index";
 import type { MisskeyNote, NoteOptions, NoteVisibility } from "../types/note";
 import type { LiteUser } from "../types/user";
-import { IterableArray } from "./iterableArrayHelper";
+// import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
 
 export class Note {
@@ -61,12 +61,13 @@ export class Note {
             for await (const reply of notes) {
                 preppedNotes.push(new Note(this.cardboard, reply));
             }
-            return new IterableArray(
-                this.cardboard,
-                "notes/children",
-                options,
-                preppedNotes,
-            );
+            return preppedNotes;
+            // return new IterableArray(
+            //     this.cardboard,
+            //     "notes/children",
+            //     options,
+            //     preppedNotes,
+            // );
         }
         return null;
     }

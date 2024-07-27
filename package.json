@@ -27,14 +27,19 @@
     "keywords": ["misskey", "wrapper", "typescript"],
     "version": "1.0.0",
     "scripts": {
-        "lint": "bunx @biomejs/biome check ."
+        "lint": "bunx @biomejs/biome check .",
+        "generate-docs": "node_modules/.bin/jsdoc.exe -c jsdoc.json"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",
-        "@types/bun": "latest"
+        "@types/bun": "latest",
+        "typedoc": "^0.26.5"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"
     },
-    "trustedDependencies": ["@biomejs/biome"]
+    "trustedDependencies": ["@biomejs/biome"],
+    "dependencies": {
+        "typedoc-plugin-missing-exports": "^3.0.0"
+    }
 }
