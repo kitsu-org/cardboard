@@ -126,7 +126,7 @@ To stop this warning, please disable bypassNoBot.
 
     /**
      * Add a box for Cardboard to work with.
-     * @param command the file leading to the box in question.
+     * @param boxFile - the file leading to the box in question.
      */
     public addBox(boxFile: string): void {
         import(boxFile).then((found) => {

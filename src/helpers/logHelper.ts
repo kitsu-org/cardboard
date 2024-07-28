@@ -34,7 +34,7 @@ const logger = (
 
 export class Logger {
     constructor(protected readonly cardboard: CardboardClient) {
-        this.loggingType = cardboard.options?.output || "error";
+        this.loggingType = cardboard.options?.output || "log";
         if (cardboard.options?.logFile) {
             this.writeStream = createWriteStream(cardboard.options.logFile, {
                 flags: "a",

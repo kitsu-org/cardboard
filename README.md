@@ -9,7 +9,7 @@ import { CardboardClient } from '@kitsu-org/cardboard';
 const cardboard = new CardboardClient("kitsunes.club", "yourkeyhere");
 
 cardboard.on("ready", async () => {
-    console.info(`ready!`);
+    cardboard.log("Ready!")
 });
 
 cardboard.on("mention", async (msg) => {
