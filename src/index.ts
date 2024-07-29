@@ -185,14 +185,16 @@ To stop this warning, please disable bypassNoBot.
      */
     public async createNote(
         content: string,
-        options: NoteOptions,
+        options?: NoteOptions,
     ): Promise<Note> {
         return new Note(
             this,
-            await misskeyRequest(this, "notes/create", {
-                text: content,
-                ...options,
-            }),
+            (
+                await misskeyRequest(this, "notes/create", {
+                    text: content,
+                    ...options,
+                })
+            ).createdNote,
         );
     }
 

@@ -61,14 +61,13 @@ const cardboard = new CardboardClient(bun.env.INSTANCE, bun.env.API_KEY);
 // We should know when Cardboard is ready for commands!
 // This'll let us know.
 cardboard.on("ready", async () => {
-    cardboard.log("Ready!")
+    cardboard.logger.log("Ready!")
 });
 
 //When someone mentions us, we'll take the mention out of the text, then we'll see if it equals to "ping". If it does, we'll say pong!
 cardboard.on("mention", async (msg) => {
     if (
-        msg.note.text
-            ?.replaceAll(`@${(await cardboard.getSelf()).user.username} `, "") === "ping"
+        msg.note.text.includes("ping") 
     ) {
         await msg.reply("Pong!");
     }
@@ -77,4 +76,4 @@ cardboard.on("mention", async (msg) => {
 cardboard.connect();
 ```
 
-All there's left is just to ``bun run`` and you're now running your first ever bot with cardboard! 👏
+All there's left is just to ``bun run index.ts`` and you're now running your first ever bot with cardboard! 👏
