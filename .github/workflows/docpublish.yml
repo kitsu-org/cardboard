@@ -31,7 +31,6 @@ jobs:
         name: "Set up Node.js"
         uses: "actions/setup-node@v3"
         with:
-          node-version-file: ".nvmrc"
           cache: "pnpm"
 
       - id: "install-dependencies"
