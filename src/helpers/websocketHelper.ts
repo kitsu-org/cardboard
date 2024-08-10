@@ -61,6 +61,13 @@ export class CardboardWebsocket {
                                 );
                                 break;
                             }
+                            case "reply": {
+                                this.cardboard.emit(
+                                    "reply",
+                                    new Note(this.cardboard, data.body.body),
+                                );
+                                break;
+                            }
                             case "reacted": {
                                 this.cardboard.emit("reaction", {
                                     noteId: data.body.id,

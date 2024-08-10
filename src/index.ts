@@ -25,6 +25,7 @@ interface Events {
     unfollow: (user: User) => void;
     followRequest: (user: User) => void;
     reaction: (react: Reaction) => void;
+    reply: (note: Note) => void;
 }
 /**
  *
