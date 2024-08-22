@@ -3,7 +3,7 @@
     "description": "a wrapper for Misskey! 📦",
     "repository": {
         "type": "git",
-        "url": "https://github.com/kitsu-org/cardboard.git"
+        "url": "git+https://github.com/kitsu-org/cardboard.git"
     },
     "exports": {
         ".": {
@@ -32,7 +32,7 @@
     "version": "1.0.0",
     "scripts": {
         "lint": "bunx @biomejs/biome check .",
-        "generate-docs": "node_modules/.bin/jsdoc.exe -c jsdoc.json"
+        "generate-docs": "jsdoc.exe -c jsdoc.json"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",
@@ -42,7 +42,7 @@
         "typedoc-plugin-missing-exports": "^3.0.0"
     },
     "peerDependencies": {
-        "typescript": "^5.0.0"
+        "typescript": "^5.5.3"
     },
     "trustedDependencies": [
         "@biomejs/biome"
