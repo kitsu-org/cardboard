@@ -154,15 +154,11 @@ To stop this warning, please disable bypassNoBot.
             limit?: number;
         },
     ): Promise<User[]> {
-        const users = await misskeyRequest(
-            this,
-            "users/search-by-username-and-host",
-            {
-                username,
-                host,
-                limit: options?.limit,
-            },
-        );
+        const users = await misskeyRequest(this, "users/show", {
+            username,
+            host,
+            limit: options?.limit,
+        });
         const createdUsers: User[] = [];
         for (const user of users) {
             createdUsers.push(new User(this, user));
