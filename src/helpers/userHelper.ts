@@ -63,6 +63,18 @@ export class User {
     }
 
     /**
+     * Add a modnote to the profile. Will fail if you do not have permission.
+     * Might be baked into the function you're running already; keep in mind!
+     * @param modNote The modnote you would like to add in.
+     */
+    async setModNote(modNote: string): Promise<void> {
+        await misskeyRequest(this.cardboard, "admin/update-user-note", {
+            userId: this.user.id,
+            text: modNote,
+        });
+    }
+
+    /**
      * Set all content from a user as NSFW, instance wide.
      * @param nsfw whether or not you wish for the user to be nsfw'd.
      */
