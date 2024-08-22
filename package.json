@@ -37,8 +37,8 @@
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",
         "@types/bun": "latest",
-        "typedoc": "^0.26.5",
-        "typedoc-plugin-mdn-links": "^3.2.5",
+        "typedoc": "^0.26.6",
+        "typedoc-plugin-mdn-links": "^3.2.9",
         "typedoc-plugin-missing-exports": "^3.0.0"
     },
     "peerDependencies": {
