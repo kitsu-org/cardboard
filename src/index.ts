@@ -153,17 +153,12 @@ To stop this warning, please disable bypassNoBot.
         options?: {
             limit?: number;
         },
-    ): Promise<User[]> {
-        const users = await misskeyRequest(this, "users/show", {
+    ): Promise<User> {
+        const user = await misskeyRequest(this, "users/show", {
             username,
             host,
-            limit: options?.limit,
         });
-        const createdUsers: User[] = [];
-        for (const user of users) {
-            createdUsers.push(new User(this, user));
-        }
-        return createdUsers;
+        return new User(this, user);
     }
 
     public async showUser(userId: string): Promise<User> {
