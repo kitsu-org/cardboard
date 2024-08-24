@@ -150,9 +150,6 @@ To stop this warning, please disable bypassNoBot.
     public async findUser(
         username: string,
         host?: string | null,
-        options?: {
-            limit?: number;
-        },
     ): Promise<User> {
         const user = await misskeyRequest(this, "users/show", {
             username,

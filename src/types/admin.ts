@@ -24,6 +24,18 @@ export type Invite = {
     used: boolean;
 }[];
 
+type ReportType = "combined" | "local" | "remote";
+
+export type ReportOptions = {
+    limit: number;
+    sinceId: string;
+    untilId: string;
+    state: string;
+    reporterOrigin: ReportType;
+    targetUserOrigin: ReportType;
+    forwarded: boolean;
+};
+
 export type AnnouncementOptions = {
     imageUrl?: string | null;
     icon?: "info" | "warning" | "error" | "success";

@@ -6,6 +6,7 @@ import type {
     Invite,
     InviteListOptions,
     Report,
+    ReportOptions,
     ReportSortingOptions,
     ServerStatusOptions,
 } from "../types/admin";
@@ -14,6 +15,7 @@ import type { ModerationLogSorting } from "../types/sorting";
 import type { MisskeyUser, Role } from "../types/user";
 import { NotImplementedError } from "./error";
 import { FileItem } from "./fileHelper";
+import { ReportItem } from "./reportHelper";
 // import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
@@ -477,13 +479,19 @@ export class Admin {
      */
     public async getReports(
         sortingOptions?: ReportSortingOptions,
-    ): Promise<Report[]> {
+    ): Promise<ReportItem[]> {
         const report = await misskeyRequest(
             this.cardboard,
             "admin/abuse-user-reports",
             sortingOptions,
         );
-        return report;
+        const reports: ReportItem[] = [];
+        for (const report of reports) {
+            //@ts-expect-error This should return proper reports. I'm just not good at typing things.
+            reports.push(new ReportItem(this.cardboard, report));
+        }
+        return reports;
+
         // return new IterableArray(
         //     this.cardboard,
         //     "admin/abuse-user-reports",
