@@ -7,6 +7,7 @@ import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
 import { SelfUser } from "./helpers/selfUserHelper";
 import { User } from "./helpers/userHelper";
+import { NoteBuilder } from "./helpers/NoteBuilder";
 import {
     CardboardWebsocket,
     TimelineType,
@@ -236,3 +237,5 @@ To stop this warning, please disable bypassNoBot.
         }
     }
 }
+
+export { NoteBuilder as PostBuilder };

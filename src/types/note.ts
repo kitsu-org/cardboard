@@ -22,7 +22,12 @@ export type NoteOptions = {
     text?: string;
     fileIds?: unknown[];
     mediaIds?: unknown[];
-    poll?: unknown[];
+    poll?: {
+        choices: string[];
+        multiple: boolean;
+        expiredAfter?: null | number;
+        expiresAt?: null | number;
+    };
 };
 
 export enum NoteVisibility {
