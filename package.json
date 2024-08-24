@@ -24,11 +24,7 @@
     "main": "src/index.ts",
     "module": "src/index.ts",
     "type": "module",
-    "keywords": [
-        "misskey",
-        "wrapper",
-        "typescript"
-    ],
+    "keywords": ["misskey", "wrapper", "typescript"],
     "version": "1.0.0",
     "scripts": {
         "lint": "bunx @biomejs/biome check .",
@@ -44,7 +40,5 @@
     "peerDependencies": {
         "typescript": "^5.5.3"
     },
-    "trustedDependencies": [
-        "@biomejs/biome"
-    ]
+    "trustedDependencies": ["@biomejs/biome"]
 }
