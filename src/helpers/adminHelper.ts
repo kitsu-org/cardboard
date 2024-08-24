@@ -5,8 +5,6 @@ import type {
     AnnouncementResponse,
     Invite,
     InviteListOptions,
-    Report,
-    ReportOptions,
     ReportSortingOptions,
     ServerStatusOptions,
 } from "../types/admin";
@@ -486,9 +484,8 @@ export class Admin {
             sortingOptions,
         );
         const reports: ReportItem[] = [];
-        for (const report of reports) {
-            //@ts-expect-error This should return proper reports. I'm just not good at typing things.
-            reports.push(new ReportItem(this.cardboard, report));
+        for (const reportObject of report) {
+            reports.push(new ReportItem(this.cardboard, reportObject));
         }
         return reports;
 
