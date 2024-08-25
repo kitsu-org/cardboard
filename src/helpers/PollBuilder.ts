@@ -1,5 +1,9 @@
 import type { CardboardClient } from "..";
 
+/**
+ * Misskey requires more than one choice when a poll is made.
+ * If you have only one choice, Cardboard will throw NotEnoughOptionsError.
+ */
 export class NotEnoughOptionsError extends Error {
     constructor() {
         super();
@@ -8,7 +12,9 @@ export class NotEnoughOptionsError extends Error {
             "There's not enough options in the poll you just made. This is not allowed.";
     }
 }
-
+/**
+ * Misskey requires unique poll options.
+ */
 export class PollNoTwoAlikeError extends Error {
     constructor() {
         super();
@@ -16,7 +22,9 @@ export class PollNoTwoAlikeError extends Error {
         this.message = "Poll options must be unique.";
     }
 }
-
+/**
+ * Misskey set the limit to poll options to 150 characters.
+ */
 export class PollOptionTooLongError extends Error {
     constructor() {
         super();
@@ -25,6 +33,9 @@ export class PollOptionTooLongError extends Error {
     }
 }
 
+/**
+ * The limit is 10 options. Any more, and Misskey will throw an error.
+ */
 export class TooManyPollOptionsError extends Error {
     constructor() {
         super();
@@ -40,7 +51,6 @@ export type PollSettings = {
 };
 
 export class PollBuilder {
-    constructor(private readonly cardboard: CardboardClient) {}
     private _poll: string[] = [];
     private _pollSettings: PollSettings = {
         multipleChoice: false,

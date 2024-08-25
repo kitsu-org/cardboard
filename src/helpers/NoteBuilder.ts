@@ -8,6 +8,10 @@ import {
     type PollSettings,
 } from "./PollBuilder";
 
+/**
+ * You cannot use the PostBuilder more than once, to prevent accidental duplicate posting.
+ * This method will throw an error if you attempt to send multiple posts.
+ */
 export class AlreadyPostedError extends Error {
     constructor() {
         super();
@@ -28,18 +32,38 @@ export class NoteBuilder {
         multipleChoice: false,
     };
 
+    /**
+     * Get the contents of the pos.
+     * @returns {string}
+     */
     get content(): string {
         return this._content;
     }
+    /**
+     * Get the current visibility of the post.
+     * @returns {NoteVisibility}
+     */
     get visibility(): NoteVisibility {
         return this._visibility;
     }
+    /**
+     * Return whether or not the post is going to be broadcasted.
+     * @returns {boolean}
+     */
     get federating(): boolean {
         return this._federating;
     }
+    /**
+     * Get the current poll settings. Will not have impact if there's no poll options.
+     * @returns {PollSettings}
+     */
     get pollSettings(): PollSettings {
         return this._pollOptions;
     }
+    /**
+     * Get the current poll options that users can select from.
+     * @returns {string[]}
+     */
     get poll(): string[] {
         return this._poll;
     }
