@@ -55,42 +55,73 @@ export class User {
         return this.misskeyUser.name;
     }
 
+    /**
+     * get the host of the user.
+     * Will return null if it's the homeserver.
+     */
     get host(): string | null {
         return this.misskeyUser.host;
     }
 
+    /**
+     * get the URL of the avatar.
+     */
     get avatarUrl(): string | null {
         return this.misskeyUser.avatarUrl;
     }
 
+    /**
+     * Get the Hash used to create the blur for the user.
+     */
     get avatarBlurhash(): string | null {
         return this.misskeyUser.avatarBlurhash;
     }
 
+    /**
+     * Quickly determine if the user has administrative abilities.
+     */
     get isAdmin(): boolean | undefined {
         return this.misskeyUser.isAdmin;
     }
 
+    /**
+     * Quickly determine if a user can do moderation on a server.
+     */
     get isModerator(): boolean | undefined {
         return this.misskeyUser.isModerator;
     }
 
+    /**
+     * Check and see if a user is silenced.
+     */
     get isSilenced(): boolean {
         return this.misskeyUser.isSilenced;
     }
 
+    /**
+     * check and see if a user permits indexing or not.
+     */
     get noindex(): boolean {
         return this.misskeyUser.noindex;
     }
 
+    /**
+     * check and see if the user is a bot.
+     */
     get isBot(): boolean | undefined {
         return this.misskeyUser.isBot;
     }
 
+    /**
+     * see if the user is a cat (cat ears and cat speech is usually included.)
+     */
     get isCat(): boolean | undefined {
         return this.misskeyUser.isCat;
     }
 
+    /**
+     * see if the user wishes to have their text transformed.
+     */
     get speakAsCat(): boolean | undefined {
         return this.misskeyUser.speakAsCat;
     }
@@ -111,18 +142,30 @@ export class User {
         return this.misskeyUser.alsoKnownAs;
     }
 
+    /**
+     * Get the URL of the banner - commonly the image featured at the top of the profile
+     */
     get bannerUrl(): string | null {
         return this.misskeyUser.bannerUrl;
     }
 
+    /**
+     * get the hash used to generate the blur for the banner, commonly used when the image cannot load.
+     */
     get bannerBlurhash(): string | null {
         return this.misskeyUser.bannerBlurhash;
     }
 
+    /**
+     * get the background url - sharkey exclusive.
+     */
     get backgroundUrl(): string | null {
         return this.misskeyUser.backgroundUrl;
     }
 
+    /**
+     * get the hash used to generate the blur for the background, commonly used when the image cannot load.
+     */
     get backgroundBlurhash(): string | null {
         return this.misskeyUser.backgroundBlurhash;
     }
@@ -131,50 +174,87 @@ export class User {
         return this.misskeyUser.isLocked;
     }
 
+    /**
+     * See if the user is suspended.
+     */
     get isSuspended(): boolean {
         return this.misskeyUser.isSuspended;
     }
 
+    /**
+     * A user-generated description.
+     */
     get description(): string | null {
         return this.misskeyUser.description;
     }
 
+    /**
+     * The location, as set by the user.
+     */
     get location(): string | null {
         return this.misskeyUser.location;
     }
 
+    /**
+     * Return the ListenBrainz username.
+     */
     // biome-ignore lint/style/useNamingConvention: This is how it's spelt in the API.
     get ListenBrainz(): string | null {
         return this.misskeyUser.ListenBrainz;
     }
 
+    /**
+     * Get the language spoken by the user (set by the user.)
+     */
     get lang(): string | null {
         return this.misskeyUser.lang;
     }
 
+    /**
+     * Get all fields.
+     */
     get fields(): { name: string; value: string }[] {
         return this.misskeyUser.fields;
     }
 
+    /**
+     * Get links that have been verified by the user.
+     */
     get verifiedLinks(): string[] {
         return this.misskeyUser.verifiedLinks;
     }
 
+    /**
+     * Get the number of followers a user has.
+     * May possibly return with unexpected behavior.
+     */
     get followersCount(): number {
         return this.misskeyUser.followersCount;
     }
-
+    /**
+     * Get the number of people a user follows.
+     * May possibly return with unexpected behavior.
+     */
     get followingCount(): number {
         return this.misskeyUser.followingCount;
     }
 
+    /**
+     * Get the number of notes the user creates.
+     */
     get notesCount(): number {
         return this.misskeyUser.notesCount;
     }
+    /**
+     * get a list of pinned notes by ID only.
+     */
     get pinnedNoteIds(): string[] {
         return this.misskeyUser.pinnedNoteIds;
     }
 
+    /**
+     * get a list of pinned notes.
+     */
     get pinnedNotes(): Note[] {
         const notes: Note[] = [];
         for (const note of this.misskeyUser.pinnedNotes) {
@@ -183,57 +263,98 @@ export class User {
         return notes;
     }
 
+    /**
+     * get a list of pages by ID.
+     */
     get pinnedPageId(): string[] {
         return this.pinnedPageId;
     }
 
+    /**
+     * See wether or not a user is publicly reacting.
+     */
     get publicReactions(): boolean {
         return this.misskeyUser.puiblicReactions;
     }
 
+    /**
+     * see the visibility of whom a user is following
+     */
     get followingVisibility(): "public" | "followers" | "private" {
         return this.misskeyUser.followingVisibility;
     }
+    /**
+     * check the visibility of the followers a user has
+     */
     get followersVisibility(): "public" | "followers" | "private" {
         return this.misskeyUser.followersVisibility;
     }
 
+    /**
+     * see the personally set memo
+     */
     get memo(): string | null {
         return this.misskeyUser.memo;
     }
 
+    /**
+     * see the moderation note (if account has it.)
+     */
     get moderationNote(): string | null | undefined {
         return this.misskeyUser.moderationNote;
     }
 
+    /**
+     * see if the user is being followed by you.
+     */
     get isFollowing(): boolean | undefined {
         return this.misskeyUser.isFollowing;
     }
 
+    /**
+     * see if the user is following you.
+     */
     get isFollowed(): boolean | undefined {
         return this.misskeyUser.isFollowed;
     }
 
+    /**
+     * See if there's a pending follow request from you.
+     */
     get hasPendingFollowRequestFromYou(): boolean | undefined {
         return this.misskeyUser.hasPendingFollowRequestFromYou;
     }
 
+    /**
+     * See if you have a pending follow request.
+     */
     get hasPendingFollowRequestToYou(): boolean | undefined {
         return this.misskeyUser.hasPendingFollowRequestToYou;
     }
 
+    /**
+     * See if you're blocking the user.
+     */
     get isBlocking(): boolean | undefined {
         return this.misskeyUser.isBlocking;
     }
 
+    /**
+     * See if the user is blocking you.
+     */
     get isBlocked(): boolean | undefined {
         return this.misskeyUser.isBlocked;
     }
 
+    /**
+     * See if the user is muted by you.
+     */
     get isMuted(): boolean | undefined {
         return this.misskeyUser.isMuted;
     }
-
+    /**
+     * See if you've muted renotes from that user.
+     */
     get isRenoteMuted(): boolean | undefined {
         return this.misskeyUser.isRenoteMuted;
     }
@@ -246,10 +367,16 @@ export class User {
         return this.misskeyUser.withReplies;
     }
 
+    /**
+     * See when the user was created or discovered by the server.
+     */
     get createdAt(): Date {
         return new Date(this.misskeyUser.createdAt);
     }
 
+    /**
+     * See when the user was last updated at.
+     */
     get updatedAt(): Date | null {
         if (typeof this.misskeyUser.updatedAt === "string") {
             return new Date(this.misskeyUser.updatedAt);
@@ -257,6 +384,9 @@ export class User {
         return this.misskeyUser.updatedAt;
     }
 
+    /**
+     * See when the user was last fetched at.
+     */
     get lastFetchedAt(): Date | null {
         if (typeof this.misskeyUser.lastFetchedAt === "string") {
             return new Date(this.misskeyUser.lastFetchedAt);
@@ -264,6 +394,9 @@ export class User {
         return this.misskeyUser.lastFetchedAt;
     }
 
+    /**
+     * Get the birthday of the user.
+     */
     get birthday(): Date | null | undefined {
         if (typeof this.misskeyUser.birthday === "string") {
             return new Date(this.misskeyUser.birthday);
