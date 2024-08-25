@@ -31,13 +31,11 @@
         "@types/bun": "latest",
         "typedoc": "^0.26.6",
         "typedoc-plugin-mdn-links": "^3.2.9",
-        "typedoc-plugin-missing-exports": "^3.0.0"
+        "typedoc-plugin-missing-exports": "^3.0.0",
+        "bun-plugin-dts": "^0.2.3"
     },
     "peerDependencies": {
         "typescript": "^5.5.3"
     },
-    "trustedDependencies": ["@biomejs/biome"],
-    "dependencies": {
-        "bun-plugin-dts": "^0.2.3"
-    }
+    "trustedDependencies": ["@biomejs/biome"]
 }
