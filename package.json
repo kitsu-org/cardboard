@@ -26,10 +26,6 @@
     "type": "module",
     "keywords": ["misskey", "wrapper", "typescript"],
     "version": "1.0.0",
-    "scripts": {
-        "lint": "bunx @biomejs/biome check .",
-        "generate-docs": "jsdoc.exe -c jsdoc.json"
-    },
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",
         "@types/bun": "latest",
@@ -40,5 +36,8 @@
     "peerDependencies": {
         "typescript": "^5.5.3"
     },
-    "trustedDependencies": ["@biomejs/biome"]
+    "trustedDependencies": ["@biomejs/biome"],
+    "dependencies": {
+        "bun-plugin-dts": "^0.2.3"
+    }
 }

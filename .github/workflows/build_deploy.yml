@@ -47,6 +47,15 @@ jobs:
       - name: Remove development systems
         run: 'rm -rf .github biome.json'
 
+      - name: Prepare Bun
+        run: `bun i --frozen-lockfile`
+
+      - name: Transpile to .JS
+        run: `bun run ./build.ts`
+
+      - name: change from src to dist in package.json
+        run: 'sed -i ''s/src\/index.ts/dist\/index.js/'' package.json' 
+
       - name: Publish to NPM
         run: npm publish --provenance --tag ${{ github.event.inputs.tag }} --access public
         env:
