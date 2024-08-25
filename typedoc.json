@@ -1,6 +1,6 @@
 {
     "$schema": "https://typedoc.org/schema.json",
-    "entryPoints": ["./src/index.ts"],
+    "entryPoints": ["./src/index.ts", "./src/helpers/NoteBuilder.ts", "./src/helpers/PollBuilder.ts"],
     "projectDocuments": ["./documents/*.md"],
     "plugin": ["typedoc-plugin-missing-exports", "typedoc-plugin-mdn-links"],
     "placeInternalsInOwningModule": true,
