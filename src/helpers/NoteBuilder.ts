@@ -1,31 +1,12 @@
 import type { CardboardClient } from "..";
 import { NoteVisibility } from "../types";
 import type { Note } from "./noteHelper";
-
-export class NotEnoughOptionsError extends Error {
-    constructor() {
-        super();
-        this.name = "NotEnoughOptionsError";
-        this.message =
-            "There's not enough options in the poll you just made. This is not allowed.";
-    }
-}
-
-export class PollOptionTooLongError extends Error {
-    constructor() {
-        super();
-        this.name = "PollOptionTooLongError";
-        this.message = "This poll option is too long! This is not allowed.";
-    }
-}
-
-export class TooManyPollOptionsError extends Error {
-    constructor() {
-        super();
-        this.name = "TooManyPollOptionsError";
-        this.message = "This poll option is too long! This is not allowed.";
-    }
-}
+import {
+    PollOptionTooLongError,
+    TooManyPollOptionsError,
+    NotEnoughOptionsError,
+    type PollSettings,
+} from "./PollBuilder";
 
 export class AlreadyPostedError extends Error {
     constructor() {
@@ -35,12 +16,6 @@ export class AlreadyPostedError extends Error {
             "To prevent accidental double-posting, NoteBuilders need to be disposed of after using post().";
     }
 }
-
-export type PollSettings = {
-    multipleChoice: boolean;
-    expiresAt?: null | number;
-    expiredAfter?: null | number;
-};
 
 export class NoteBuilder {
     constructor(private readonly cardboard: CardboardClient) {}
@@ -110,7 +85,7 @@ export class NoteBuilder {
         if (option.length >= 150) {
             throw PollOptionTooLongError;
         }
-        if (this._poll.length + 1 === 11) {
+        if (this._poll.length === 10) {
             throw TooManyPollOptionsError;
         }
         this._poll.push(option);
