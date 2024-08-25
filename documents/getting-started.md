@@ -9,20 +9,15 @@ Welcome to Cardboard! If you're new to programming, then it can be a daunting ta
 > ℹ️ You should keep in mind, screenshots are taken from Sharkey - a soft fork of Misskey. Things may look a bit different on your instance.
 
 ## Preparing your environment
-While we're still working on getting Cardboard to 100%, you'll need to use a Typescript-friendly compiler. In this instance, we recommend Bun for this task!
+We're still working on getting Cardboard to 100%, but that doesn't mean you shouldn't start making boxes in Cardboard now!
 
-We assume you already have NodeJS installed. To install bun, run this command:
+If you're comfortable using the release version of Cardboard, you're free to use NodeJS; though we recommend writing in typescript.
+
+We assume you already have NodeJS installed. So, lets get set up!
 ```bash
-$ npm install -g bun
-$ bun init
+$ npm init
+$ npm install @kitsu-org/cardboard
 ```
-
-once complete, you can now initialize bun, and run cardboard!
-```bash
-$ bun init
-$ bun add @kitsu-org/cardboard
-```
-
 
 ## Getting an API Key
 When using *Key for programmatic access, there's a couple things you should keep in mind.
@@ -76,4 +71,4 @@ cardboard.on("mention", async (msg) => {
 cardboard.connect();
 ```
 
-All there's left is just to ``bun run index.ts`` and you're now running your first ever bot with cardboard! 👏
+All there's left is just to ``node index.js`` and you're now running your first ever bot with cardboard! 👏
