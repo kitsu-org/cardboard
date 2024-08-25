@@ -1,6 +1,7 @@
 /**
  * if you're looking to create a poll, you should probably look at the PollBuilder Class.
  * @see {PollBuilder}
+ * @module
  */
 import type { CardboardClient } from "..";
 
