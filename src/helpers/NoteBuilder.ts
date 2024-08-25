@@ -1,12 +1,12 @@
 import type { CardboardClient } from "..";
 import { NoteVisibility } from "../types";
-import type { Note } from "./noteHelper";
 import {
-    PollOptionTooLongError,
-    TooManyPollOptionsError,
     NotEnoughOptionsError,
+    PollOptionTooLongError,
     type PollSettings,
+    TooManyPollOptionsError,
 } from "./PollBuilder";
+import type { Note } from "./noteHelper";
 
 /**
  * You cannot use the PostBuilder more than once, to prevent accidental duplicate posting.

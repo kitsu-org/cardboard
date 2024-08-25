@@ -3,7 +3,6 @@
  * @see {@link PollBuilder}
  * @module
  */
-import type { CardboardClient } from "..";
 
 /**
  * Misskey requires more than one choice when a poll is made.
