@@ -2,6 +2,7 @@ import { readdir } from "node:fs/promises";
 import { NoteBuilder } from "./helpers/NoteBuilder";
 import { PollBuilder } from "./helpers/PollBuilder";
 import { Admin } from "./helpers/adminHelper";
+import { Command } from "./helpers/commandHelper";
 import { Drive } from "./helpers/driveHelper";
 // import { IterableArray } from "./helpers/iterableArrayHelper";
 import { Logger } from "./helpers/logHelper";
@@ -17,7 +18,6 @@ import {
 import type { Emoji } from "./types/emoji";
 import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
-import { Command } from "./helpers/commandHelper";
 
 interface Events {
     ready: () => void;

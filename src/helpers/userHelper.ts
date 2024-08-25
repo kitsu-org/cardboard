@@ -413,7 +413,7 @@ export class User {
     }
 
     /**
-     * Suspends the user from using the isntance.
+     * Suspends the user from using the instance.
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async suspend(modNote?: string): Promise<void> {
