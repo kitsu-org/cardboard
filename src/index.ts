@@ -1,5 +1,6 @@
 import { readdir } from "node:fs/promises";
 import { NoteBuilder } from "./helpers/NoteBuilder";
+import { PollBuilder } from "./helpers/PollBuilder";
 import { Admin } from "./helpers/adminHelper";
 import { Drive } from "./helpers/driveHelper";
 // import { IterableArray } from "./helpers/iterableArrayHelper";
@@ -13,7 +14,6 @@ import {
     TimelineType,
     type WebsocketOptions,
 } from "./helpers/websocketHelper";
-import type { PollBuilder } from "./helpers/PollBuilder";
 import type { Emoji } from "./types/emoji";
 import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
