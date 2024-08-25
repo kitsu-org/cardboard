@@ -48,10 +48,10 @@ jobs:
         run: 'rm -rf .github biome.json'
 
       - name: Prepare Bun
-        run: `bun i --frozen-lockfile`
+        run: 'bun i --frozen-lockfile'
 
       - name: Transpile to .JS
-        run: `bun run ./build.ts`
+        run: 'bun run ./build.ts'
 
       - name: change from src to dist in package.json
         run: 'sed -i ''s/src\/index.ts/dist\/index.js/'' package.json' 
