@@ -150,15 +150,32 @@ To stop this warning, please disable bypassNoBot.
         new CardboardWebsocket(this, websocketOptions);
     }
 
+    /**
+     * Find a user by a username & host.
+     * @param {string} [username] The username you'd like to search for.
+     * @param {string|null|undefined} [host] - the host. if undefined or null, will search the home server.
+     * @param {number|undefined} limit the limit. [1..100] is the limit.
+     * @returns {User[]}
+     */
     public async findUser(
         username: string,
         host?: string | null,
-    ): Promise<User> {
-        const user = await misskeyRequest(this, "users/show", {
-            username,
-            host,
-        });
-        return new User(this, user);
+        limit?: number,
+    ): Promise<User[]> {
+        const users = await misskeyRequest(
+            this,
+            "users/search-by-username-and-host",
+            {
+                username,
+                host,
+                limit,
+            },
+        );
+        const userList: User[] = [];
+        for (const user of users) {
+            userList.push(new User(this, user));
+        }
+        return userList;
     }
 
     public async showUser(userId: string): Promise<User> {
