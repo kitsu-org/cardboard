@@ -2,7 +2,7 @@ import type { CardboardClient } from "..";
 import { type NoteOptions, NoteVisibility } from "../types/note";
 import type { MisskeyUser } from "../types/user";
 import { CannotHurtSelfError, NoBotInteractionError } from "./error";
-import type { Note } from "./noteHelper";
+import { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
 
 const checkForHarmAndThrowIfTrue = async (
@@ -42,6 +42,239 @@ export class User {
         protected misskeyUser: MisskeyUser,
     ) {}
 
+    /**
+     * Return the ID of the user.
+     */
+    get id(): string {
+        return this.misskeyUser.id;
+    }
+    /**
+     * Get the displayname of the user
+     */
+    get name(): string {
+        return this.misskeyUser.name;
+    }
+
+    get host(): string | null {
+        return this.misskeyUser.host;
+    }
+
+    get avatarUrl(): string | null {
+        return this.misskeyUser.avatarUrl;
+    }
+
+    get avatarBlurhash(): string | null {
+        return this.misskeyUser.avatarBlurhash;
+    }
+
+    get isAdmin(): boolean | undefined {
+        return this.misskeyUser.isAdmin;
+    }
+
+    get isModerator(): boolean | undefined {
+        return this.misskeyUser.isModerator;
+    }
+
+    get isSilenced(): boolean {
+        return this.misskeyUser.isSilenced;
+    }
+
+    get noindex(): boolean {
+        return this.misskeyUser.noindex;
+    }
+
+    get isBot(): boolean | undefined {
+        return this.misskeyUser.isBot;
+    }
+
+    get isCat(): boolean | undefined {
+        return this.misskeyUser.isCat;
+    }
+
+    get speakAsCat(): boolean | undefined {
+        return this.misskeyUser.speakAsCat;
+    }
+
+    get url(): string | null {
+        return this.misskeyUser.url;
+    }
+
+    get uri(): string | null {
+        return this.misskeyUser.uri;
+    }
+
+    get movedTo(): string | null {
+        return this.misskeyUser.movedTo;
+    }
+
+    get alsoKnownAs(): string[] | null {
+        return this.misskeyUser.alsoKnownAs;
+    }
+
+    get bannerUrl(): string | null {
+        return this.misskeyUser.bannerUrl;
+    }
+
+    get bannerBlurhash(): string | null {
+        return this.misskeyUser.bannerBlurhash;
+    }
+
+    get backgroundUrl(): string | null {
+        return this.misskeyUser.backgroundUrl;
+    }
+
+    get backgroundBlurhash(): string | null {
+        return this.misskeyUser.backgroundBlurhash;
+    }
+
+    get isLocked(): boolean {
+        return this.misskeyUser.isLocked;
+    }
+
+    get isSuspended(): boolean {
+        return this.misskeyUser.isSuspended;
+    }
+
+    get description(): string | null {
+        return this.misskeyUser.description;
+    }
+
+    get location(): string | null {
+        return this.misskeyUser.location;
+    }
+
+    // biome-ignore lint/style/useNamingConvention: This is how it's spelt in the API.
+    get ListenBrainz(): string | null {
+        return this.misskeyUser.ListenBrainz;
+    }
+
+    get lang(): string | null {
+        return this.misskeyUser.lang;
+    }
+
+    get fields(): { name: string; value: string }[] {
+        return this.misskeyUser.fields;
+    }
+
+    get verifiedLinks(): string[] {
+        return this.misskeyUser.verifiedLinks;
+    }
+
+    get followersCount(): number {
+        return this.misskeyUser.followersCount;
+    }
+
+    get followingCount(): number {
+        return this.misskeyUser.followingCount;
+    }
+
+    get notesCount(): number {
+        return this.misskeyUser.notesCount;
+    }
+    get pinnedNoteIds(): string[] {
+        return this.misskeyUser.pinnedNoteIds;
+    }
+
+    get pinnedNotes(): Note[] {
+        const notes: Note[] = [];
+        for (const note of this.misskeyUser.pinnedNotes) {
+            notes.push(new Note(this.cardboard, note));
+        }
+        return notes;
+    }
+
+    get pinnedPageId(): string[] {
+        return this.pinnedPageId;
+    }
+
+    get publicReactions(): boolean {
+        return this.misskeyUser.puiblicReactions;
+    }
+
+    get followingVisibility(): "public" | "followers" | "private" {
+        return this.misskeyUser.followingVisibility;
+    }
+    get followersVisibility(): "public" | "followers" | "private" {
+        return this.misskeyUser.followersVisibility;
+    }
+
+    get memo(): string | null {
+        return this.misskeyUser.memo;
+    }
+
+    get moderationNote(): string | null | undefined {
+        return this.misskeyUser.moderationNote;
+    }
+
+    get isFollowing(): boolean | undefined {
+        return this.misskeyUser.isFollowing;
+    }
+
+    get isFollowed(): boolean | undefined {
+        return this.misskeyUser.isFollowed;
+    }
+
+    get hasPendingFollowRequestFromYou(): boolean | undefined {
+        return this.misskeyUser.hasPendingFollowRequestFromYou;
+    }
+
+    get hasPendingFollowRequestToYou(): boolean | undefined {
+        return this.misskeyUser.hasPendingFollowRequestToYou;
+    }
+
+    get isBlocking(): boolean | undefined {
+        return this.misskeyUser.isBlocking;
+    }
+
+    get isBlocked(): boolean | undefined {
+        return this.misskeyUser.isBlocked;
+    }
+
+    get isMuted(): boolean | undefined {
+        return this.misskeyUser.isMuted;
+    }
+
+    get isRenoteMuted(): boolean | undefined {
+        return this.misskeyUser.isRenoteMuted;
+    }
+
+    get notify(): "normal" | "none" | undefined {
+        return this.misskeyUser.notify;
+    }
+
+    get withReplies(): boolean | undefined {
+        return this.misskeyUser.withReplies;
+    }
+
+    get createdAt(): Date {
+        return new Date(this.misskeyUser.createdAt);
+    }
+
+    get updatedAt(): Date | null {
+        if (typeof this.misskeyUser.updatedAt === "string") {
+            return new Date(this.misskeyUser.updatedAt);
+        }
+        return this.misskeyUser.updatedAt;
+    }
+
+    get lastFetchedAt(): Date | null {
+        if (typeof this.misskeyUser.lastFetchedAt === "string") {
+            return new Date(this.misskeyUser.lastFetchedAt);
+        }
+        return this.misskeyUser.lastFetchedAt;
+    }
+
+    get birthday(): Date | null | undefined {
+        if (typeof this.misskeyUser.birthday === "string") {
+            return new Date(this.misskeyUser.birthday);
+        }
+        return this.misskeyUser.birthday;
+    }
+
+    /**
+     * Raw access to the misskey user.
+     * @deprecated
+     */
     get user(): MisskeyUser {
         return this.misskeyUser;
     }

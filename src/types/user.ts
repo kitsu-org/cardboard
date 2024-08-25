@@ -141,7 +141,7 @@ export type MisskeyUser = {
     url: string | null;
     uri: string | null;
     movedTo: string | null;
-    alsoKnownAs: string | null;
+    alsoKnownAs: string[] | null;
     updatedAt: string;
     lastFetchedAt: string | null;
     bannerUrl: string | null;
