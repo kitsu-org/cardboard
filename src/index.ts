@@ -13,6 +13,7 @@ import {
     TimelineType,
     type WebsocketOptions,
 } from "./helpers/websocketHelper";
+import type { PollBuilder } from "./helpers/PollBuilder";
 import type { Emoji } from "./types/emoji";
 import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
@@ -238,4 +239,4 @@ To stop this warning, please disable bypassNoBot.
     }
 }
 
-export { NoteBuilder as PostBuilder };
+export { NoteBuilder, PollBuilder };
