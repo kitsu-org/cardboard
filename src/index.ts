@@ -17,6 +17,7 @@ import {
 import type { Emoji } from "./types/emoji";
 import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
+import { Command } from "./helpers/commandHelper";
 
 interface Events {
     ready: () => void;
@@ -239,4 +240,4 @@ To stop this warning, please disable bypassNoBot.
     }
 }
 
-export { NoteBuilder, PollBuilder };
+export { NoteBuilder, PollBuilder, Command };
