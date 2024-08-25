@@ -1,7 +1,7 @@
 /**
  * if you're looking to create a poll, you should probably look at the PollBuilder Class.
  * @see {@link PollBuilder}
- * @module
+ * @module PollBuilder
  */
 
 /**

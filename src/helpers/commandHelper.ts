@@ -1,3 +1,7 @@
+/**
+ * @module Command
+ * @see {@link Command}
+ */
 import type { CardboardClient } from "..";
 import type { Note } from "./noteHelper";
 import type { User } from "./userHelper";

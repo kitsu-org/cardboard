@@ -1,3 +1,8 @@
+/**
+ * @module NoteBuilder
+ * @See {@link NoteBuilder}
+ */
+
 import type { CardboardClient } from "..";
 import { NoteVisibility } from "../types";
 import {
