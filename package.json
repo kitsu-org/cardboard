@@ -16,6 +16,7 @@
         }
     },
     "author": "Kio (https://kitsu.life)",
+    "sideEffects": false,
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/kitsu-org/cardboard/issues"
