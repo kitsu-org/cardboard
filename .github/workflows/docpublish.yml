@@ -33,7 +33,7 @@ jobs:
         name: "Build documentation"
         run: |
           set -euo pipefail
-          bunx typedoc
+          bunx typedoc --customFooterHtml "Made with Love and 🍵 by <strong><a href="https://kitsu.life/">Kitsu</a></strong>!"
       - id: "upload-documentation"
         name: "Upload Pages artifact"
         uses: "actions/upload-pages-artifact@v2"

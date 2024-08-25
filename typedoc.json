@@ -7,5 +7,14 @@
     "name": "Cardboard",
     "excludeExternals": true,
     "hideGenerator": true,
-    "out": "docs"
+    "out": "docs",
+    "sidebarLinks": {
+        "Github": "https://github.com/kitsu-org/cardboard"
+    },
+    "navigation": {
+        "includeCategories": false,
+        "includeGroups": false,
+        "includeFolders": false
+    },
+    "categorizeByGroup": false
 }
