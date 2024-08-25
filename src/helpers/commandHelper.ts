@@ -2,7 +2,7 @@ import type { CardboardClient } from "..";
 import type { Note } from "./noteHelper";
 import type { User } from "./userHelper";
 
-export default class Command {
+export class Command {
     constructor(protected readonly cardboard: CardboardClient) {
         this.cardboard.on("note", this.onNote);
         this.cardboard.on("mention", this.onMention);
