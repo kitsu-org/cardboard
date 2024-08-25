@@ -51,7 +51,7 @@ Now that you have put your keys into a .env file, you can open up the ``index`` 
 
 ```ts
 import { CardboardClient } from '@kitsu-org/cardboard';
-const cardboard = new CardboardClient(bun.env.INSTANCE, bun.env.API_KEY);
+const cardboard = new CardboardClient(process.env.INSTANCE, process.env.API_KEY);
 
 // We should know when Cardboard is ready for commands!
 // This'll let us know.
@@ -71,4 +71,4 @@ cardboard.on("mention", async (msg) => {
 cardboard.connect();
 ```
 
-All there's left is just to ``node index.js`` and you're now running your first ever bot with cardboard! 👏
+All there's left is just to ``node --env-file=.env index.js`` and you're now running your first ever bot with cardboard! 👏
