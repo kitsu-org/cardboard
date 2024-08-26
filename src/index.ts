@@ -9,7 +9,6 @@ import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
 import { SelfUser } from "./helpers/selfUserHelper";
 import { User } from "./helpers/userHelper";
-
 import { Box } from "./helpers/boxHelper";
 import {
     CardboardWebsocket,
@@ -37,11 +36,32 @@ interface Events {
  */
 export class CardboardClient {
     constructor(
+        /**
+         * The current homeserver cardboard connects to.
+         */
         public readonly instance: string,
+        /**
+         * the access token used.
+         * @todo THIS IS A SECURITY RISK. We need to make this private!
+         * @ignore
+         */
         public readonly accessToken: string,
+        /**
+         * the initialized options for Cardboard.
+         */
         public readonly options?: {
+            /**
+             * Whether or not bypassNoBot is enabled.
+             * DISCOURAGED. If a user doesn't want to be interacted with, then _don't interact with them._
+             */
             bypassNoBot?: boolean;
+            /**
+             * the verbosity of cardboard. By default, set to log.
+             */
             output?: "verbose" | "debug" | "log" | "warn" | "error" | "crit";
+            /**
+             * the path of the logfile, if set.
+             */
             logFile?: string;
         },
     ) {
@@ -61,14 +81,34 @@ To stop this warning, please disable bypassNoBot.
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
         new Map();
 
+    /**
+     * Get yourself as a user.
+     * @returns {Promise<SelfUser>}
+     */
     public async getSelf(): Promise<SelfUser> {
         return new SelfUser(this, await misskeyRequest(this, "i"));
     }
 
+    /**
+     * The bot's drive.
+     * @see {@link Drive}
+     */
     public drive: Drive;
+    /**
+     * Cardboard's custom log system.
+     * @see {@link Logger}
+     */
     public logger: Logger;
+    /**
+     * the administrative actions. functions in the admin class are more destructive.
+     * @see {@link Admin}
+     */
     public admin: Admin;
 
+    /**
+     * Load a folder's worth of boxes.
+     * @param boxFolder the path that cardboard should look for boxes.
+     */
     public async addFolder(boxFolder: string): Promise<void> {
         const folder = await readdir(boxFolder);
         for (const file of folder) {
@@ -76,6 +116,13 @@ To stop this warning, please disable bypassNoBot.
         }
     }
 
+    /**
+     * Get posts by a hashtag.
+     * @param tag the hashtag to search by.
+     * @param limit the amount of posts to get. limit is [1..100].
+     * @param allowPartial whether or not to simplify posts.
+     * @returns {Note[]}
+     */
     public async getPostsByTag(
         tag: string,
         limit = 10,
@@ -104,6 +151,9 @@ To stop this warning, please disable bypassNoBot.
      * Note: This can be a very extensive list. Filter at your own risk.
      */
     public async getEmojis(): Promise<{
+        /**
+         * A list of the emojis you'll receive.
+         */
         emojis: Omit<Emoji, "id" | "host" | "license" | "localOnly">[];
     }> {
         return await misskeyRequest(this, "emojis");
@@ -179,11 +229,35 @@ To stop this warning, please disable bypassNoBot.
         return userList;
     }
 
+    /**
+     * get a user by their userId.
+     * @param userId the ID of the user that you'd like to retrieve.
+     * @returns {Promise<User>}
+     */
     public async showUser(userId: string): Promise<User> {
         return new User(
             this,
             await misskeyRequest(this, "users/show", {
                 userId,
+            }),
+        );
+    }
+
+    /**
+     * get a singular user by a username and host.
+     * @param username the username to look for.
+     * @param host optional. if set, search the remote server for a user.
+     * @returns {Promise<User>}
+     */
+    public async showUserByUsernameAndHost(
+        username: string,
+        host?: string,
+    ): Promise<User> {
+        return new User(
+            this,
+            await misskeyRequest(this, "users/show", {
+                username,
+                host,
             }),
         );
     }

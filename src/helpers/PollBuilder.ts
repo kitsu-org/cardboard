@@ -48,12 +48,30 @@ export class TooManyPollOptionsError extends Error {
     }
 }
 
+/**
+ * The settings of the poll.
+ */
 export type PollSettings = {
+    /**
+     * Whether or not a user can select multiple options in the poll.
+     */
     multipleChoice: boolean;
+    /**
+     * An exact epoch time for when the poll closes.
+     */
     expiresAt?: null | number;
+    /**
+     * {unknown. if you know, open an issue!}
+     */
     expiredAfter?: null | number;
 };
 
+/**
+ * Easily create a poll by stringing the PollBuilder!
+ * const poll = new PollBuilder()
+ * poll.addOption("hamburger").addOption("fries").addOption("both!")
+ * await cardboard.createNote("hamburger or fries?", poll)
+ */
 export class PollBuilder {
     private _poll: string[] = [];
     private _pollSettings: PollSettings = {
@@ -109,11 +127,18 @@ export class PollBuilder {
      */
     get finish() {
         return {
+            /**
+             * the poll property that will be output when finished.
+             */
             poll: {
+                /**
+                 * the compounded list of options added.
+                 */
                 choices: this._poll,
-                multiple: this._pollSettings.multipleChoice,
-                expiresAt: this._pollSettings.expiresAt,
-                expiredAfter: this._pollSettings.expiredAfter,
+                /**
+                 * the poll options that were set.
+                 */
+                ...this._pollSettings,
             },
         };
     }

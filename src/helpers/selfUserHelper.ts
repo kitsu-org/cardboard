@@ -2,6 +2,9 @@ import type { MetaOptions, PermissionsOptions } from "../types/user";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
+/**
+ * The SelfUser, which allows you to control your account.
+ */
 export class SelfUser extends User {
     /**
      * A way to change what people may see when they look at your post. This is not your username.
@@ -24,12 +27,15 @@ export class SelfUser extends User {
 
     /**
      * Create a restricted API key. By default, all parameters are disabled.
-     * NOTE: This is labelled as an internal endpoint. *Key devs may ask for it to be removed at any time,
+     * @remarks This is labelled as an internal endpoint. *Key devs may ask for it to be removed at any time,
      * and I will comply.
      */
-    async createApiKey(
-        options: PermissionsOptions,
-    ): Promise<{ token: string }> {
+    async createApiKey(options: PermissionsOptions): Promise<{
+        /**
+         * The token you can use.
+         */
+        token: string;
+    }> {
         return await misskeyRequest(
             this.cardboard,
             "miauth/gen-token",

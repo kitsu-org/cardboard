@@ -26,6 +26,10 @@ export class AlreadyPostedError extends Error {
     }
 }
 
+/**
+ * You cannot escape square brackets (as far as I'm aware.)
+ * If I'm mistaken, please open an issue!
+ */
 export class CannotEscapeSquareBracketsError extends Error {
     constructor() {
         super();
@@ -53,6 +57,12 @@ const processArgs = (args?: Record<string, unknown>): string => {
     return string;
 };
 
+/**
+ * The NoteBuilder Class! Easily create your own note by stringing together a NoteBuilder.
+ * @example
+ * const note = new NoteBuilder()
+ * await note.add("hello world!").x2("big!").sparkle("yay!").post()
+ */
 export class NoteBuilder {
     constructor(private readonly cardboard: CardboardClient) {}
     private _content = "";
@@ -145,7 +155,7 @@ export class NoteBuilder {
         if (this._posted) {
             throw AlreadyPostedError;
         }
-        this._content += content;
+        this._content += ` ${content}`;
         return this;
     }
 
@@ -165,7 +175,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[tada${processArgs(args)} ${content}]`;
+        this._content += ` $[tada${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -185,7 +195,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[jelly${processArgs(args)} ${content}]`;
+        this._content += ` $[jelly${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -205,7 +215,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[twitch${processArgs(args)} ${content}]`;
+        this._content += ` $[twitch${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -225,7 +235,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[shake${processArgs(args)} ${content}]`;
+        this._content += ` $[shake${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -252,7 +262,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[spin${processArgs(args)} ${content}]`;
+        this._content += ` $[spin${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -272,7 +282,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[jump${processArgs(args)} ${content}]`;
+        this._content += ` $[jump${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -292,7 +302,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[bounce${processArgs(args)} ${content}]`;
+        this._content += ` $[bounce${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -309,7 +319,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[flip${processArgs(args)} ${content}]`;
+        this._content += ` $[flip${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -325,7 +335,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[x2 ${content}]`;
+        this._content += ` $[x2 ${content}]`;
         return this;
     }
 
@@ -341,7 +351,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[x3 ${content}]`;
+        this._content += ` $[x3 ${content}]`;
         return this;
     }
 
@@ -357,7 +367,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[x4 ${content}]`;
+        this._content += ` $[x4 ${content}]`;
         return this;
     }
 
@@ -374,7 +384,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[scale${processArgs(args)} ${content}]`;
+        this._content += ` $[scale${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -391,7 +401,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[position${processArgs(args)} ${content}]`;
+        this._content += ` $[position${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -409,7 +419,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[fg.color=${color} ${content}]`;
+        this._content += ` $[fg.color=${color} ${content}]`;
         return this;
     }
 
@@ -427,7 +437,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[bg.color=${color} ${content}]`;
+        this._content += ` $[bg.color=${color} ${content}]`;
         return this;
     }
 
@@ -454,7 +464,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[border${processArgs(args)} ${content}]`;
+        this._content += ` $[border${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -475,7 +485,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[font.${font} ${content}]`;
+        this._content += ` $[font.${font} ${content}]`;
         return this;
     }
 
@@ -492,7 +502,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[blur ${content}]`;
+        this._content += ` $[blur ${content}]`;
         return this;
     }
 
@@ -513,7 +523,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[rainbow${processArgs(args)} ${content}]`;
+        this._content += ` $[rainbow${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -530,7 +540,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[sparkle ${content}]`;
+        this._content += ` $[sparkle ${content}]`;
         return this;
     }
 
@@ -547,7 +557,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[rotate${deg ? `.deg=${deg}` : ""} ${content}]`;
+        this._content += ` $[rotate${deg ? `.deg=${deg}` : ""} ${content}]`;
         return this;
     }
 
@@ -564,7 +574,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[ruby ${content}]`;
+        this._content += ` $[ruby ${content}]`;
         return this;
     }
 
@@ -577,7 +587,7 @@ export class NoteBuilder {
         if (this._posted) {
             throw AlreadyPostedError;
         }
-        this._content += `$[unixtime ${content}]`;
+        this._content += ` $[unixtime ${content}]`;
         return this;
     }
 
@@ -607,7 +617,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[crop${processArgs(args)} ${content}]`;
+        this._content += ` $[crop${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -627,7 +637,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[fade${processArgs(args)} ${content}]`;
+        this._content += ` $[fade${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -652,7 +662,7 @@ export class NoteBuilder {
         if (content.includes("[") || content.includes("]")) {
             throw CannotEscapeSquareBracketsError;
         }
-        this._content += `$[followmouse${processArgs(args)} ${content}]`;
+        this._content += ` $[followmouse${processArgs(args)} ${content}]`;
         return this;
     }
 
@@ -684,6 +694,12 @@ export class NoteBuilder {
         return this;
     }
 
+    /**
+     * Set the "settings" of the poll.
+     * @param multipleChoice Whether or not a user can select multiple options in the poll.
+     * @param expiresAt An exact epoch time for when the poll closes.
+     * @param expiredAfter {unknown. if you know, open an issue!}
+     */
     setPollSettings(
         multipleChoice = false,
         expiresAt?: number | null,

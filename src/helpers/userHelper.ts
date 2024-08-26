@@ -38,7 +38,15 @@ To disable this warning, please disable bypassNoBot.
 
 export class User {
     constructor(
+        /**
+         * The cardboard client, passed when creating a new user.
+         * @see {CardboardClient}
+         */
         protected readonly cardboard: CardboardClient,
+        /**
+         * The misskey user to extract from.
+         * @see {MisskeyUser}
+         */
         protected misskeyUser: MisskeyUser,
     ) {}
 

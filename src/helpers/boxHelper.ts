@@ -1,5 +1,5 @@
 /**
- * @module Command
+ * @module Box
  * @see {@link Box}
  * @document documents/making-boxes.md
  */
@@ -7,7 +7,15 @@ import type { CardboardClient } from "..";
 import type { Note } from "./noteHelper";
 import type { User } from "./userHelper";
 
+/**
+ * The abstract method to creating a new box.
+ *  use me as a template!
+ */
 export class Box {
+    /**
+     * Construct the Box.
+     * @param cardboard the Cardboard parameter that cardboard will push upon initialization.
+     */
     constructor(protected readonly cardboard: CardboardClient) {
         this.cardboard.on("note", this.onNote);
         this.cardboard.on("mention", this.onMention);

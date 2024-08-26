@@ -1,3 +1,6 @@
+/**
+ * Cardboard will complain if your token is not valid.
+ */
 export class AuthenticationError extends Error {
     constructor() {
         super();
@@ -6,15 +9,21 @@ export class AuthenticationError extends Error {
     }
 }
 
+/**
+ * If Cardboard detects a non-json return, it'll throw a hissy-fit as to not damage anything account-wise.
+ */
 export class NotValidJsonError extends Error {
     constructor() {
         super();
         this.name = "NotValidJsonError";
         this.message =
-            "I accessed a file & it's not JSON, like *key reports as. This is not allowed.";
+            "I accessed a file & it's not JSON, like *key should report as. Bailing!!";
     }
 }
 
+/**
+ * Protect against negative offsets.
+ */
 export class BadOffsetError extends Error {
     constructor() {
         super();
@@ -23,6 +32,9 @@ export class BadOffsetError extends Error {
     }
 }
 
+/**
+ * Protect against permanent damage by preventing nonrecursive deletes.
+ */
 export class PopulatedFolderError extends Error {
     constructor() {
         super();
@@ -32,6 +44,9 @@ export class PopulatedFolderError extends Error {
     }
 }
 
+/**
+ * If Permission has been denied by misskey, Cardboard will intercept and throw a try..catch'able error.
+ */
 export class PermissionDeniedError extends Error {
     constructor() {
         super();
@@ -41,6 +56,9 @@ export class PermissionDeniedError extends Error {
     }
 }
 
+/**
+ * If a function hasn't been implemented, then we'll use this. You will _NEVER_ see this in a function.
+ */
 export class NotImplementedError extends Error {
     constructor() {
         super();
@@ -50,6 +68,9 @@ export class NotImplementedError extends Error {
     }
 }
 
+/**
+ * If NoBot Detection is enabled (by default it is), then throw if you try to interact with them.
+ */
 export class NoBotInteractionError extends Error {
     constructor() {
         super();
@@ -59,6 +80,10 @@ export class NoBotInteractionError extends Error {
     }
 }
 
+/**
+ * Prevent risky actions, like suspension, silencing from being ran, especially if cardboard is being ran
+ * on a misbehaving instance that will accept and action on these endpoints.
+ */
 export class CannotHurtSelfError extends Error {
     constructor() {
         super();
