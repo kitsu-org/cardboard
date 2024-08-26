@@ -4,18 +4,54 @@ import { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
+/**
+ * an Enum for the TimelineType to connect to.
+ * @deprecated (just use the strings themselves.)
+ */
 export enum TimelineType {
+    /**
+     * Only see notes from the local timeline, preventing cardboard from seeing notes made from outside the homeserver.
+     */
     Local = "localTimeline",
+    /**
+     * See _all_ notes.
+     * @remarks You should keep in mind, your cardboard bot should be optimized enough to handle hundreds of notes a second.
+     */
     Global = "globalTimeline",
 }
 
+/**
+ * Options to modify how to connect to the websocket.
+ */
 export type WebsocketOptions = {
-    TimelineType: TimelineType;
+    /**
+     * The type of timeline that you wish to connect to.
+     * At present, Cardboard only allows you to connect to one timeline at a time.
+     * (Notes from the local timeline will appear on the global timeline.)
+     * @default "localTimeline"
+     */
+    TimelineType: TimelineType | "localTimeline" | "globalTimeline";
+    /**
+     * Whether or not to receive renotes
+     * @default {false}
+     */
     withRenotes?: boolean;
+    /**
+     * Whether or not to receive replies
+     * @default {false}
+     */
     withReplies?: boolean;
+    /**
+     * Whether or not to receive notes from bots
+     * @default {false}
+     */
     withBots?: boolean;
 };
 
+/**
+ * The websocket for Cardboard.
+ * This can be removed, but you will lose notifications. Don't use connect() and you should be okay.
+ */
 export class CardboardWebsocket {
     constructor(
         private readonly cardboard: CardboardClient,

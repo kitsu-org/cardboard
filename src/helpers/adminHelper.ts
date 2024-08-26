@@ -18,8 +18,19 @@ import { ReportItem } from "./reportHelper";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
+/**
+ * the administrative helper. The functions in this class are potentially destructive and can hurt users.
+ * A good idea to think twice before using a command in here.
+ */
 export class Admin {
-    constructor(protected readonly cardboard: CardboardClient) {}
+    constructor(
+        /**
+         * The Cardboard client, to interface with the misskey API.
+         * @internal
+         * @ignore
+         */
+        protected readonly cardboard: CardboardClient,
+    ) {}
 
     /**
      * Get invites, as defined by the options.
@@ -178,6 +189,10 @@ export class Admin {
         });
     }
 
+    /**
+     * Delete a role permanently.
+     * @param roleId the ID of the roll that you wish to permanently delete.
+     */
     public async deleteRole(roleId: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/roles/delete/", { roleId });
     }
@@ -186,7 +201,7 @@ export class Admin {
      * Create an emoji from a drive file.
      * @param fileId the ID of the file in the misskey Drive.
      * @param name The name of the emoji. Will translate to the name. f.e, :cardboard:.
-     * @param options Additional options to finetune how users may use the emoji.
+     * @param options Additional options to fine tune how users may use the emoji.
      * @returns {Promise<Emoji>}
      */
     public async createEmoji(

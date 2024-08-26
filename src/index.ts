@@ -19,15 +19,62 @@ import type { Emoji } from "./types/emoji";
 import type { DeletedNote, NoteOptions, Reaction } from "./types/note";
 import type { ServerSortOptions } from "./types/sorting";
 
+/**
+ * The current events cardboard supports.
+ */
 interface Events {
+    /**
+     * once connected to homeserver, emit ready.
+     * @returns {void}
+     */
     ready: () => void;
+    /**
+     * The event sent out when the bot is mentioned.
+     * @param {Note} msg The note received with the mention
+     * @returns {void}
+     */
     mention: (msg: Note) => void;
+    /**
+     * The bot received a regular note from the websocket.
+     * @param note The note that was received.
+     * @returns {void}
+     */
     note: (note: Note) => void;
+    /**
+     * A note that was received has been deleted.
+     * @param deletedNote The ID of the note that was deleted.
+     * @returns {void}
+     */
     delete: (deletedNote: DeletedNote) => void;
+    /**
+     * You got a follow!
+     * @param user The user that followed you.
+     * @returns {void}
+     */
     follow: (user: User) => void;
+    /**
+     * A user unfollowed you.
+     * @param user The user that unfollowed you.
+     * @returns {void}
+     */
     unfollow: (user: User) => void;
+    /**
+     * You received a follow request!
+     * @param user the user that requested to be followed
+     * @returns {void}
+     */
     followRequest: (user: User) => void;
+    /**
+     * A post received a reaction!
+     * @param react The reaction that you have received!
+     * @returns {void}
+     */
     reaction: (react: Reaction) => void;
+    /**
+     * You've gotten a reply to your note!
+     * @param note The reply.
+     * @returns {void}
+     */
     reply: (note: Note) => void;
 }
 /**
@@ -60,7 +107,7 @@ export class CardboardClient {
              */
             output?: "verbose" | "debug" | "log" | "warn" | "error" | "crit";
             /**
-             * the path of the logfile, if set.
+             * the path of the log file, if set.
              */
             logFile?: string;
         },

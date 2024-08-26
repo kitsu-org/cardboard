@@ -57,6 +57,10 @@ export class Logger {
             });
         } else {
             this.writeStream = {
+                /**
+                 * An internal dumper, just incase a write log is not given.
+                 * @internal
+                 */
                 write: () => {
                     return null;
                 },
