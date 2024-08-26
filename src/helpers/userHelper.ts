@@ -9,8 +9,8 @@ const checkForHarmAndThrowIfTrue = async (
     cardboard: CardboardClient,
     userId: string,
 ) => {
-    const checkforSelf = await misskeyRequest(cardboard, "i");
-    if (checkforSelf.id === userId) {
+    const checkForSelf = await misskeyRequest(cardboard, "i");
+    if (checkForSelf.id === userId) {
         throw new CannotHurtSelfError();
     }
 };
@@ -137,18 +137,30 @@ export class User {
         return this.misskeyUser.speakAsCat;
     }
 
+    /**
+     * Get the URL of the user, if they're not on the homeserver.
+     */
     get url(): string | null {
         return this.misskeyUser.url;
     }
 
+    /**
+     * {unknown}
+     */
     get uri(): string | null {
         return this.misskeyUser.uri;
     }
 
+    /**
+     * Get the URL of the new account the user has moved to.
+     */
     get movedTo(): string | null {
         return this.misskeyUser.movedTo;
     }
 
+    /**
+     * Get the accounts of who the user previously was.
+     */
     get alsoKnownAs(): string[] | null {
         return this.misskeyUser.alsoKnownAs;
     }
@@ -181,6 +193,9 @@ export class User {
         return this.misskeyUser.backgroundBlurhash;
     }
 
+    /**
+     * {unknown}
+     */
     get isLocked(): boolean {
         return this.misskeyUser.isLocked;
     }
@@ -224,7 +239,10 @@ export class User {
     /**
      * Get all fields.
      */
-    get fields(): { name: string; value: string }[] {
+    get fields(): /**
+     * fields that were self-set by the user.
+     */
+    MisskeyUser["fields"] {
         return this.misskeyUser.fields;
     }
 
@@ -370,10 +388,16 @@ export class User {
         return this.misskeyUser.isRenoteMuted;
     }
 
+    /**
+     * {unknown}
+     */
     get notify(): "normal" | "none" | undefined {
         return this.misskeyUser.notify;
     }
 
+    /**
+     * {unknown}
+     */
     get withReplies(): boolean | undefined {
         return this.misskeyUser.withReplies;
     }
@@ -429,12 +453,12 @@ export class User {
      */
     async suspend(modNote?: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/suspend-user", {
-            userId: this.user.id,
+            userId: this.id,
         });
         if (modNote) {
             await misskeyRequest(this.cardboard, "admin/update-user-note", {
-                userId: this.user.id,
-                text: `${this.user.moderationNote}\n${modNote}`,
+                userId: this.id,
+                text: `${this.moderationNote}\n${modNote}`,
             });
         }
     }
@@ -446,7 +470,7 @@ export class User {
      */
     async setModNote(modNote: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/update-user-note", {
-            userId: this.user.id,
+            userId: this.id,
             text: modNote,
         });
     }
@@ -460,7 +484,7 @@ export class User {
             this.cardboard,
             nsfw ? "admin/nsfw-user" : "admin/unnsfw-user",
             {
-                userId: this.user.id,
+                userId: this.id,
             },
         );
     }
@@ -470,7 +494,7 @@ export class User {
      */
     async approveFollowRequest(): Promise<void> {
         await misskeyRequest(this.cardboard, "following/requests/accept", {
-            userId: this.user.id,
+            userId: this.id,
         });
     }
     /**
@@ -478,7 +502,7 @@ export class User {
      */
     async rejectFollowRequest(): Promise<void> {
         await misskeyRequest(this.cardboard, "following/requests/reject", {
-            userId: this.user.id,
+            userId: this.id,
         });
     }
 
@@ -488,12 +512,12 @@ export class User {
      */
     async unsuspend(modNote?: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/unsuspend-user", {
-            userId: this.user.id,
+            userId: this.id,
         });
         if (modNote) {
             await misskeyRequest(this.cardboard, "admin/update-user-note", {
-                userId: this.user.id,
-                text: `${this.user.moderationNote}\n${modNote}`,
+                userId: this.id,
+                text: `${this.moderationNote}\n${modNote}`,
             });
         }
     }
@@ -504,12 +528,12 @@ export class User {
      */
     async silence(modNote?: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/silence-user", {
-            userId: this.user.id,
+            userId: this.id,
         });
         if (modNote) {
             await misskeyRequest(this.cardboard, "admin/update-user-note", {
-                userId: this.user.id,
-                text: `${this.user.moderationNote}\n${modNote}`,
+                userId: this.id,
+                text: `${this.moderationNote}\n${modNote}`,
             });
         }
     }
@@ -520,12 +544,12 @@ export class User {
      */
     async unsilence(modNote?: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/unsilence-user", {
-            userId: this.user.id,
+            userId: this.id,
         });
         if (modNote) {
             await misskeyRequest(this.cardboard, "admin/update-user-note", {
-                userId: this.user.id,
-                text: `${this.user.moderationNote}\n${modNote}`,
+                userId: this.id,
+                text: `${this.moderationNote}\n${modNote}`,
             });
         }
     }
@@ -534,12 +558,12 @@ export class User {
      * follow the user.
      */
     async follow(): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
         await checkForNoBotAndThrowIfExists(this.cardboard, this.user);
         const request = await misskeyRequest(
             this.cardboard,
             "following/create",
-            { userId: this.user.id },
+            { userId: this.id },
         );
         this.misskeyUser = request;
     }
@@ -548,11 +572,11 @@ export class User {
      * unfollow the user.
      */
     async unfollow(): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
         const request = await misskeyRequest(
             this.cardboard,
             "following/delete",
-            { userId: this.user.id },
+            { userId: this.id },
         );
         this.misskeyUser = request;
     }
@@ -562,14 +586,14 @@ export class User {
      * @param renotes prevent notes from this user, renoted by others, from appearing on the feed.
      */
     async mute(renotes = false): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
         const request = await misskeyRequest(this.cardboard, "mute/create", {
-            userId: this.user.id,
+            userId: this.id,
         });
         this.misskeyUser = request;
         if (renotes) {
             await misskeyRequest(this.cardboard, "renote-mute/create", {
-                userId: this.user.id,
+                userId: this.id,
             });
         }
     }
@@ -579,14 +603,14 @@ export class User {
      * @param renotes also return notes from this user, renoted by others.
      */
     async unmute(renotes = false): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
         const request = await misskeyRequest(this.cardboard, "mute/delete", {
-            userId: this.user.id,
+            userId: this.id,
         });
         this.misskeyUser = request;
         if (renotes) {
             await misskeyRequest(this.cardboard, "renote-mute/delete", {
-                userId: this.user.id,
+                userId: this.id,
             });
         }
     }
@@ -594,16 +618,16 @@ export class User {
     /**
      * Block the user, preventing the user from seeing the bot, & vice versa.
      * On specific/legacy instances, you should keep in mind that some users may be able to bypass this,
-     * and that the bot is easily accessible by viewing it from a seperate account, or by logging out.
+     * and that the bot is easily accessible by viewing it from a separate account, or by logging out.
      */
     async block(): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
 
         const request = await misskeyRequest(
             this.cardboard,
             "blocking/create",
             {
-                userId: this.user.id,
+                userId: this.id,
             },
         );
         this.misskeyUser = request;
@@ -612,14 +636,14 @@ export class User {
     /**
      * Block the user, preventing the user from seeing the bot, & vice versa.
      * On specific/legacy instances, you should keep in mind that some users may be able to bypass this,
-     * and that the bot is easily accessible by viewing it from a seperate account, or by logging out.
+     * and that the bot is easily accessible by viewing it from a separate account, or by logging out.
      */
     async unblock(): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.user.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
         const request = await misskeyRequest(
             this.cardboard,
             "blocking/delete",
-            { userId: this.user.id },
+            { userId: this.id },
         );
         this.misskeyUser = request;
     }
@@ -630,7 +654,7 @@ export class User {
      */
     async setMemo(memo: string): Promise<void> {
         await misskeyRequest(this.cardboard, "users/update-memo", {
-            userId: this.user.id,
+            userId: this.id,
             memo: memo,
         });
     }
@@ -649,7 +673,7 @@ export class User {
         return await this.cardboard.createNote(content, {
             visibility: NoteVisibility.Specified,
             text: content,
-            visibleUserIds: [this.user.id],
+            visibleUserIds: [this.id],
             ...options,
         });
     }
