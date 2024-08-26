@@ -1,12 +1,13 @@
 /**
  * @module Command
- * @see {@link Command}
+ * @see {@link Box}
+ * @document documents/making-boxes.md
  */
 import type { CardboardClient } from "..";
 import type { Note } from "./noteHelper";
 import type { User } from "./userHelper";
 
-export class Command {
+export class Box {
     constructor(protected readonly cardboard: CardboardClient) {
         this.cardboard.on("note", this.onNote);
         this.cardboard.on("mention", this.onMention);

@@ -2,7 +2,7 @@ import { readdir } from "node:fs/promises";
 import { NoteBuilder } from "./helpers/NoteBuilder";
 import { PollBuilder } from "./helpers/PollBuilder";
 import { Admin } from "./helpers/adminHelper";
-import { Command } from "./helpers/commandHelper";
+import { Box } from "./helpers/BoxHelper";
 import { Drive } from "./helpers/driveHelper";
 // import { IterableArray } from "./helpers/iterableArrayHelper";
 import { Logger } from "./helpers/logHelper";
@@ -257,4 +257,4 @@ To stop this warning, please disable bypassNoBot.
     }
 }
 
-export { NoteBuilder, PollBuilder, Command };
+export { NoteBuilder, PollBuilder, Box };
