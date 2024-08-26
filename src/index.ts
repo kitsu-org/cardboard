@@ -75,7 +75,7 @@ To stop this warning, please disable bypassNoBot.
                 `);
         }
         this.drive = new Drive(this);
-        this.logger = new Logger(this);
+        this.logger = new Logger(this.options?.output, this.options?.logFile);
         this.admin = new Admin(this);
     }
     private eventListeners: Map<keyof Events | "*", Events[keyof Events][]> =
@@ -299,7 +299,7 @@ To stop this warning, please disable bypassNoBot.
             this.eventListeners.set(event, [listener]);
         }
     }
-    
+
     /**
      * Removes an event listener for the specified event.
      * @template Event - The type of the event.
@@ -322,7 +322,7 @@ To stop this warning, please disable bypassNoBot.
             }
         }
     }
-    
+
     /**
      * Emits an event, calling all registered listeners for that event.
      * @template Event - The type of the event.

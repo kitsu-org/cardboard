@@ -1,5 +1,4 @@
 import { type WriteStream, createWriteStream } from "node:fs"; // How do I turn this dynamic?
-import type { CardboardClient } from "..";
 
 const logger = (
     message: string,
@@ -32,11 +31,28 @@ const logger = (
     writeLog.write(`[${type.toUpperCase()}] [${time}] ${message}\r\n`);
 };
 
+/**
+ * Cardboard's very own logger. Formatting & LogToFile support included!
+ */
 export class Logger {
-    constructor(protected readonly cardboard: CardboardClient) {
-        this.loggingType = cardboard.options?.output || "log";
-        if (cardboard.options?.logFile) {
-            this.writeStream = createWriteStream(cardboard.options.logFile, {
+    constructor(
+        /**
+         * The logging type - a.k.a how chatty you'll let Cardboard be.
+         */
+        protected readonly loggingType:
+            | "verbose"
+            | "debug"
+            | "log"
+            | "warn"
+            | "error"
+            | "crit" = "log",
+        /**
+         * a path to a log file.
+         */
+        protected readonly logFile?: string,
+    ) {
+        if (logFile) {
+            this.writeStream = createWriteStream(logFile, {
                 flags: "a",
             });
         } else {
@@ -47,8 +63,9 @@ export class Logger {
             };
         }
     }
-
-    loggingType;
+    /**
+     * a writestream. Either an fs writestream, or a dummy to ingest content.
+     */
     writeStream;
     /**
      * Send a verbosity-level message to the log. In terms of importance, this is just Cardboard rambling, at this point.
