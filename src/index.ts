@@ -282,10 +282,16 @@ To stop this warning, please disable bypassNoBot.
         );
     }
 
+    /**
+     * Registers an event listener for the specified event.
+     * @template Event - The type of the event.
+     * @param {Event | "*"} event - The event to listen for. Use "*" to listen for all events.
+     * @param {Events[Event]} listener - The callback function to execute when the event is emitted.
+     */
     on<Event extends keyof Events>(
         event: Event | "*",
         listener: Events[Event],
-    ) {
+    ): void {
         const listeners = this.eventListeners.get(event);
         if (listeners) {
             listeners.push(listener);
@@ -293,11 +299,17 @@ To stop this warning, please disable bypassNoBot.
             this.eventListeners.set(event, [listener]);
         }
     }
-
+    
+    /**
+     * Removes an event listener for the specified event.
+     * @template Event - The type of the event.
+     * @param {Event | "*"} event - The event to remove the listener from. Use "*" to remove from all events.
+     * @param {Events[Event]} [listener] - The callback function to remove. If not provided, all listeners for the event will be removed.
+     */
     off<Event extends keyof Events>(
         event: Event | "*",
         listener?: Events[Event],
-    ) {
+    ): void {
         const listeners = this.eventListeners.get(event);
         if (listeners) {
             if (listener) {
@@ -310,7 +322,13 @@ To stop this warning, please disable bypassNoBot.
             }
         }
     }
-
+    
+    /**
+     * Emits an event, calling all registered listeners for that event.
+     * @template Event - The type of the event.
+     * @param {Event} event - The event to emit.
+     * @param {...Parameters<Events[Event]>} args - The arguments to pass to the event listeners.
+     */
     emit<Event extends keyof Events>(
         event: Event,
         ...args: Parameters<Events[Event]>
