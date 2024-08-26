@@ -43,7 +43,6 @@ Now that you have a box created, it's important for us to tell cardboard to load
 
 ``index.js``
 ```js
-
 import {CardboardClient} from "@kitsu-org/cardboard"
 import {join} from "node:path"
 const cardboard = new CardboardClient(process.env.INSTANCE, process.env.API_KEY);
@@ -57,7 +56,6 @@ cardboard.on("ready", () => {
 
 cardboard.addFolder(join(__dirname, "boxes"));
 cardboard.connect();
-
 ```
 
 now, when you run ``node --env-file=.env index.js``, you should see that your box was loaded. If you message yourself from another account, you should promptly get a reply!
