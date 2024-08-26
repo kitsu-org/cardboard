@@ -1,24 +1,13 @@
 import type { CardboardClient } from "..";
-import type { MisskeyUser } from "../types";
+import type { Report } from "../types/admin";
 import { misskeyRequest } from "./requestHelper";
 import { User } from "./userHelper";
 
+/**
+ * A report that was generated for review.
+ */
 export class ReportItem {
-    constructor(
-        cardboard: CardboardClient,
-        report: {
-            id: string;
-            comment: string;
-            createdAt: string;
-            resolved: boolean;
-            reporterId: string;
-            targetUserId: string;
-            assigneeId: string;
-            reporter: MisskeyUser;
-            targetUser: MisskeyUser;
-            assignee?: MisskeyUser;
-        },
-    ) {
+    constructor(cardboard: CardboardClient, report: Report) {
         this.target = new User(cardboard, report.targetUser);
         this.reporter = new User(cardboard, report.reporter);
         this.resolved = report.resolved;

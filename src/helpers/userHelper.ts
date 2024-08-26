@@ -36,6 +36,9 @@ To disable this warning, please disable bypassNoBot.
     return Promise.resolve(true);
 };
 
+/**
+ * The User. Created by Cardboard.
+ */
 export class User {
     constructor(
         /**
@@ -59,7 +62,7 @@ export class User {
     /**
      * Get the displayname of the user
      */
-    get name(): string {
+    get name(): string | null {
         return this.misskeyUser.name;
     }
 
@@ -282,7 +285,7 @@ export class User {
      * See wether or not a user is publicly reacting.
      */
     get publicReactions(): boolean {
-        return this.misskeyUser.puiblicReactions;
+        return this.misskeyUser.publicReactions;
     }
 
     /**

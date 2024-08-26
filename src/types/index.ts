@@ -7,7 +7,6 @@ import {
 } from "../helpers/error";
 import type { MisskeyFile } from "./file";
 import {
-    type File,
     type FileProperties,
     type MisskeyNote,
     type NoteOptions,
@@ -39,7 +38,6 @@ export {
     OnlineStatus,
     type MisskeyNote,
     type FileProperties,
-    type File,
     type NoteOptions,
 };
 //user

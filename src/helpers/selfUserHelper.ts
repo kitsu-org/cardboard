@@ -58,7 +58,7 @@ export class SelfUser extends User {
             isBot: meta.isBot,
             isCat: meta.catMode?.earsVisible,
             speakAsCat: meta.catMode?.speech,
-            listenbrainz: meta.listenBrainz,
+            listenbrainz: meta.ListenBrainz,
             location: meta.location,
             lang: meta.language,
             followingVisibility: meta.following?.visibility,

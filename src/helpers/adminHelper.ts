@@ -2,10 +2,10 @@ import type { CardboardClient } from "..";
 import type {
     AdvertisementOptions,
     AnnouncementOptions,
-    AnnouncementResponse,
+    Announcement,
     Invite,
     InviteListOptions,
-    ReportSortingOptions,
+    ReportOptions,
     ServerStatusOptions,
 } from "../types/admin";
 import type { Emoji } from "../types/emoji";
@@ -351,7 +351,7 @@ export class Admin {
         title: string,
         message: string,
         options?: AnnouncementOptions,
-    ): Promise<AnnouncementResponse> {
+    ): Promise<Announcement> {
         return await misskeyRequest(
             this.cardboard,
             "admin/announcements/create",
@@ -476,7 +476,7 @@ export class Admin {
      * @param sortingOptions A list of options you can utilize to sort.
      */
     public async getReports(
-        sortingOptions?: ReportSortingOptions,
+        sortingOptions?: ReportOptions,
     ): Promise<ReportItem[]> {
         const report = await misskeyRequest(
             this.cardboard,

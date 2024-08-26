@@ -4,17 +4,40 @@ import type { LiteUser } from "../types/user";
 // import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
 
+/**
+ * A wrapped note, created by cardboard.
+ */
 export class Note {
     constructor(
+        /**
+         * Cardboard! How strange!
+         */
         private readonly cardboard: CardboardClient,
+        /**
+         * The raw misskeynote.
+         * @todo KIO DEPRECATE THIS
+         */
         public readonly note: MisskeyNote,
     ) {
         this.content = note.text;
         this.user = note.user;
     }
-
+    /**
+     * The content of the note.
+     */
     public content: string | null;
+    /**
+     * The user who made the post.
+     * @todo Kio, change this for a proper userclass!!
+     */
     public user: LiteUser;
+
+    /**
+     * Get the ID of the note.
+     */
+    get id() {
+        return this.note.id;
+    }
 
     /**
      * get the Parent note, if there is any.
@@ -33,10 +56,6 @@ export class Note {
             );
         }
         return null;
-    }
-
-    get id() {
-        return this.note.id;
     }
 
     /**
