@@ -21,7 +21,6 @@ export class Box {
     /**
      * What to do when the box is added.
      * @returns {void}
-     * @abstract
      * @example
      * onStartup() {
      *  console.log("command is ready!")
@@ -34,7 +33,6 @@ export class Box {
     /**
      * What to do when the box receives a note
      * @returns {void}
-     * @abstract
      * @example
      * onNote(note) {
      *  console.log(note.contents)
@@ -47,7 +45,6 @@ export class Box {
     /**
      * What to do when the box receives a follow
      * @returns {void}
-     * @abstract
      * @example
      * onFollow(user) {
      *  await user.dm(`hi! it's nice to meet you, ${user.user.username}!`)
@@ -60,7 +57,6 @@ export class Box {
     /**
      * What to do when the box receives an unfollow
      * @returns {void}
-     * @abstract
      * @example
      * onFollow(user) {
      *  await user.dm(`bye bye, ${user.user.username}! It was nice hanging out!`)
@@ -74,7 +70,6 @@ export class Box {
     /**
      * What to do when the box noticed a deleted note
      * @returns {void}
-     * @abstract
      */
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
     onNoteDelete(deletedMessage: { id: string; deletedAt: string }): void {
@@ -84,7 +79,6 @@ export class Box {
     /**
      * What should the box do if the bot received a mention
      * @returns {void}
-     * @abstract
      * @example
      * onMention(message) {
      *  await msg.react("👍")
@@ -98,7 +92,6 @@ export class Box {
     /**
      * What to do when the box notices a reaction
      * @returns {void}
-     * @abstract
      */
     // biome-ignore lint/correctness/noUnusedVariables: This is a template c:
     onReact(reaction: {

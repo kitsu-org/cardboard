@@ -2,7 +2,6 @@ import { readdir } from "node:fs/promises";
 import { NoteBuilder } from "./helpers/NoteBuilder";
 import { PollBuilder } from "./helpers/PollBuilder";
 import { Admin } from "./helpers/adminHelper";
-import { Box } from "./helpers/BoxHelper";
 import { Drive } from "./helpers/driveHelper";
 // import { IterableArray } from "./helpers/iterableArrayHelper";
 import { Logger } from "./helpers/logHelper";
@@ -10,6 +9,8 @@ import { Note } from "./helpers/noteHelper";
 import { misskeyRequest } from "./helpers/requestHelper";
 import { SelfUser } from "./helpers/selfUserHelper";
 import { User } from "./helpers/userHelper";
+
+import { Box } from "./helpers/boxHelper";
 import {
     CardboardWebsocket,
     TimelineType,
