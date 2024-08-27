@@ -307,11 +307,29 @@ export class Admin {
      * @returns
      */
     public async getUsers(options?: {
-        username?: string;
+        username?: string | null;
         host?: string | null;
         limit?: number;
         origin?: "local" | "remote" | "combined";
-        state: string;
+        state?:
+            | "all"
+            | "alive"
+            | "available"
+            | "admin"
+            | "moderator"
+            | "adminOrModerator"
+            | "suspended"
+            | "approved";
+        offset?: number;
+        sort?:
+            | "+follower"
+            | "-follower"
+            | "+createdAt"
+            | "-createdAt"
+            | "+updatedAt"
+            | "-updatedAt"
+            | "+lastActiveDate"
+            | "-lastActiveDate";
     }): Promise<User[]> {
         const response = await misskeyRequest(
             this.cardboard,
