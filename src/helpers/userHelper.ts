@@ -1,6 +1,6 @@
 import type { CardboardClient } from "..";
 import { type NoteOptions, NoteVisibility } from "../types/note";
-import type { MisskeyUser } from "../types/user";
+import type { MisskeyUser, Role } from "../types/user";
 import { CannotHurtSelfError, NoBotInteractionError } from "./error";
 import { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
@@ -427,6 +427,14 @@ export class User {
             return new Date(this.misskeyUser.lastFetchedAt);
         }
         return this.misskeyUser.lastFetchedAt;
+    }
+
+    get badgeRoles(): MisskeyUser["badgeRoles"] {
+        return this.misskeyUser.badgeRoles;
+    }
+
+    get roles(): Role[] {
+        return this.misskeyUser.roles;
     }
 
     /**
