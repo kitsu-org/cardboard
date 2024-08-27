@@ -38,7 +38,7 @@ export type LiteUser = {
     /**
      * Decorations that may be applied to the user's avatar.
      */
-    avatarDecorations: {
+    avatarDecorations: Array<{
         /**
          * The ID of the decoration.
          */
@@ -63,7 +63,7 @@ export type LiteUser = {
          * How many units to offset from the center on the Y-Axis
          */
         offsetY: number;
-    }[];
+    }>;
     /**
      * Whether or not the user is an administrator.
      */
@@ -132,7 +132,7 @@ export type LiteUser = {
     /**
      * The badges that the user has, as assigned by the homeserver (automatically) or by the administrators.
      */
-    badgeRoles: {
+    badgeRoles: Array<{
         /**
          * The human-readable name of the badge.
          */
@@ -145,7 +145,7 @@ export type LiteUser = {
          * In which order to display the badge.
          */
         displayOrder: number;
-    }[];
+    }>;
 };
 
 /**
@@ -307,7 +307,7 @@ export type SelfMisskeyUser = MisskeyUser & {
     /**
      * a list of hardware keys used to authenticate the user
      */
-    securityKeysList: {
+    securityKeysList: Array<{
         /**
          * The homeserver-generated id of the security key
          */
@@ -320,7 +320,7 @@ export type SelfMisskeyUser = MisskeyUser & {
          * The last time the security was used.
          */
         lastUsed: string;
-    }[];
+    }>;
 };
 
 /**
@@ -459,10 +459,10 @@ export type MisskeyUser = LiteUser & {
     /**
      * The user's self-set fields.
      */
-    fields: {
+    fields: Array<{
         name: string;
         value: string;
-    }[];
+    }>;
     /**
      * A list of links that the user has control over
      */
@@ -681,7 +681,7 @@ export type MetaOptions = {
     /**
      * A list of custom fields that the user has set.
      */
-    fields?: { name: string; value: string }[];
+    fields?: Array<{ name: string; value: string }>;
     /**
      * Whether the user has self-identified as a bot.
      */

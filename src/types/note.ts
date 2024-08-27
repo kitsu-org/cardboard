@@ -264,7 +264,7 @@ export type MisskeyNote = {
         /**
          * The choices that are presented in the poll.
          */
-        choices: {
+        choices: Array<{
             /**
              * See if you voted for a particular option at a glance.
              */
@@ -277,7 +277,7 @@ export type MisskeyNote = {
              * The amount of votes seen by the homeserver.
              */
             votes: number;
-        }[];
+        }>;
     };
     /**
      * The emojis within the note.
