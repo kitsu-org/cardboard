@@ -9,13 +9,14 @@ import type {
 } from "../types/admin";
 import type { Emoji } from "../types/emoji";
 import type { ModerationLogSorting } from "../types/sorting";
-import type { MisskeyRole } from "../types/user"; // Todo: Make Roles by themselves into a separate actionable class.
+import type { MisskeyRole } from "../types/user";
 import { NotImplementedError } from "./error";
 import { FileItem } from "./fileHelper";
 import { Invite } from "./inviteHelper";
 import { ReportItem } from "./reportHelper";
 // import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
+import { Role } from "./roleHelper";
 import { ApprovableUser, User } from "./userHelper";
 
 /**
@@ -130,19 +131,29 @@ export class Admin {
     /**
      * Get a list of roles.
      */
-    public async getRoles(): Promise<MisskeyRole[]> {
-        return await misskeyRequest(this.cardboard, "admin/roles/list");
+    public async getRoles(): Promise<Role[]> {
+        const roleArray: Role[] = [];
+        for await (const role of await misskeyRequest(
+            this.cardboard,
+            "admin/roles/list",
+        )) {
+            roleArray.push(new Role(this.cardboard, role));
+        }
+        return roleArray;
     }
 
     /**
      * Get a singular role, if you are certain of it's ID.
      * @param roleId the ID of the role.
-     * @returns {Promise<MisskeyRole>}
+     * @returns {Promise<Role>}
      */
-    public async showRole(roleId: string): Promise<MisskeyRole> {
-        return await misskeyRequest(this.cardboard, "admin/roles/show", {
-            roleId,
-        });
+    public async showRole(roleId: string): Promise<Role> {
+        return new Role(
+            this.cardboard,
+            await misskeyRequest(this.cardboard, "admin/roles/show", {
+                roleId,
+            }),
+        );
     }
 
     /**
@@ -181,18 +192,17 @@ export class Admin {
     /**
      * Create a new role.
      * @param options The options you would like the role to have.
-     * @returns {Promise<MisskeyRole>}
+     * @returns {Promise<Role>}
      */
     public async createRole(
         options: Omit<
             MisskeyRole,
             "id" | "createdAt" | "updatedAt" | "usersCount"
         >,
-    ): Promise<MisskeyRole> {
-        return await misskeyRequest(
+    ): Promise<Role> {
+        return new Role(
             this.cardboard,
-            "admin/roles/create",
-            options,
+            await misskeyRequest(this.cardboard, "admin/roles/create", options),
         );
     }
 
@@ -200,6 +210,7 @@ export class Admin {
      * Change options within the role.
      * @param roleId the ID of the role that you'd like to modify.
      * @param options Options that you would like to modify.
+     * @deprecated
      */
     public async setRole(
         roleId: string,
@@ -217,6 +228,7 @@ export class Admin {
     /**
      * Delete a role permanently.
      * @param roleId the ID of the roll that you wish to permanently delete.
+     * @deprecated
      */
     public async deleteRole(roleId: string): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/roles/delete/", { roleId });
