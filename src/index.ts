@@ -197,12 +197,12 @@ To stop this warning, please disable bypassNoBot.
      * Get the emoji list.
      * Note: This can be a very extensive list. Filter at your own risk.
      */
-    public async getEmojis(): Promise<{
+    public async getEmojis(): Promise<
         /**
          * A list of the emojis you'll receive.
          */
-        emojis: Omit<Emoji, "id" | "host" | "license" | "localOnly">[];
-    }> {
+        Omit<Emoji, "id" | "host" | "license" | "localOnly">[]
+    > {
         return (await misskeyRequest(this, "emojis")).emojis;
     }
 
