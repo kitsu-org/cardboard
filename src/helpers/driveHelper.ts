@@ -34,24 +34,27 @@ export type ShowOptions = {
     /**
      * The amount of items you'd like to have returned. limit [1..100].
      */
-    limit: number;
+    limit?: number;
     /**
      * Get items that are NEWER than the itemID you are listing.
      */
-    sinceId: string;
+    sinceId?: string;
     /**
      * Get items that are OLDER than the itemID you are listing.
      */
-    untilId: string;
+    untilId?: string;
     /**
      * Look for the item within the folderId.
      */
-    folderId: string;
-    type: string;
+    folderId?: string;
+    /**
+     * The type of the file.
+     */
+    type?: string;
     /**
      * Sorting options.
      */
-    sort:
+    sort?:
         | "+createdAt"
         | "-createdAt"
         | "+name"
