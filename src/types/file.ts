@@ -1,11 +1,11 @@
-import type { LiteUser } from "./user";
+import type { MisskeyLiteUser } from "./user";
 
 /**
  * A raw Misskey folder.
  */
 export type MisskeyFolder = {
     /**
-     * The ID of the folder, as assigned by the homserver.
+     * The ID of the folder, as assigned by the homeserver.
      */
     id: string;
     /**
@@ -112,7 +112,11 @@ export type MisskeyFile = {
      */
     folder: MisskeyFolder;
     /**
+     * The ID of the user the item belongs to.
+     */
+    userId: string;
+    /**
      * The user the item belongs to.
      */
-    user: LiteUser | null;
+    user?: MisskeyLiteUser;
 };

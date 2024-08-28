@@ -1,22 +1,22 @@
 import type { CardboardClient } from "..";
 import type {
     AdvertisementOptions,
-    AnnouncementOptions,
     Announcement,
-    Invite,
+    AnnouncementOptions,
     InviteListOptions,
     ReportOptions,
     ServerStatusOptions,
 } from "../types/admin";
 import type { Emoji } from "../types/emoji";
 import type { ModerationLogSorting } from "../types/sorting";
-import type { MisskeyUser, Role } from "../types/user";
+import type { MisskeyRole } from "../types/user"; // Todo: Make Roles by themselves into a separate actionable class.
 import { NotImplementedError } from "./error";
 import { FileItem } from "./fileHelper";
+import { Invite } from "./inviteHelper";
 import { ReportItem } from "./reportHelper";
 // import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
-import { User } from "./userHelper";
+import { ApprovableUser, User } from "./userHelper";
 
 /**
  * the administrative helper. The functions in this class are potentially destructive and can hurt users.
@@ -44,7 +44,7 @@ export class Admin {
             "admin/invite/list",
             options,
         );
-        return response;
+        return new Invite(this.cardboard, response);
         // return new IterableArray(
         //     this.cardboard,
         //     "admin/invite/list",
@@ -64,16 +64,20 @@ export class Admin {
         qty = 1,
         expiry?: string | null,
     ): Promise<Invite> {
-        return await misskeyRequest(this.cardboard, "admin/invite/create", {
-            count: qty,
-            expiresAt: expiry,
-        });
+        return new Invite(
+            this.cardboard,
+            await misskeyRequest(this.cardboard, "admin/invite/create", {
+                count: qty,
+                expiresAt: expiry,
+            }),
+        );
     }
 
     /**
      * Revoke an invite, rendering it permanently unusable.
      * No effect if it's already used.
      * @param inviteId the inviteId that you would like to delete.
+     * @deprecated delete it straight from the invite! `await invite.delete()`
      */
     public async deleteInvite(inviteId: string): Promise<void> {
         await misskeyRequest(this.cardboard, "invite/delete", {
@@ -82,10 +86,11 @@ export class Admin {
     }
 
     /**
-     * Alias to get the approval list required. getApprovalsList makes assumptions, that you have a low user registration influx.
+     * Alias to get the approval list required.
+     * @remarks getApprovalsList makes assumptions, that you have a low user registration influx.
      * Not recommended for massive servers.
      */
-    public async getApprovalsList(): Promise<MisskeyUser[]> {
+    public async getApprovalsList(): Promise<ApprovableUser[]> {
         const options = {
             limit: 100,
             allowPartial: true,
@@ -98,7 +103,21 @@ export class Admin {
             "admin/show-users",
             options,
         );
-        return response;
+        const ApprovableUserArray: ApprovableUser[] = [];
+        for await (const user of response) {
+            const meta = await misskeyRequest(
+                this.cardboard,
+                "admin/show-user",
+                { userId: user.id },
+            );
+            ApprovableUserArray.push(
+                new ApprovableUser(this.cardboard, user, meta),
+            );
+        }
+
+        return ApprovableUserArray;
+
+        // return response;
         // return new IterableArray(
         //     this.cardboard,
         //     "admin/show-users",
@@ -111,16 +130,16 @@ export class Admin {
     /**
      * Get a list of roles.
      */
-    public async getRoles(): Promise<Role[]> {
+    public async getRoles(): Promise<MisskeyRole[]> {
         return await misskeyRequest(this.cardboard, "admin/roles/list");
     }
 
     /**
      * Get a singular role, if you are certain of it's ID.
      * @param roleId the ID of the role.
-     * @returns {Promise<Role>}
+     * @returns {Promise<MisskeyRole>}
      */
-    public async showRole(roleId: string): Promise<Role> {
+    public async showRole(roleId: string): Promise<MisskeyRole> {
         return await misskeyRequest(this.cardboard, "admin/roles/show", {
             roleId,
         });
@@ -162,11 +181,14 @@ export class Admin {
     /**
      * Create a new role.
      * @param options The options you would like the role to have.
-     * @returns {Promise<Role>}
+     * @returns {Promise<MisskeyRole>}
      */
     public async createRole(
-        options: Omit<Role, "id" | "createdAt" | "updatedAt" | "usersCount">,
-    ): Promise<Role> {
+        options: Omit<
+            MisskeyRole,
+            "id" | "createdAt" | "updatedAt" | "usersCount"
+        >,
+    ): Promise<MisskeyRole> {
         return await misskeyRequest(
             this.cardboard,
             "admin/roles/create",
@@ -181,7 +203,10 @@ export class Admin {
      */
     public async setRole(
         roleId: string,
-        options: Omit<Role, "id" | "createdAt" | "updatedAt" | "usersCount">,
+        options: Omit<
+            MisskeyRole,
+            "id" | "createdAt" | "updatedAt" | "usersCount"
+        >,
     ): Promise<void> {
         await misskeyRequest(this.cardboard, "admin/roles/update", {
             roleId,
@@ -290,7 +315,6 @@ export class Admin {
 
     /**
      * Empty the drive of a user.
-     * NOTE: This command can make a user pretty unhappy - so you should be _very_ careful about invoking it!
      * @param userId the user of the drive that you'd like to empty.
      */
     public async emptyUserDrive(userId: string): Promise<void> {
@@ -380,6 +404,13 @@ export class Admin {
         return new FileItem(this.cardboard, file);
     }
 
+    /**
+     * Create an announcement for immediate consumption.
+     * @param title The title of the announcement you'd like to create.
+     * @param message The human-readable text that you'd like for users to be aware of.
+     * @param options Options to make your announcement stand-out (or blend in)
+     * @returns {Announcement}
+     */
     public async createAnnouncement(
         title: string,
         message: string,
@@ -434,7 +465,7 @@ export class Admin {
 
     /**
      * Delete an announcement permanently.
-     * @see archiveAnnouncement you shouldn't hide announcements from users - archive them so they don't get confused.
+     * @see {archiveAnnouncement} you shouldn't hide announcements from users - archive them so they don't get confused.
      * @param announcementId the id of the announcement.
      */
     public async deleteAnnouncement(announcementId: string): Promise<void> {
@@ -534,6 +565,7 @@ export class Admin {
      * Resolve a report that was made within or sent to your instance.
      * @param reportId the id of the report you would like to report.
      * @param sendToRemoteInstance If the report was local, and about a remote user, send the report to the remote instance.
+     * @deprecated
      */
     public async resolveReport(
         reportId: string,

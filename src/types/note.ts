@@ -1,4 +1,4 @@
-import type { LiteUser } from "./user";
+import type { MisskeyLiteUser } from "./user";
 
 /**
  * Determines the way the note will handle being reacted to.
@@ -204,7 +204,7 @@ export type MisskeyNote = {
     /**
      * The user that created the note.
      */
-    user: LiteUser;
+    user: MisskeyLiteUser;
     /**
      * The parent post's ID.
      */

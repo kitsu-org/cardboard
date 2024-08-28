@@ -7,10 +7,185 @@ export enum Visibility {
     Private = "private",
 }
 
+export type Decoration = {
+    /**
+     * The ID of the decoration.
+     */
+    id: string;
+    /**
+     * The angle that the decoration was positioned at.
+     */
+    angle: number;
+    /**
+     * Whether or not the decoration is flipped horizontally
+     */
+    flipH: boolean;
+    /**
+     * The publicly accessible URL to the decoration photo.
+     */
+    url: string;
+    /**
+     * How many units to offset from the center on the X-Axis
+     */
+    offsetX: number;
+    /**
+     * How many units to offset from the center on the Y-Axis
+     */
+    offsetY: number;
+};
+
+export type Policies = {
+    /**
+     * Is the Global Timeline available?
+     */
+    gtlAvailable: boolean;
+    /**
+     * Is the Bubble Timeline available?
+     */
+    btlAvailable: boolean;
+    /**
+     * Is the Local Timeline available?
+     */
+    ltlAvailable: boolean;
+    /**
+     * How many people can be mentioned in a post
+     */
+    mentionLimit: number;
+    /**
+     * Is the user allowed to create invites for the instance?
+     */
+    canInvite: boolean;
+    /**
+     * How many invites may the user give out
+     */
+    inviteLimit: number;
+    /**
+     * How long before the user may get a fresh batch of invites
+     */
+    inviteLimitCycle: number;
+    /**
+     * How long can a generated invite sit before it goes stale
+     */
+    inviteExpirationTime: number;
+    /**
+     * Can the user manage emoji for the instance
+     */
+    canManageCustomEmojis: boolean;
+    /**
+     * Can the user manage decorations
+     */
+    canManageAvatarDecorations: boolean;
+    /**
+     * Can the user search notes by text
+     */
+    canSearchNotes: boolean;
+    /**
+     * Can the user utilize translation features (if provided)
+     */
+    canUseTranslator: boolean;
+    /**
+     * Can the user hide ads
+     */
+    canHideAds: boolean;
+    /**
+     * The user's drive limit
+     */
+    driveCapacityMb: number;
+    /**
+     * If the user's posts are marked NSFW
+     */
+    alwaysMarkNsfw: boolean;
+    /**
+     * The number of pins the user can have in a profile
+     */
+    pinLimit: number;
+    /**
+     * The number of antennas the user can register
+     */
+    antennaLimit: number;
+    /**
+     * The amount of words the user can mute
+     */
+    wordMuteLimit: number;
+    /**
+     * The amount of webhooks the user can have
+     */
+    webhookLimit: number;
+    /**
+     * The amount of clips the user can have
+     */
+    clipLimit: number;
+    /**
+     * The amount of notes each clip can have
+     */
+    noteEachClipsLimit: number;
+    /**
+     * The amount of userLists the user can have
+     */
+    userListLimit: number;
+    /**
+     * The amount of users each userList can have
+     */
+    userEachUserListsLimit: number;
+    /**
+     * The Rate Limit Factor. Unsure how works. Please PR and tell me how :3
+     */
+    rateLimitFactor: number;
+    /**
+     * Whether or not the user is allowed to import notes from another instance
+     */
+    canImportNotes: boolean;
+    /**
+     * the amount of decorations the user is allowed to have
+     */
+    avatarDecorationLimit: number;
+};
+
+export type UserAdminMeta = {
+    email: string;
+    /**
+     * Whether or not the user had their email validated by the server.
+     */
+    emailVerified: boolean;
+    /**
+     * Whether or not the user has been approved (by the instance, if approval is automatic, or manually if otherwise)
+     */
+    approved: boolean;
+    /**
+     * The user-provided reason for joining.
+     */
+    signupReason: string;
+    autoAcceptFollowed: boolean;
+    noCrawle: boolean;
+    preventAiLearning: boolean;
+    alwaysMarkNsfw: boolean;
+    autoSensitive: boolean;
+    carefulBot: boolean;
+    injectFeaturedNote: boolean;
+    receiveAnnouncementEmail: boolean;
+    mutedWords: string[];
+    mutedInstances: string[];
+    notificationReceiveConfig: Record<string, unknown>;
+    isModerator: boolean;
+    isSilenced: boolean;
+    isSuspended: boolean;
+    isHibernated: boolean;
+    lastActiveDate: string;
+    moderationNote: string;
+    signins: Array<{
+        id: string;
+        userId: string;
+        ip?: string | null;
+        headers: Record<string, string>;
+        success: boolean;
+    }>;
+    roles: MisskeyRole[];
+    policies: Policies;
+};
 /**
  * A minified version of the user pulled, that does not contain all of the data a regular user has.
  */
-export type LiteUser = {
+export type MisskeyLiteUser = {
     /**
      * The ID of the user, as assigned by the homeserver.
      */
@@ -38,32 +213,7 @@ export type LiteUser = {
     /**
      * Decorations that may be applied to the user's avatar.
      */
-    avatarDecorations: Array<{
-        /**
-         * The ID of the decoration.
-         */
-        id: string;
-        /**
-         * The angle that the decoration was positioned at.
-         */
-        angle: number;
-        /**
-         * Whether or not the decoration is flipped horizontally
-         */
-        flipH: boolean;
-        /**
-         * The publicly accessible URL to the decoration photo.
-         */
-        url: string;
-        /**
-         * How many units to offset from the center on the X-Axis
-         */
-        offsetX: number;
-        /**
-         * How many units to offset from the center on the Y-Axis
-         */
-        offsetY: number;
-    }>;
+    avatarDecorations: Decoration[];
     /**
      * Whether or not the user is an administrator.
      */
@@ -291,7 +441,7 @@ export type SelfMisskeyUser = MisskeyUser & {
     /**
      * {unknown.}
      */
-    policies: Record<string, unknown>;
+    policies: Policies;
     /**
      * The email associated with the account.
      */
@@ -327,7 +477,7 @@ export type SelfMisskeyUser = MisskeyUser & {
  * The raw Misskey User. You should really not be using this.
  * If you need to access this, put in an issue!
  */
-export type MisskeyUser = LiteUser & {
+export type MisskeyUser = MisskeyLiteUser & {
     /**
      * the self-written description of the user.
      */
@@ -498,7 +648,7 @@ export type MisskeyUser = LiteUser & {
     /**
      * Roles associated with the user
      */
-    roles: Role[];
+    roles: MisskeyRole[];
     /**
      * A personally-set memo.
      */
@@ -703,7 +853,7 @@ export type MetaOptions = {
 /**
  * A Role assigned to a user.
  */
-export type Role = {
+export type MisskeyRole = {
     /**
      * The ID of the role, as generated by the homeserver.
      */
@@ -771,7 +921,7 @@ export type Role = {
     /**
      * The policies that are modified by the role.
      */
-    policies: Record<string, unknown>;
+    policies: Policies;
     /**
      * The amount of users assigned to the role.
      */

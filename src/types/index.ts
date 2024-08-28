@@ -15,7 +15,7 @@ import {
     ReactionAcceptance,
 } from "./note";
 import {
-    type LiteUser,
+    type MisskeyLiteUser,
     type MisskeyUser,
     type SelfMisskeyUser,
     Visibility,
@@ -43,7 +43,7 @@ export {
 //user
 export {
     Visibility,
-    type LiteUser,
+    type MisskeyLiteUser as LiteUser,
     type SelfMisskeyUser as SelfUser,
     type MisskeyUser,
 };

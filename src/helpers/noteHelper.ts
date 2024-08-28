@@ -1,8 +1,8 @@
 import type { CardboardClient } from "../index";
 import type { MisskeyNote, NoteOptions, NoteVisibility } from "../types/note";
-import type { LiteUser } from "../types/user";
 // import { IterableArray } from "./iterableArrayHelper";
 import { misskeyRequest } from "./requestHelper";
+import { LiteUser } from "./userHelper";
 
 /**
  * A wrapped note, created by cardboard.
@@ -20,17 +20,18 @@ export class Note {
         public readonly note: MisskeyNote,
     ) {
         this.content = note.text;
-        this.user = note.user;
     }
     /**
      * The content of the note.
      */
     public content: string | null;
+
     /**
      * The user who made the post.
-     * @todo Kio, change this for a proper userclass!!
      */
-    public user: LiteUser;
+    get user(): LiteUser {
+        return new LiteUser(this.cardboard, this.note.user);
+    }
 
     /**
      * Get the ID of the note.
