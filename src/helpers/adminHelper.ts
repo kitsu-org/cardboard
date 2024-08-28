@@ -550,19 +550,50 @@ export class Admin {
     }
 
     /**
+     * Add an emoji for usage on the instance.
+     * @param name The name of the emoji that you want to add.
+     * @param fileId The drive ID of the file that you want to add.
+     * @param options Any options that you'd like to add.
+     * @returns {Emoji}
+     */
+    public async addEmoji(
+        name: string,
+        fileId: string,
+        options: {
+            category?: string | null;
+            aliases?: string[];
+            license?: string | null;
+            isSensitive?: boolean;
+            localOnly?: boolean;
+            permittedRoles?: string[];
+        },
+    ): Promise<Emoji> {
+        return await misskeyRequest(this.cardboard, "admin/emoji/add", {
+            name,
+            fileId,
+            category: options.category,
+            aliases: options.aliases,
+            license: options.license,
+            isSensitive: options.isSensitive,
+            localOnly: options.localOnly,
+            roleIdsThatCanBeUsedThisEmojiAsReaction: options.permittedRoles,
+        });
+    }
+
+    /**
      * Get the immutable moderation logs.
      * @param options Optional methods of sorting the logs.
-     * @returns {Promise<{id: string; createdAt: string; type: string; info: Record<string, unknown>; userId: string; user: MisskeyUser;}[]>}
+     * @returns {Promise<Array<{id: string; createdAt: string; type: string; info: Record<string, unknown>; userId: string; user: MisskeyUser;}>>}
      */
     public async getModerationLogs(options?: ModerationLogSorting): Promise<
-        {
+        Array<{
             id: string;
             createdAt: string;
             type: string;
             info: Record<string, unknown>;
             userId: string;
             user: User;
-        }[]
+        }>
     > {
         const returned = await misskeyRequest(
             this.cardboard,
