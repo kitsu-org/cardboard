@@ -203,7 +203,7 @@ To stop this warning, please disable bypassNoBot.
          */
         emojis: Omit<Emoji, "id" | "host" | "license" | "localOnly">[];
     }> {
-        return await misskeyRequest(this, "emojis");
+        return (await misskeyRequest(this, "emojis")).emojis;
     }
 
     /**

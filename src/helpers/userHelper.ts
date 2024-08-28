@@ -222,6 +222,13 @@ export class User {
     }
 
     /**
+     * The username, chosen by the user. cannot change.
+     */
+    get username(): string {
+        return this.misskeyUser.username;
+    }
+
+    /**
      * Return the ListenBrainz username.
      */
     // biome-ignore lint/style/useNamingConvention: This is how it's spelt in the API.
