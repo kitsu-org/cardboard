@@ -1,3 +1,4 @@
+import type { MisskeyFile } from "./file";
 import type { MisskeyLiteUser } from "./user";
 
 /**
@@ -244,7 +245,7 @@ export type MisskeyNote = {
     /**
      * The files that are attached to the note, if applicable.
      */
-    files?: File[];
+    files?: MisskeyFile[];
     /**
      * The hashtags used within the post.
      */
@@ -324,7 +325,7 @@ export type MisskeyNote = {
     /**
      * How the note accepts reactions.
      */
-    reactionAcceptance: string | null;
+    reactionAcceptance: ReactionAcceptance | null;
     /**
      * the current set of reacts by their emojis & Segregated by homeserver.
      */
@@ -349,11 +350,11 @@ export type MisskeyNote = {
     /**
      * The remote link to the post, if from an external source.
      */
-    uri?: string;
-    /**
-     * {unknown. Know what this does? Make a PR!}
-     */
     url?: string;
+    /**
+     * A JSON-compatible object from the external source.
+     */
+    uri?: string;
     /**
      * {unknown. Know what this does? Make a PR!}
      */
