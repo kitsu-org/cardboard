@@ -91,3 +91,12 @@ export class CannotHurtSelfError extends Error {
         this.message = "You cannot use this method on yourself.";
     }
 }
+
+export class CannotHurtActorsError extends Error {
+    constructor() {
+        super();
+        this.name = "CannotHurtActors";
+        this.message =
+            "You cannot use this method on instance or relay actors.";
+    }
+}

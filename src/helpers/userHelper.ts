@@ -3,21 +3,36 @@ import { type NoteOptions, NoteVisibility } from "../types/note";
 import type {
     Decoration,
     MisskeyLiteUser,
-    MisskeyUser,
     MisskeyRole,
+    MisskeyUser,
     UserAdminMeta,
 } from "../types/user";
-import { CannotHurtSelfError, NoBotInteractionError } from "./error";
+import {
+    CannotHurtActorsError,
+    CannotHurtSelfError,
+    NoBotInteractionError,
+} from "./error";
 import { Note } from "./noteHelper";
 import { misskeyRequest } from "./requestHelper";
 
 const checkForHarmAndThrowIfTrue = async (
     cardboard: CardboardClient,
     userId: string,
+    shouldNotCheckForActor?: boolean,
 ) => {
     const checkForSelf = await misskeyRequest(cardboard, "i");
     if (checkForSelf.id === userId) {
         throw new CannotHurtSelfError();
+    }
+    if (!shouldNotCheckForActor) {
+        const findUsername = await cardboard.showUser(userId);
+        if (
+            ["instance.actor", "relay.actor", findUsername.host].includes(
+                findUsername.username,
+            )
+        ) {
+            throw new CannotHurtActorsError();
+        }
     }
 };
 
@@ -215,7 +230,7 @@ export class LiteUser {
      * unfollow the user.
      */
     async unfollow(): Promise<void> {
-        await checkForHarmAndThrowIfTrue(this.cardboard, this.id);
+        await checkForHarmAndThrowIfTrue(this.cardboard, this.id, false);
         await misskeyRequest(this.cardboard, "following/delete", {
             userId: this.id,
         });
@@ -415,12 +430,9 @@ export class User extends LiteUser {
     }
 
     /**
-     * Get all fields.
+     * Get all fields that were self-set by the user.
      */
-    get fields(): /**
-     * fields that were self-set by the user.
-     */
-    MisskeyUser["fields"] {
+    get fields(): MisskeyUser["fields"] {
         return this.fullMisskeyUser.fields;
     }
 
@@ -634,6 +646,9 @@ export class User extends LiteUser {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async unsuspend(modNote?: string): Promise<void> {
+        if (!this.isSuspended) {
+            return;
+        }
         await misskeyRequest(this.cardboard, "admin/unsuspend-user", {
             userId: this.id,
         });
@@ -643,6 +658,7 @@ export class User extends LiteUser {
                 text: `${this.moderationNote}\n${modNote}`,
             });
         }
+        this.user.isSuspended = false;
     }
 
     /**
@@ -650,6 +666,9 @@ export class User extends LiteUser {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async silence(modNote?: string): Promise<void> {
+        if (this.isSilenced) {
+            return;
+        }
         await misskeyRequest(this.cardboard, "admin/silence-user", {
             userId: this.id,
         });
@@ -659,6 +678,7 @@ export class User extends LiteUser {
                 text: `${this.moderationNote}\n${modNote}`,
             });
         }
+        this.user.isSilenced = true;
     }
 
     /**
@@ -666,6 +686,9 @@ export class User extends LiteUser {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async unsilence(modNote?: string): Promise<void> {
+        if (!this.isSilenced) {
+            return;
+        }
         await misskeyRequest(this.cardboard, "admin/unsilence-user", {
             userId: this.id,
         });
@@ -675,6 +698,7 @@ export class User extends LiteUser {
                 text: `${this.moderationNote}\n${modNote}`,
             });
         }
+        this.user.isSilenced = false;
     }
 
     /**
@@ -682,6 +706,9 @@ export class User extends LiteUser {
      * @param modNote an optional string to automatically inform admins what's going on.
      */
     async suspend(modNote?: string): Promise<void> {
+        if (this.isSuspended) {
+            return;
+        }
         await misskeyRequest(this.cardboard, "admin/suspend-user", {
             userId: this.id,
         });
@@ -691,6 +718,7 @@ export class User extends LiteUser {
                 text: `${this.moderationNote}\n${modNote}`,
             });
         }
+        this.user.isSuspended = true;
     }
 
     /**
@@ -714,6 +742,9 @@ export class User extends LiteUser {
             this.cardboard,
             this.fullMisskeyUser,
         );
+        if (this.isFollowing) {
+            return;
+        }
         await misskeyRequest(this.cardboard, "following/create", {
             userId: this.id,
         });

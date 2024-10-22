@@ -109,7 +109,9 @@ export class Admin {
             const meta = await misskeyRequest(
                 this.cardboard,
                 "admin/show-user",
-                { userId: user.id },
+                {
+                    userId: user.id,
+                },
             );
             ApprovableUserArray.push(
                 new ApprovableUser(this.cardboard, user, meta),
@@ -333,7 +335,9 @@ export class Admin {
         await misskeyRequest(
             this.cardboard,
             "admin/delete-all-files-of-a-user",
-            { userId },
+            {
+                userId,
+            },
         );
     }
 
